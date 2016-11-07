@@ -1,21 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package trabajo;
 
-/**
- *
- * @author jason
- */
 public class Rut {
 
-    /**
-     * Le da formato a un rut, concatenándole puntos y guión.
-     * @param rut Rut a formatear.
-     * @return Un nuevo String, con el rut formateado.
-     */
     static public String formatear(String rut){
         int cont=0;
         String format;
@@ -37,12 +23,6 @@ public class Rut {
         }
     }
 
-    /**
-     * Valida un rut de acuerdo a su dígito verificador.
-     * @param rut Rut a validar
-     * @return true si el rut es válido,
-     * false en cualquier otro caso.
-     */
     static public boolean validar(String rut){
         int suma=0;
         String dvR,dvT;

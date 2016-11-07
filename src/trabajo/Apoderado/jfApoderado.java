@@ -2,8 +2,6 @@ package trabajo.Apoderado;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
-import javax.swing.JOptionPane;
 import trabajo.jfMenu;
 
 public class jfApoderado extends javax.swing.JFrame {
@@ -157,11 +155,7 @@ public class jfApoderado extends javax.swing.JFrame {
         asig.setVisible(true);
     }//GEN-LAST:event_btnAsignarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -183,8 +177,6 @@ public class jfApoderado extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(jfApoderado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new jfApoderado().setVisible(true);
