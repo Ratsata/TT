@@ -30,6 +30,8 @@ public class Conexion {
             //conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/cpl","root","");
             //CONEXION SEBA//
             //conexion = DriverManager.getConnection("jdbc:mysql://192.168.1.36:3306/cpl","ratsata","toor");
+            
+            // --//
             conexion = DriverManager.getConnection("jdbc:mysql://defweb.ddns.net:3306/BG","ratsata","toor");
         } catch (SQLException ex) {
             ex.printStackTrace();
