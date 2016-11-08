@@ -1,6 +1,8 @@
 package trabajo.Cursos;
 
 import clases.Conexion;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
@@ -9,6 +11,8 @@ public class jfEliminar extends javax.swing.JFrame {
     private String msj;
     
     public jfEliminar() {
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_delete.png"));
+        setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
     }

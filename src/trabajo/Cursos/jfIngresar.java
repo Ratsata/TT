@@ -1,6 +1,8 @@
 package trabajo.Cursos;
 
 import clases.Conexion;
+import java.awt.Image;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 public class jfIngresar extends javax.swing.JFrame {
@@ -8,6 +10,8 @@ public class jfIngresar extends javax.swing.JFrame {
     private String msj;
     
     public jfIngresar() {
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_add.png"));
+        setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
     }
