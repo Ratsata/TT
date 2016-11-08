@@ -128,7 +128,7 @@ public class jfIngresar extends javax.swing.JFrame {
 
         lblTitulo.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
         lblTitulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_add.png"))); // NOI18N
-        lblTitulo.setText("Generar Curso");
+        lblTitulo.setText("Generar Cursos");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
