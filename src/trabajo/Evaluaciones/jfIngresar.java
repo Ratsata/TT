@@ -1,6 +1,8 @@
 package trabajo.Evaluaciones;
 
 import clases.Conexion;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
@@ -18,6 +20,8 @@ public class jfIngresar extends javax.swing.JFrame {
     
     
     public jfIngresar() {
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_add.png"));
+        setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
         
