@@ -1,7 +1,12 @@
 package trabajo.Cursos;
 
-public class jfIngresar extends javax.swing.JFrame {
+import clases.Conexion;
+import javax.swing.JOptionPane;
 
+public class jfIngresar extends javax.swing.JFrame {
+    private Conexion BD = new Conexion();
+    private String msj;
+    
     public jfIngresar() {
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
@@ -12,13 +17,12 @@ public class jfIngresar extends javax.swing.JFrame {
     private void initComponents() {
 
         btnGroupEnseñansa = new javax.swing.ButtonGroup();
-        btnGroupParalelo = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lblCod = new javax.swing.JLabel();
+        lblNom = new javax.swing.JLabel();
         txtCod = new javax.swing.JTextField();
         txtNom = new javax.swing.JTextField();
-        btnFinalizar = new javax.swing.JButton();
+        btnGenerar = new javax.swing.JButton();
         cmbCurso = new javax.swing.JComboBox<>();
         lblmensaje = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
@@ -30,20 +34,26 @@ public class jfIngresar extends javax.swing.JFrame {
         lblTitulo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(337, 329));
+        setResizable(false);
 
-        jLabel2.setText("Codigo Curso:");
+        jPanel1.setMaximumSize(new java.awt.Dimension(337, 329));
+        jPanel1.setMinimumSize(new java.awt.Dimension(337, 329));
 
-        jLabel3.setText("Nombre Curso:");
+        lblCod.setText("Codigo Curso:");
+
+        lblNom.setText("Nombre Curso:");
 
         txtCod.setEditable(false);
 
         txtNom.setEditable(false);
 
-        btnFinalizar.setText("Finalizar");
-        btnFinalizar.setEnabled(false);
-        btnFinalizar.addActionListener(new java.awt.event.ActionListener() {
+        btnGenerar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disk.png"))); // NOI18N
+        btnGenerar.setText("Generar");
+        btnGenerar.setEnabled(false);
+        btnGenerar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFinalizarActionPerformed(evt);
+                btnGenerarActionPerformed(evt);
             }
         });
 
@@ -56,8 +66,9 @@ public class jfIngresar extends javax.swing.JFrame {
             }
         });
 
-        lblmensaje.setText("Codigo y nombre generados");
+        lblmensaje.setText("Ejemplo codigo y nombre generados");
 
+        btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/backward.png"))); // NOI18N
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,7 +124,7 @@ public class jfIngresar extends javax.swing.JFrame {
 
         lblTitulo.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
         lblTitulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_add.png"))); // NOI18N
-        lblTitulo.setText("Ingreso de Curso");
+        lblTitulo.setText("Generar Curso");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -125,7 +136,7 @@ public class jfIngresar extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(btnVolver)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnFinalizar))
+                        .addComponent(btnGenerar))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -134,8 +145,8 @@ public class jfIngresar extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(49, 49, 49)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2))
+                                    .addComponent(lblNom)
+                                    .addComponent(lblCod))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -152,7 +163,7 @@ public class jfIngresar extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 40, Short.MAX_VALUE)
+                .addGap(0, 65, Short.MAX_VALUE)
                 .addComponent(panelEnseñanza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(57, 57, 57))
         );
@@ -170,16 +181,16 @@ public class jfIngresar extends javax.swing.JFrame {
                 .addComponent(lblmensaje)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(lblCod)
                     .addComponent(txtCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                    .addComponent(lblNom))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver)
-                    .addComponent(btnFinalizar))
+                    .addComponent(btnGenerar))
                 .addContainerGap())
         );
 
@@ -199,7 +210,7 @@ public class jfIngresar extends javax.swing.JFrame {
 
     private void habilitarBotones(){
         cmbCurso.setEnabled(true);
-        btnFinalizar.setEnabled(true);
+        btnGenerar.setEnabled(true);
     }
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
@@ -208,9 +219,39 @@ public class jfIngresar extends javax.swing.JFrame {
         curs.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
-    private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-        habilitarBotones();
-    }//GEN-LAST:event_btnFinalizarActionPerformed
+    private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
+        BD.crearConexion();
+        String Cod,Nom,Observacion,coma;
+        Observacion = "";
+        coma = "','";
+        try {
+            if (rdoBasica.isSelected()) {
+                String[] arrayCursosB = {"Primero","Segundo","Tercero","Cuarto","Quinto","Sexto","Septimo","Octavo"};
+                for (int i = 1; i < 9; i++) {
+                    Cod = "B" + String.valueOf(i) + cmbCurso.getSelectedItem();
+                    Nom = arrayCursosB[i-1] + " Basico " + cmbCurso.getSelectedItem();
+                    
+                    String sql = "INSERT INTO curso(id_curso,nombre,observaciones) VALUES ('" + Cod + coma + Nom + coma + Observacion + "')";
+                    BD.ejecutarSQL(sql);
+                }
+                
+            }else{
+                for (int i = 1; i < 5; i++) {
+                    String[] arrayCursosM = {"Primero","Segundo","Tercero","Cuarto"};
+                    Cod = "M" + String.valueOf(i) + cmbCurso.getSelectedItem();
+                    Nom = arrayCursosM[i-1] + " Medio " + cmbCurso.getSelectedItem();
+                    
+                    String sql = "INSERT INTO curso(id_curso,nombre,observaciones) VALUES ('" + Cod + coma + Nom + coma + Observacion + "')";
+                    BD.ejecutarSQL(sql);
+                }
+            }
+            msj="Se genero el paralelo correctamente";
+            JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
+        }catch (Exception e){
+            msj = "Error, hubo un problema.";
+            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
+        }
+    }//GEN-LAST:event_btnGenerarActionPerformed
 
     private void rdoBasicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoBasicaActionPerformed
         habilitarBotones();
@@ -273,15 +314,14 @@ public class jfIngresar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnFinalizar;
+    private javax.swing.JButton btnGenerar;
     public static javax.swing.ButtonGroup btnGroupEnseñansa;
-    public static javax.swing.ButtonGroup btnGroupParalelo;
     private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> cmbCurso;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel lblCod;
     private javax.swing.JLabel lblEnseñanza;
+    private javax.swing.JLabel lblNom;
     private javax.swing.JLabel lblParalelo;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblmensaje;
