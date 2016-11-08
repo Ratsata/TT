@@ -32,7 +32,7 @@ public class jfCursos extends javax.swing.JFrame {
 
         jLabel1.setText("Elija una opcion");
 
-        btn_Ingresar.setText("Ingresar Curso");
+        btn_Ingresar.setText("Generar Paralelo");
         btn_Ingresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_IngresarActionPerformed(evt);
