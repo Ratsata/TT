@@ -430,8 +430,7 @@ public class jfIngresar extends javax.swing.JFrame {
                 //FECHA
                 int year = Integer.parseInt(jAño.getText());
                 int month = cmbMes.getSelectedIndex() + 1;
-                String cmbD = (String)cmbDia.getSelectedItem();
-                int day = Integer.parseInt(cmbD);
+                int day = Integer.parseInt((String)cmbDia.getSelectedItem());
                 if (year <1900){
                     throw new IllegalArgumentException("Año Invalido");
                 }

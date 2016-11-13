@@ -4,10 +4,7 @@ import clases.Conexion;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 
 public class jfModificar extends javax.swing.JFrame {
     private Conexion BD = new Conexion();
@@ -15,9 +12,10 @@ public class jfModificar extends javax.swing.JFrame {
     private ResultSet rs;
     private String id_curso;
     private String id_asignatura;
-    private JList lista;
-    private DefaultListModel modeloLista=new DefaultListModel();
-    JScrollPane scrollpaneLista;
+    private String sql;
+    private Boolean cmbAsignaturainiciado = false;
+    private Boolean cmbCursoiniciado = false;
+    private Boolean cmbEvaluacionesiniciado = false;
     
     public jfModificar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_edit.png"));
@@ -25,28 +23,29 @@ public class jfModificar extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
         
-        jScrollPane1 = new JScrollPane();
-        listEvaluaciones = new JList();
-        jScrollPane1.setViewportView(lista);
-        
         //Llenar ComboBoxs
         try{
-            BD.crearConexion();
             
+            BD.crearConexion();
             //PRIMER COMBOBOX
-            String sql = "SELECT c.nombre FROM asignatura_curso ac, curso c WHERE ac.id_curso = c.id_curso";
+            sql = "SELECT c.nombre FROM asignatura_curso ac, curso c WHERE ac.id_curso = c.id_curso";
             rs = BD.ejecutarSQLSelect(sql);
             while(rs.next()){
                 cmbCurso.addItem(rs.getString("c.nombre"));
+                
             }
-            
+            cmbCursoiniciado = true;
             //SEGUNDO COMBOBOX
             sql = "SELECT DISTINCT(a.nombre) FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura";
             rs = BD.ejecutarSQLSelect(sql);
             while(rs.next()){
                 cmbAsignatura.addItem(rs.getString("a.nombre"));
+                
             }
             BD.cerrarConexion();
+            cmbAsignaturainiciado = true;
+            //Evaluaciones
+            llenarCmbEvaluaciones();
         }catch (Exception e){
             msj = "Error, hubo un problema.";
             JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
@@ -63,15 +62,17 @@ public class jfModificar extends javax.swing.JFrame {
         txtDescripcion = new javax.swing.JTextArea();
         lblTitulo3 = new javax.swing.JLabel();
         lblTitulo2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listEvaluaciones = new javax.swing.JList<>();
         cmbAsignatura = new javax.swing.JComboBox<>();
         lblAsignatura = new javax.swing.JLabel();
         cmbCurso = new javax.swing.JComboBox<>();
         lblCurso = new javax.swing.JLabel();
         lblTitulo = new javax.swing.JLabel();
+        cmbEvaluaciones = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(372, 400));
+        setMinimumSize(new java.awt.Dimension(372, 400));
+        setResizable(false);
 
         btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/backward.png"))); // NOI18N
         btnVolver.setText("Volver");
@@ -97,15 +98,31 @@ public class jfModificar extends javax.swing.JFrame {
 
         lblTitulo2.setText("Evaluaciones a la fecha (haga click sobre ella para ver detalles)");
 
-        jScrollPane1.setViewportView(listEvaluaciones);
+        cmbAsignatura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbAsignaturaActionPerformed(evt);
+            }
+        });
 
         lblAsignatura.setText("Seleccione Asignatura");
+
+        cmbCurso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCursoActionPerformed(evt);
+            }
+        });
 
         lblCurso.setText("Seleccione curso:");
 
         lblTitulo.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
         lblTitulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_edit.png"))); // NOI18N
         lblTitulo.setText("Modificar Evaluacion");
+
+        cmbEvaluaciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbEvaluacionesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -122,8 +139,7 @@ public class jfModificar extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(35, 35, 35)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(lblTitulo3)
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
@@ -134,7 +150,8 @@ public class jfModificar extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(cmbAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(cmbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(lblTitulo2)))
+                                    .addComponent(lblTitulo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbEvaluaciones, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(lblTitulo)))
@@ -154,14 +171,14 @@ public class jfModificar extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAsignatura)
                     .addComponent(cmbAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(lblTitulo2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cmbEvaluaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(lblTitulo3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver)
@@ -172,27 +189,50 @@ public class jfModificar extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void Cambio(){
-        try{
-            BD.crearConexion();
-            String sql = "SELECT ac.id_curso, ac.id_asignatura, anno FROM asignatura_curso ac, curso c, asignatura a WHERE ac.id_curso = c.id_curso AND ac.id_asignatura = a.id_asignatura AND a.nombre = '"+ cmbAsignatura.getSelectedItem() +"' AND c.nombre = '"+ cmbCurso.getSelectedItem() +"';";
-            rs = BD.ejecutarSQLSelect(sql);
-            while(rs.next()){
-                id_curso = rs.getString("ac.id_curso");
-                id_asignatura = rs.getString("ac.id_asignatura");
+    private void llenarCmbEvaluaciones(){
+        if (cmbAsignaturainiciado && cmbCursoiniciado) {
+            try {
+                cmbEvaluacionesiniciado = false;
+                cmbEvaluaciones.removeAllItems();
+                BD.crearConexion();
+                sql = "SELECT ac.id_curso, ac.id_asignatura, anno FROM asignatura_curso ac, curso c, asignatura a WHERE ac.id_curso = c.id_curso AND ac.id_asignatura = a.id_asignatura AND a.nombre = '" + cmbAsignatura.getSelectedItem() + "' AND c.nombre = '" + cmbCurso.getSelectedItem() + "';";
+                rs = BD.ejecutarSQLSelect(sql);
+                while (rs.next()) {
+                    id_curso = rs.getString("ac.id_curso");
+                    id_asignatura = rs.getString("ac.id_asignatura");
+                }
+                sql = "SELECT id_evaluacion FROM evaluacion WHERE id_curso = '" + id_curso + "' AND id_asignatura = '" + id_asignatura + "'";
+                rs = BD.ejecutarSQLSelect(sql);
+                while (rs.next()) {
+                    cmbEvaluaciones.addItem(rs.getString("id_evaluacion"));
+                }
+                BD.cerrarConexion();
+                cmbEvaluacionesiniciado = true;
+            } catch (Exception e) {
+                msj = "Error, hubo un problema.";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
             }
-            sql = "SELECT id_evaluacion FROM evaluacion WHERE id_curso = '"+ id_curso +"' AND id_asignatura = '"+ id_asignatura +"'";
-            rs = BD.ejecutarSQLSelect(sql);
-            while(rs.next()){
-                modeloLista.addElement(rs.getString("id_evaluacion"));
-            }
-            listEvaluaciones.setModel(modeloLista);
-        }catch (Exception e){
-            msj = "Error, hubo un problema.";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
+            LlenarDescripcion();
         }
     }
-    
+    private void LlenarDescripcion() {
+        try {
+            if (cmbEvaluacionesiniciado){
+                txtDescripcion.setText("");
+                BD.crearConexion();
+                sql = "SELECT detalle FROM evaluacion WHERE id_evaluacion = '"+ cmbEvaluaciones.getSelectedItem() +"'";
+                rs = BD.ejecutarSQLSelect(sql);
+                while (rs.next()) {
+                    txtDescripcion.setText(rs.getString("detalle"));
+                }
+                BD.cerrarConexion();
+            }
+        } catch (Exception e) {
+            msj = "Error, hubo un problema.";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
     
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         jfEvaluaciones eva = new jfEvaluaciones();
@@ -200,8 +240,32 @@ public class jfModificar extends javax.swing.JFrame {
         eva.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    private void cmbCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCursoActionPerformed
+        llenarCmbEvaluaciones();
+    }//GEN-LAST:event_cmbCursoActionPerformed
+
+    private void cmbAsignaturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAsignaturaActionPerformed
+        llenarCmbEvaluaciones();
+    }//GEN-LAST:event_cmbAsignaturaActionPerformed
+
+    private void cmbEvaluacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEvaluacionesActionPerformed
+        LlenarDescripcion();
+    }//GEN-LAST:event_cmbEvaluacionesActionPerformed
+
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        Cambio();
+        try{
+            BD.crearConexion();
+            sql = "UPDATE evaluacion SET "
+                   + "detalle = '"+ txtDescripcion.getText() +"'"
+                   + " WHERE id_evaluacion = '"+ cmbEvaluaciones.getSelectedItem() +"';";
+            BD.ejecutarSQL(sql);
+            BD.cerrarConexion();
+            msj="Se guardo su modificacion correctamente";
+            JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
+        }catch (Exception e){
+            msj = "Error, hubo un problema.";
+            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     public static void main(String args[]) {
@@ -238,14 +302,13 @@ public class jfModificar extends javax.swing.JFrame {
     private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> cmbAsignatura;
     private javax.swing.JComboBox<String> cmbCurso;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox<String> cmbEvaluaciones;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAsignatura;
     private javax.swing.JLabel lblCurso;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTitulo2;
     private javax.swing.JLabel lblTitulo3;
-    private javax.swing.JList<String> listEvaluaciones;
     private javax.swing.JTextArea txtDescripcion;
     // End of variables declaration//GEN-END:variables
 }
