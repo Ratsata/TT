@@ -1,43 +1,61 @@
 package trabajo.Evaluaciones;
 
+import clases.Conexion;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 public class jfEliminar extends javax.swing.JFrame {
+    private Conexion BD = new Conexion();
+    private String msj;
+    private String ID;
 
     public jfEliminar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_delete.png"));
         setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
+        
+        txtDetalle.setLineWrap(true);
+        txtDetalle.setWrapStyleWord(true);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        lblMensaje = new javax.swing.JLabel();
+        txtId_evaluacion = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        txtDetalle = new javax.swing.JTextArea();
+        btnEliminar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         lblTitulo1 = new javax.swing.JLabel();
+        lblCurso = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(431, 406));
+        setMinimumSize(new java.awt.Dimension(431, 406));
+        setResizable(false);
 
-        jLabel1.setText("Ingrese codigo evaluacion a eliminar");
+        lblMensaje.setText("Ingres el id de evaluacion a eliminar");
 
-        jTextField1.setText("M3BLENG2016204");
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Usted va a eliminar la evaluacion numero 4\ncorrespondiente al 3ero medio B, \nasignatura lenguaje del semestre 2 \ndel año 2016");
-        jScrollPane1.setViewportView(jTextArea1);
+        txtDetalle.setEditable(false);
+        txtDetalle.setColumns(20);
+        txtDetalle.setRows(5);
+        jScrollPane1.setViewportView(txtDetalle);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete.png"))); // NOI18N
-        jButton1.setText("Eliminar");
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/delete.png"))); // NOI18N
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/backward.png"))); // NOI18N
         btnVolver.setText("Volver");
@@ -48,42 +66,50 @@ public class jfEliminar extends javax.swing.JFrame {
         });
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         lblTitulo1.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
         lblTitulo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_delete.png"))); // NOI18N
         lblTitulo1.setText("Eliminar Evaluacion");
 
+        lblCurso.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblCurso.setText("Id de la Evaluacion");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblMensaje)
+                .addGap(130, 130, 130))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btnVolver))
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(lblTitulo1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(122, 122, 122)
-                                .addComponent(jLabel1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(147, 147, 147)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnBuscar)))
-                        .addGap(0, 67, Short.MAX_VALUE))
+                        .addGap(163, 163, 163)
+                        .addComponent(btnEliminar))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1)))
+                        .addComponent(btnVolver))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblTitulo1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(lblCurso)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtId_evaluacion, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnBuscar)))
+                .addContainerGap(56, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(163, 163, 163)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -91,15 +117,16 @@ public class jfEliminar extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblTitulo1)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1)
+                .addComponent(lblMensaje)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar))
+                    .addComponent(txtId_evaluacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscar)
+                    .addComponent(lblCurso))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(btnEliminar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addComponent(btnVolver)
                 .addContainerGap())
@@ -113,6 +140,47 @@ public class jfEliminar extends javax.swing.JFrame {
         this.dispose();
         eva.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        try{
+            BD.crearConexion();
+            String sql="SELECT e.id_evaluacion, c.nombre, a.nombre, e.anno, e.semestre, e.num_evaluacion, e.fecha FROM evaluacion e, curso c, asignatura a WHERE e.id_curso = c.id_curso AND e.id_asignatura = a.id_asignatura AND e.id_evaluacion = '"+ txtId_evaluacion.getText() +"'";
+            ResultSet lis = BD.ejecutarSQLSelect(sql);
+            if (lis.next()){
+                msj="Evaluacion encontrada";
+                ID = lis.getString("e.id_evaluacion");
+                txtDetalle.setText("Usted va a eliminar la evaluacion numero " + lis.getString("e.num_evaluacion") + " correspondiente al\n" + lis.getString("c.nombre") + " , de la asignatura " + lis.getString("a.nombre") + " del Semestre " + lis.getString("e.semestre") + " puesta en la fecha: " + lis.getString("e.fecha"));
+            }else {
+                msj="Evaluacion no existe, busque denuevo";
+            }
+            lblMensaje.setText(msj);
+            BD.cerrarConexion();
+        }catch(Exception e){
+            msj="Error, no se pudo realizar la operacion";
+            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        String sql ="DELETE FROM evaluacion WHERE id_evaluacion = '" + ID + "' ";
+        if(!txtId_evaluacion.getText().equals("")){
+            try{
+                BD.crearConexion();
+                BD.ejecutarSQL(sql);
+                msj="Datos eliminados con exito";
+                JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
+                txtDetalle.setText("");
+                txtId_evaluacion.setText("");
+                BD.cerrarConexion();
+            }catch(Exception e){
+                msj="Error, no se pudo realizar la operacion";
+                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            msj="Error, ningún ID ah sido escrito";
+            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -145,12 +213,13 @@ public class jfEliminar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnVolver;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel lblCurso;
+    private javax.swing.JLabel lblMensaje;
     private javax.swing.JLabel lblTitulo1;
+    private javax.swing.JTextArea txtDetalle;
+    private javax.swing.JTextField txtId_evaluacion;
     // End of variables declaration//GEN-END:variables
 }
