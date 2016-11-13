@@ -390,16 +390,10 @@ public class jfIngresar extends javax.swing.JFrame {
         apeP = jApePat.getText();
         apeM = jApeMat.getText();
         dir = jDir.getText();
-        /* yyyy-mm-dd formato transformado para que en la base de datos quede tipo date
-           años limitados a 1900 -> 2011
-           falta validar si el año es biciesto y los meses correspondientes a los meses...*/
+        //FECHA
+        //falta validar si el año es biciesto y los meses correspondientes a los meses...
         año = jAño.getText();
-        Numero = cmbMes.getSelectedIndex();
-        if (Numero>=0 && Numero <9) {
-            numeroString = Integer.toString(Numero + 1);
-            mes = "0" + numeroString;
-        }else if (Numero>=9){ 
-            mes = Integer.toString(Numero + 1);}
+        mes = String.format("%02d", cmbMes.getSelectedIndex()+1);
         dia = (String)cmbDia.getSelectedItem();
         fechaNac = año + "-" + mes + "-" + dia;  
         // Se obtiene el folio y se transforma al tipo de dato requerido por la bd
@@ -442,7 +436,7 @@ public class jfIngresar extends javax.swing.JFrame {
                     throw new IllegalArgumentException("Año Invalido");
                 }
                 LocalDate today = LocalDate.of(year,month,day);
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+                //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
                 //FIN-FECHA
                 String sql = "INSERT INTO alumno(rut_alumno,nombres,ape_paterno,ape_materno ,fecha_nacimiento,"
                     + "sexo,direccion,religion,id_comuna,nacionalidad,transporte,num_hermanos,"
@@ -484,7 +478,6 @@ public class jfIngresar extends javax.swing.JFrame {
             {BD.cerrarConexion();}
         this.dispose();
         new jfAlumno().setVisible(true);
-        //new jfMenu().setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void jAñoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jAñoKeyTyped

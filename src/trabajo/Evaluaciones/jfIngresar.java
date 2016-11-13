@@ -3,8 +3,11 @@ package trabajo.Evaluaciones;
 import clases.Conexion;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 
 public class jfIngresar extends javax.swing.JFrame {
@@ -66,7 +69,9 @@ public class jfIngresar extends javax.swing.JFrame {
         txtDetalle = new javax.swing.JTextArea();
         lblTitulo = new javax.swing.JLabel();
         lblFecha = new javax.swing.JLabel();
-        calendario = new com.toedter.calendar.JDateChooser();
+        txtAño = new javax.swing.JTextField();
+        cmbDia = new javax.swing.JComboBox<>();
+        cmbMes = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(350, 343));
@@ -80,6 +85,11 @@ public class jfIngresar extends javax.swing.JFrame {
         lblSemestre.setText("Semestre");
 
         cmbSemestre.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Primer Semestre", "Segundo Semestre" }));
+        cmbSemestre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbSemestreActionPerformed(evt);
+            }
+        });
 
         btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/backward.png"))); // NOI18N
         btnVolver.setText("Volver");
@@ -109,6 +119,21 @@ public class jfIngresar extends javax.swing.JFrame {
 
         lblFecha.setText("Fecha");
 
+        txtAño.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtAñoFocusLost(evt);
+            }
+        });
+        txtAño.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAñoKeyTyped(evt);
+            }
+        });
+
+        cmbDia.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" }));
+
+        cmbMes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -133,12 +158,16 @@ public class jfIngresar extends javax.swing.JFrame {
                                         .addComponent(lblSemestre)
                                         .addComponent(lblFecha)))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(cmbAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(cmbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cmbSemestre, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(calendario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addComponent(cmbSemestre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtAño, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -147,23 +176,24 @@ public class jfIngresar extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(lblTitulo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblCurso)
-                            .addComponent(cmbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblAsignatura)
-                            .addComponent(cmbAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblSemestre)
-                            .addComponent(cmbSemestre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblFecha))
-                    .addComponent(calendario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblCurso)
+                    .addComponent(cmbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblAsignatura)
+                    .addComponent(cmbAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblSemestre)
+                    .addComponent(cmbSemestre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFecha))
+                .addGap(19, 19, 19)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
@@ -185,48 +215,84 @@ public class jfIngresar extends javax.swing.JFrame {
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
         String coma = "','";
-        if (calendario == null){
-            msj = "Error, ingrese una fecha.";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE); 
-        }else{
-            try{
-                BD.crearConexion();
-                String sql = "SELECT ac.id_curso, ac.id_asignatura, anno FROM asignatura_curso ac, curso c, asignatura a WHERE ac.id_curso = c.id_curso AND ac.id_asignatura = a.id_asignatura AND a.nombre = '"+ cmbAsignatura.getSelectedItem() +"' AND c.nombre = '"+ cmbCurso.getSelectedItem() +"';";
-                rs = BD.ejecutarSQLSelect(sql);
-                //Armar id_evaluacion
-                while(rs.next()){
-                    id_curso = rs.getString("ac.id_curso");
-                    id_asignatura = rs.getString("ac.id_asignatura");
-                    anno = rs.getString("ac.anno");
-                    id_evaluacion = id_curso + id_asignatura + anno + (int)(cmbSemestre.getSelectedIndex()+1);
-                }
-                //semestre = cmbSemestre.getSelectedItem();
-                //Agregar el numero de la Evaluacion
-                sql = "SELECT COUNT(id_evaluacion)+1 as n_evaluacion FROM evaluacion WHERE id_asignatura = '"+ id_asignatura +"' AND id_curso = '"+ id_curso +"' AND anno = '"+ anno +"' AND semestre = '"+ (int)(cmbSemestre.getSelectedIndex()+1) +"'";
-                rs = BD.ejecutarSQLSelect(sql);
-                while(rs.next()){
-                    num_evaluacion = String.format("%02d", rs.getInt("n_evaluacion"));
-                }
-                id_evaluacion = id_evaluacion + num_evaluacion;
-                //FECHA
-                fecha = new SimpleDateFormat("yyyy-MM-dd").format(calendario.getDate());
-                   
-                    JOptionPane.showMessageDialog(null,fecha,"Exito",JOptionPane.INFORMATION_MESSAGE);
-                sql = "INSERT INTO evaluacion(id_evaluacion,id_curso,id_asignatura,anno,semestre,num_evaluacion,fecha,detalle) VALUES ('" + id_evaluacion + coma + id_curso + coma + id_asignatura + coma + anno + coma + (int)(cmbSemestre.getSelectedIndex()+1) + coma + num_evaluacion + coma + fecha + coma + txtDetalle.getText() +"')";
-                if (BD.ejecutarSQL(sql)){
-                    msj="Se registro la evaluacion correctamente";
-                    JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
-                }else{
-                    msj="Error, No se pudo realizar la operacion";
-                    JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
-                }
-                BD.cerrarConexion();
-            }catch (Exception e){
-                msj = "Error, hubo un problema.";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
+        try {
+            BD.crearConexion();
+            String sql = "SELECT ac.id_curso, ac.id_asignatura, anno FROM asignatura_curso ac, curso c, asignatura a WHERE ac.id_curso = c.id_curso AND ac.id_asignatura = a.id_asignatura AND a.nombre = '" + cmbAsignatura.getSelectedItem() + "' AND c.nombre = '" + cmbCurso.getSelectedItem() + "';";
+            rs = BD.ejecutarSQLSelect(sql);
+            //Armar id_evaluacion
+            while (rs.next()) {
+                id_curso = rs.getString("ac.id_curso");
+                id_asignatura = rs.getString("ac.id_asignatura");
+                anno = rs.getString("ac.anno");
+                id_evaluacion = id_curso + id_asignatura + anno + (int)(cmbSemestre.getSelectedIndex() + 1);
             }
+            //Agregar el numero de la Evaluacion
+            sql = "SELECT COUNT(id_evaluacion)+1 as n_evaluacion FROM evaluacion WHERE id_asignatura = '" + id_asignatura + "' AND id_curso = '" + id_curso + "' AND anno = '" + anno + "' AND semestre = '" + (int) (cmbSemestre.getSelectedIndex() + 1) + "'";
+            rs = BD.ejecutarSQLSelect(sql);
+            while (rs.next()) {
+                num_evaluacion = String.format("%02d", rs.getInt("n_evaluacion"));
+            }
+            id_evaluacion = id_evaluacion + num_evaluacion;
+            //FECHA
+            String año = txtAño.getText();
+            String mes = String.format("%02d", cmbMes.getSelectedIndex()+1);
+            String dia = (String)cmbDia.getSelectedItem();
+            fecha = año + "-" + mes + "-" + dia;
+            LocalDate today = LocalDate.of(Integer.parseInt(año),Integer.parseInt(mes),Integer.parseInt(dia));
+            //INSERT
+            sql = "INSERT INTO evaluacion(id_evaluacion,id_curso,id_asignatura,anno,semestre,num_evaluacion,fecha,detalle) VALUES ('" + id_evaluacion + coma + id_curso + coma + id_asignatura + coma + anno + coma + (int) (cmbSemestre.getSelectedIndex() + 1) + coma + num_evaluacion + coma + fecha + coma + txtDetalle.getText() + "')";
+            if (BD.ejecutarSQL(sql)) {
+                msj = "Se registro la evaluacion correctamente";
+                JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                msj = "Error, No se pudo realizar la operacion";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            BD.cerrarConexion();
+        } catch (Exception e) {
+            msj = "Error, hubo un problema.";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnGenerarActionPerformed
+
+    private void txtAñoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAñoFocusLost
+        try{
+            //Objeto con fecha actual
+            Calendar calendario = new GregorianCalendar();
+
+            Integer año = Integer.parseInt(txtAño.getText());
+            if (año<2002) {
+                JOptionPane.showMessageDialog(null,"Año imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
+                txtAño.requestFocus();
+                txtAño.setText("");
+            }
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Año imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
+            txtAño.requestFocus();
+            txtAño.setText("");
+        }
+
+    }//GEN-LAST:event_txtAñoFocusLost
+
+    private void txtAñoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAñoKeyTyped
+        //metodo para que no se ingresen letras en el campo jAño
+        int k=(int)evt.getKeyChar();
+        if (k >= 97 && k <= 122 || k>=65 && k<=90){
+            evt.setKeyChar((char)KeyEvent.VK_CLEAR);
+            JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+        }
+        if(k==241 || k==209){
+            evt.setKeyChar((char)KeyEvent.VK_CLEAR);
+            JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+        }
+        if(k==10){
+            txtAño.transferFocus();
+        }
+    }//GEN-LAST:event_txtAñoKeyTyped
+
+    private void cmbSemestreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSemestreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbSemestreActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -260,9 +326,10 @@ public class jfIngresar extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerar;
     private javax.swing.JButton btnVolver;
-    private com.toedter.calendar.JDateChooser calendario;
     private javax.swing.JComboBox<String> cmbAsignatura;
     private javax.swing.JComboBox<String> cmbCurso;
+    private javax.swing.JComboBox<String> cmbDia;
+    private javax.swing.JComboBox<String> cmbMes;
     private javax.swing.JComboBox<String> cmbSemestre;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -271,6 +338,7 @@ public class jfIngresar extends javax.swing.JFrame {
     private javax.swing.JLabel lblFecha;
     private javax.swing.JLabel lblSemestre;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JTextField txtAño;
     private javax.swing.JTextArea txtDetalle;
     // End of variables declaration//GEN-END:variables
 }
