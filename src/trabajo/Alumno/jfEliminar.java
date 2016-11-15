@@ -224,23 +224,35 @@ public class jfEliminar extends javax.swing.JFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         String rut = jRutEli.getText();
-        String sql ="DELETE FROM alumno WHERE rut_alumno = '" + rut + "' ";
-        if(!jNomAlumno.getText().equals("")){
-            try{
-                BD.ejecutarSQL(sql);
-                msj="Datos eliminados con exito";
-                JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
-                jRutEli.setText("");
-                jNomAlumno.setText("");
-                jRutAlumno.setText("");
-            }catch(Exception e){
-                msj="Error, no se pudo realizar la operación";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        String sql1 = "Select * from alumno_curso where rut_alumno = '" + rut + "' ";
+        try {
+            ResultSet rs = BD.ejecutarSQLSelect(sql1);
+            if (rs.next()) {
+                String sql2 = "UPDATE alumno_curso SET activo = 'n' where rut_alumno = '" + rut + "' ";
+                if (!jNomAlumno.getText().equals("")) {
+                    try {
+                        BD.ejecutarSQL(sql2);
+                        msj = "Alumno eliminado con exito";
+                        JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                        jRutEli.setText("");
+                        jNomAlumno.setText("");
+                        jRutAlumno.setText("");
+                    } catch (Exception e) {
+                        msj = "Error, no se pudo realizar la operación";
+                        JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    msj = "Error, busque un Rut valido";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                msj = "Error, alumno no ingresado en ningun curso";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }else{
-            msj="Error, busque un Rut valido";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+            
+        } catch (Exception e) {
         }
+
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void jRutEliFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRutEliFocusLost

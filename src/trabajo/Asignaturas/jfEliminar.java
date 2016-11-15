@@ -155,21 +155,28 @@ public class jfEliminar extends javax.swing.JFrame {
             codigo = codigo.substring(0, posicion);
             String sql = "Select * from asignatura_curso where id_asignatura = '" + codigo + "'";
             rs = BD.ejecutarSQLSelect(sql);
-            if (rs.next()){
+            if (rs.next()) {
                 msj = "Asignatura asociada a un curso no puede eliminarse";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
-            }else{
-                try{
-                    String sql2 = "DELETE FROM asignatura where id_asignatura = '"+codigo+"'";
-                    BD.ejecutarSQL(sql2);
-                    msj="Datos eliminados con exito";
-                    JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);                
-                }catch (Exception e){
-                    msj = "Error, hubo un problema.";
-                    JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE); 
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                sql = "Select * from evaluacion where id_asignatura = '" + codigo + "'";
+                rs = BD.ejecutarSQLSelect(sql);
+                if (rs.next()) {
+                    msj = "Asignatura asociada a una evaluacion no puede eliminarse";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    try {
+                        String sql2 = "DELETE FROM asignatura where id_asignatura = '" + codigo + "'";
+                        BD.ejecutarSQL(sql2);
+                        msj = "Datos eliminados con exito";
+                        JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception e) {
+                        msj = "Error, hubo un problema.";
+                        JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             msj = "Error, hubo un problema.";
             JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE); 
         }

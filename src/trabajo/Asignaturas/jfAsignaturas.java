@@ -27,6 +27,7 @@ public class jfAsignaturas extends javax.swing.JFrame {
         btn_Eliminar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
         btn_Ingresar1 = new javax.swing.JButton();
+        btn_EliAsigCurso = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(377, 317));
@@ -78,6 +79,13 @@ public class jfAsignaturas extends javax.swing.JFrame {
             }
         });
 
+        btn_EliAsigCurso.setText("Eliminar asig de un curso");
+        btn_EliAsigCurso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_EliAsigCursoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -85,18 +93,19 @@ public class jfAsignaturas extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnVolver))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(140, 140, 140)
                         .addComponent(jLabel1))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnVolver))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(98, 98, 98)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btn_modificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btn_Ingresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btn_Eliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btn_Ingresar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btn_Ingresar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_EliAsigCurso, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(112, Short.MAX_VALUE))
         );
 
@@ -115,9 +124,11 @@ public class jfAsignaturas extends javax.swing.JFrame {
                 .addComponent(btn_Eliminar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_Ingresar1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btn_EliAsigCurso)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnVolver)
-                .addGap(20, 20, 20))
+                .addContainerGap())
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_Eliminar, btn_Ingresar, btn_modificar});
@@ -166,6 +177,13 @@ public class jfAsignaturas extends javax.swing.JFrame {
         asig.setVisible(true);
     }//GEN-LAST:event_btn_Ingresar1ActionPerformed
 
+    private void btn_EliAsigCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EliAsigCursoActionPerformed
+        jfEliminarAsignaturaCurso eli = new jfEliminarAsignaturaCurso();
+        this.dispose();
+        eli.setVisible(true);
+        
+    }//GEN-LAST:event_btn_EliAsigCursoActionPerformed
+
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -197,6 +215,7 @@ public class jfAsignaturas extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVolver;
+    private javax.swing.JButton btn_EliAsigCurso;
     private javax.swing.JButton btn_Eliminar;
     private javax.swing.JButton btn_Ingresar;
     private javax.swing.JButton btn_Ingresar1;

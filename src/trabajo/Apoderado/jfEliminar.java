@@ -12,6 +12,7 @@ public class jfEliminar extends javax.swing.JFrame {
 
     private Conexion BD = new Conexion();
     private String msj;
+    private ResultSet rs;
 
     public jfEliminar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_delete.png"));
@@ -199,21 +200,34 @@ public class jfEliminar extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         String rut = jRutEli.getText();
         String sql ="DELETE FROM persona WHERE rut_persona = '" + rut + "' ";
-        if(!jNomPersona.getText().equals("")){
-            try{
-                BD.ejecutarSQL(sql);
-                msj="Datos eliminados con exito";
-                JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
-                jRutEli.setText("");
-                jNomPersona.setText("");
-                jRutPersona.setText("");
-            }catch(Exception e){
-                msj="Error, no se pudo realizar la operacion";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        if (!jNomPersona.getText().equals("")) {
+            try {
+                String sql2 = "Select * from relacion_persona_alumno where rut_persona = '" + rut + "'";
+                rs = BD.ejecutarSQLSelect(sql2);
+                if (rs.next()) {
+                    msj = "Persona asociada a un alumno no puede eliminarse";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    try {
+                        BD.ejecutarSQL(sql);
+                        msj = "Datos eliminados con exito";
+                        JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                        jRutEli.setText("");
+                        jNomPersona.setText("");
+                        jRutPersona.setText("");
+                    } catch (Exception e) {
+                        msj = "Error, no se pudo realizar la operacion";
+                        JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+
+            } catch (Exception e) {
+                msj = "Error, no se pudo realizar la operacion";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }else{
-            msj="Error, ningún Rut ah sido digitado";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        } else {
+            msj = "Error, ningún Rut ah sido digitado";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
