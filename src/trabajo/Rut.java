@@ -45,4 +45,10 @@ public class Rut {
             return false;
         }
     }
+    
+    static public String desformatear(String rut){
+        rut = rut.replace(".", "");
+        rut = rut.replace("-", "");
+        return rut;
+    }
 }

@@ -3,10 +3,15 @@ package trabajo.Apoderado;
 import clases.Conexion;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import trabajo.Rut;
 
 public class jfAsignarAlumno extends javax.swing.JFrame {
     private Conexion BD = new Conexion();
     private String msj;
+    private ResultSet rs;
+    private Rut rut;
     
     public jfAsignarAlumno() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_edit.png"));
@@ -22,20 +27,20 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         btnVolver = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        lblRutPersona = new javax.swing.JLabel();
+        txtRutPersona = new javax.swing.JTextField();
+        txtNomPersona = new javax.swing.JTextField();
+        lblRutAlu = new javax.swing.JLabel();
+        lblNomPersona = new javax.swing.JLabel();
+        lblNomAlu = new javax.swing.JLabel();
         btnAsignar = new javax.swing.JButton();
         jCheckBox1 = new javax.swing.JCheckBox();
         jCheckBox2 = new javax.swing.JCheckBox();
-        lbl_Ocupacion = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        lblParentesco = new javax.swing.JLabel();
+        cmbParentesco = new javax.swing.JComboBox<>();
         lblTitulo = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        txtNomAlu = new javax.swing.JTextField();
+        txtRutAlu = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(415, 330));
@@ -56,13 +61,29 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Ingrese Rut Apoderado/Sostenedor");
+        lblRutPersona.setText("Ingrese Rut Apoderado/Sostenedor");
 
-        jLabel2.setText("Ingrese Rut Alumno");
+        txtRutPersona.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtRutPersonaFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtRutPersonaFocusLost(evt);
+            }
+        });
+        txtRutPersona.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtRutPersonaKeyReleased(evt);
+            }
+        });
 
-        jLabel3.setText("Nombre de la persona:");
+        txtNomPersona.setEditable(false);
 
-        jLabel4.setText("Nombre del alumno:");
+        lblRutAlu.setText("Ingrese Rut Alumno");
+
+        lblNomPersona.setText("Nombre de la persona:");
+
+        lblNomAlu.setText("Nombre del alumno:");
 
         btnAsignar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disk.png"))); // NOI18N
         btnAsignar.setText("Asignar");
@@ -71,14 +92,30 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
 
         jCheckBox2.setText("Sostenedor");
 
-        lbl_Ocupacion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Ocupacion.setText("Parentesco:");
+        lblParentesco.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblParentesco.setText("Parentesco:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Padre", "Madre", "Hermano", "Tio", "Tia" }));
+        cmbParentesco.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Padre", "Madre", "Hermano", "Tio", "Tia" }));
 
         lblTitulo.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
         lblTitulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/group_add.png"))); // NOI18N
         lblTitulo.setText("Asignar Alumno");
+
+        txtNomAlu.setEditable(false);
+
+        txtRutAlu.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtRutAluFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtRutAluFocusLost(evt);
+            }
+        });
+        txtRutAlu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtRutAluKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -93,16 +130,16 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(lblTitulo)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jLabel1)
-                                        .addComponent(jLabel2)
-                                        .addComponent(jLabel4)))
+                                        .addComponent(lblNomPersona)
+                                        .addComponent(lblRutPersona)
+                                        .addComponent(lblRutAlu)
+                                        .addComponent(lblNomAlu)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtRutPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNomPersona, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNomAlu, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtRutAlu, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnVolver)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
@@ -114,9 +151,9 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
                         .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lbl_Ocupacion)
+                        .addComponent(lblParentesco)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cmbParentesco, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30))
         );
         jPanel1Layout.setVerticalGroup(
@@ -126,28 +163,28 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
                 .addComponent(lblTitulo)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblRutPersona)
+                    .addComponent(txtRutPersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblNomPersona)
+                    .addComponent(txtNomPersona, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblRutAlu)
+                    .addComponent(txtRutAlu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblNomAlu)
+                    .addComponent(txtNomAlu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBox1)
                     .addComponent(jCheckBox2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbl_Ocupacion)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblParentesco)
+                    .addComponent(cmbParentesco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver)
@@ -167,6 +204,51 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
         this.dispose();
         new jfApoderado().setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
+
+    private void txtRutPersonaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRutPersonaKeyReleased
+        try{
+            String RutFormateado = rut.formatear(txtRutPersona.getText());
+            String RutDesformateado = rut.desformatear(RutFormateado);
+            String sql = "SELECT nombres FROM persona WHERE rut_persona = '"+ RutDesformateado +"'";
+            rs = BD.ejecutarSQLSelect(sql);
+            txtNomPersona.setText("");
+            while (rs.next()){
+                txtNomPersona.setText(rs.getString("nombres"));
+            }
+        }catch (Exception e){
+            
+        }
+    }//GEN-LAST:event_txtRutPersonaKeyReleased
+
+    private void txtRutPersonaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRutPersonaFocusGained
+        BD.crearConexion();
+    }//GEN-LAST:event_txtRutPersonaFocusGained
+
+    private void txtRutPersonaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRutPersonaFocusLost
+        BD.cerrarConexion();
+    }//GEN-LAST:event_txtRutPersonaFocusLost
+
+    private void txtRutAluFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRutAluFocusGained
+        BD.crearConexion();
+    }//GEN-LAST:event_txtRutAluFocusGained
+
+    private void txtRutAluFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRutAluFocusLost
+        BD.cerrarConexion();
+    }//GEN-LAST:event_txtRutAluFocusLost
+
+    private void txtRutAluKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRutAluKeyReleased
+         try{
+            String RutFormateado = rut.formatear(txtRutAlu.getText());
+            String RutDesformateado = rut.desformatear(RutFormateado);
+            String sql = "SELECT nombres FROM alumno WHERE rut_alumno = '"+ RutDesformateado +"'";            rs = BD.ejecutarSQLSelect(sql);
+            txtNomAlu.setText("");
+            while (rs.next()){
+                txtNomAlu.setText(rs.getString("nombres"));
+            }
+        }catch (Exception e){
+            
+        }
+    }//GEN-LAST:event_txtRutAluKeyReleased
 
 
     public static void main(String args[]) {
@@ -201,19 +283,19 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignar;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JComboBox<String> cmbParentesco;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JLabel lblNomAlu;
+    private javax.swing.JLabel lblNomPersona;
+    private javax.swing.JLabel lblParentesco;
+    private javax.swing.JLabel lblRutAlu;
+    private javax.swing.JLabel lblRutPersona;
     private javax.swing.JLabel lblTitulo;
-    private javax.swing.JLabel lbl_Ocupacion;
+    private javax.swing.JTextField txtNomAlu;
+    private javax.swing.JTextField txtNomPersona;
+    private javax.swing.JTextField txtRutAlu;
+    private javax.swing.JTextField txtRutPersona;
     // End of variables declaration//GEN-END:variables
 }

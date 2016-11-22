@@ -7,7 +7,6 @@ import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
@@ -435,7 +434,6 @@ public class jfIngresar extends javax.swing.JFrame {
                     throw new IllegalArgumentException("Año Invalido");
                 }
                 LocalDate today = LocalDate.of(year,month,day);
-                //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
                 //FIN-FECHA
                 String sql = "INSERT INTO alumno(rut_alumno,nombres,ape_paterno,ape_materno ,fecha_nacimiento,"
                     + "sexo,direccion,religion,id_comuna,nacionalidad,transporte,num_hermanos,"
@@ -568,13 +566,16 @@ public class jfIngresar extends javax.swing.JFrame {
             rut = rutv.formatear(rut);
             if (rutv.validar(rut) == false){
                 JOptionPane.showMessageDialog(null,"Rut incorrecto","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
-                jRut.setText("");}else {
+                jRut.setText("");
+            }else{
                 rut = rut.replace(".", "");
                 rut = rut.replace("-", "");
-                jRut.setText(rut);}}catch (Exception e) {
-                    JOptionPane.showMessageDialog(null,"Mal formato de rut","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
-                    jRut.setText("");
-                }
+                jRut.setText(rut);
+            }
+        }catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Mal formato de rut","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
+            jRut.setText("");
+        }
     }//GEN-LAST:event_jRutFocusLost
 
     
