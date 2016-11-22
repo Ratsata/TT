@@ -146,7 +146,7 @@
         <Component class="javax.swing.JButton" name="btnAsignar">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/imagenes/add.png"/>
+              <Image iconType="3" name="/imagenes/group_add.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Asignar Alumno a Apoderado/Sostenedor"/>
           </Properties>

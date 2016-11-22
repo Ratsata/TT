@@ -28,7 +28,7 @@ public class jfApoderado extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(500, 400));
         setResizable(false);
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel1.setMaximumSize(new java.awt.Dimension(500, 400));
         jPanel1.setMinimumSize(new java.awt.Dimension(500, 400));
@@ -69,7 +69,7 @@ public class jfApoderado extends javax.swing.JFrame {
         jInstruccion.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jInstruccion.setText("Elija la opción que desee");
 
-        btnAsignar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add.png"))); // NOI18N
+        btnAsignar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/group_add.png"))); // NOI18N
         btnAsignar.setText("Asignar Alumno a Apoderado/Sostenedor");
         btnAsignar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
