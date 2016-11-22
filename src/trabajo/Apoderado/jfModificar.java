@@ -22,6 +22,7 @@ public class jfModificar extends javax.swing.JFrame {
         initComponents();
         this.jPanel1.setVisible(true);
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
+        deshabilitarBotones();
     }
 
     @SuppressWarnings("unchecked")
@@ -499,11 +500,14 @@ public class jfModificar extends javax.swing.JFrame {
         jAño.setText("");
         jNacionalidad.setText("");
         jOcupacion.setText("");
-        //jFolio.setText("");
+        jCelular.setText("");
+        jFono.setText("");
         cmbComuna.setSelectedIndex(0);
         cmbMes.setSelectedIndex(0);
         cmbDia.setSelectedIndex(0);
         cmbSexo.setSelectedIndex(0);
+        cmbPrefijo.setSelectedIndex(0);
+        cmbNivelEducacion.setSelectedIndex(0);
     }//GEN-LAST:event_jLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -555,6 +559,7 @@ public class jfModificar extends javax.swing.JFrame {
                 jOcupacion.setText(lis.getString(12));
                 cmbNivelEducacion.setSelectedItem(lis.getString(13));
                 jExiste.setText(msj);
+                habilitarBotones();
             }
         }catch(Exception e){
             msj="Error, no se pudo realizar la operacion";
@@ -642,8 +647,6 @@ public class jfModificar extends javax.swing.JFrame {
             jDir.setText("");
             jAño.setText("");
             jNacionalidad.setText("");
-            //jTransporte.setText("");
-            deshabilitarBotones();
         }
     }//GEN-LAST:event_jRutModiFocusLost
 
@@ -658,6 +661,11 @@ public class jfModificar extends javax.swing.JFrame {
         cmbMes.setEnabled(true);
         cmbSexo.setEnabled(true);
         jNacionalidad.setEnabled(true);
+        jOcupacion.setEnabled(true);
+        jCelular.setEnabled(true);
+        cmbPrefijo.setEnabled(true);
+        jFono.setEnabled(true);
+        cmbNivelEducacion.setEnabled(true);
     }
     
     private void deshabilitarBotones(){
@@ -671,6 +679,11 @@ public class jfModificar extends javax.swing.JFrame {
         cmbMes.setEnabled(false);
         cmbSexo.setEnabled(false);
         jNacionalidad.setEnabled(false);
+        jOcupacion.setEnabled(false);
+        jCelular.setEnabled(false);
+        cmbPrefijo.setEnabled(false);
+        jFono.setEnabled(false);
+        cmbNivelEducacion.setEnabled(false);
     }
     
     private void jRutModiKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jRutModiKeyPressed
