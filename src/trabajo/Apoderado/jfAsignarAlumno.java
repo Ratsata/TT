@@ -1,6 +1,7 @@
 package trabajo.Apoderado;
 
 import clases.Conexion;
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
@@ -12,6 +13,11 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
     private String msj;
     private ResultSet rs;
     private Rut rut;
+    String rut_persona;
+    String rut_alumno;
+    String parentesco;
+    String apoderado;
+    String sostenedor;
     
     public jfAsignarAlumno() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_edit.png"));
@@ -34,8 +40,8 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
         lblNomPersona = new javax.swing.JLabel();
         lblNomAlu = new javax.swing.JLabel();
         btnAsignar = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        chkApoderado = new javax.swing.JCheckBox();
+        chkSostenedor = new javax.swing.JCheckBox();
         lblParentesco = new javax.swing.JLabel();
         cmbParentesco = new javax.swing.JComboBox<>();
         lblTitulo = new javax.swing.JLabel();
@@ -87,10 +93,15 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
 
         btnAsignar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disk.png"))); // NOI18N
         btnAsignar.setText("Asignar");
+        btnAsignar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAsignarActionPerformed(evt);
+            }
+        });
 
-        jCheckBox1.setText("Apoderado");
+        chkApoderado.setText("Apoderado");
 
-        jCheckBox2.setText("Sostenedor");
+        chkSostenedor.setText("Sostenedor");
 
         lblParentesco.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblParentesco.setText("Parentesco:");
@@ -146,9 +157,9 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
                                 .addComponent(btnAsignar))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(71, 71, 71)
-                        .addComponent(jCheckBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(chkApoderado, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(chkSostenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblParentesco)
@@ -179,8 +190,8 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
                     .addComponent(txtNomAlu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jCheckBox2))
+                    .addComponent(chkApoderado)
+                    .addComponent(chkSostenedor))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblParentesco)
@@ -221,19 +232,39 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
     }//GEN-LAST:event_txtRutPersonaKeyReleased
 
     private void txtRutPersonaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRutPersonaFocusGained
-        BD.crearConexion();
+        try{
+            BD.crearConexion();
+        }catch (Exception e){
+            msj = "No se pudo conectar a la Base de Datos";
+            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_txtRutPersonaFocusGained
 
     private void txtRutPersonaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRutPersonaFocusLost
-        BD.cerrarConexion();
+        try{
+            BD.cerrarConexion();
+        }catch (Exception e){
+            msj = "No se pudo conectar a la Base de Datos";
+            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_txtRutPersonaFocusLost
 
     private void txtRutAluFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRutAluFocusGained
-        BD.crearConexion();
+        try{
+            BD.crearConexion();
+        }catch (Exception e){
+            msj = "No se pudo conectar a la Base de Datos";
+            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_txtRutAluFocusGained
 
     private void txtRutAluFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRutAluFocusLost
-        BD.cerrarConexion();
+        try{
+            BD.cerrarConexion();
+        }catch (Exception e){
+            msj = "No se pudo conectar a la Base de Datos";
+            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_txtRutAluFocusLost
 
     private void txtRutAluKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRutAluKeyReleased
@@ -249,6 +280,38 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_txtRutAluKeyReleased
+
+    private void btnAsignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarActionPerformed
+        try{
+            BD.crearConexion();
+            String coma = "','";
+            
+            rut_persona = txtRutPersona.getText();
+            rut_alumno = txtRutAlu.getText();
+            parentesco = String.valueOf(cmbParentesco.getSelectedItem());
+            if (chkApoderado.isSelected()){
+                apoderado = "S";
+            }else{
+                apoderado = "N";
+            }
+            if (chkSostenedor.isSelected()){
+                sostenedor = "S";
+            }else{
+                apoderado = "N";
+            }
+            String sql = "INSERT INTO relacion_persona_alumno(rut_persona,rut_alumno,parentesco,apoderado,sostenedor) VALUES ('" + rut_persona + coma + rut_alumno + coma + parentesco + coma + apoderado + coma + sostenedor +"')";
+            if (BD.ejecutarSQL(sql)){
+                msj = "Se realizó la asociación con éxito.";
+                JOptionPane.showMessageDialog(null,msj,"Éxito",JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                msj = "Ya existe esta asociacion entre persona y alumno.";
+                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+            }
+        }catch (Exception e){
+            msj = "Error, hubo un problema.";
+            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnAsignarActionPerformed
 
 
     public static void main(String args[]) {
@@ -283,9 +346,9 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignar;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JCheckBox chkApoderado;
+    private javax.swing.JCheckBox chkSostenedor;
     private javax.swing.JComboBox<String> cmbParentesco;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblNomAlu;
     private javax.swing.JLabel lblNomPersona;
