@@ -66,11 +66,11 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="98" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="btn_modificar" linkSize="1" max="32767" attributes="0"/>
-                              <Component id="btn_Ingresar" linkSize="1" max="32767" attributes="0"/>
-                              <Component id="btn_Eliminar" linkSize="1" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btn_Ingresar1" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btn_Ingresar" max="32767" attributes="0"/>
                               <Component id="btn_EliAsigCurso" max="32767" attributes="0"/>
+                              <Component id="btn_Ingresar1" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btn_Eliminar" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btn_modificar" alignment="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -91,9 +91,9 @@
                   <Component id="btn_Eliminar" linkSize="2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btn_Ingresar1" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="btn_EliAsigCurso" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
                   <Component id="btnVolver" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -163,6 +163,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="btn_EliAsigCurso">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/imagenes/book_delete.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Eliminar asig de un curso"/>
           </Properties>
           <Events>
