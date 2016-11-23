@@ -1,6 +1,7 @@
 package trabajo.Apoderado;
 
 import clases.Conexion;
+import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -12,9 +13,11 @@ import javax.swing.JOptionPane;
 import trabajo.Rut;
 
 public class jfModificar extends javax.swing.JFrame {
-
     private Conexion BD = new Conexion();
     private String msj;
+    private Rut rut;
+    private String rutFormateado;
+    private String rutDesformateado;
     
     public jfModificar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_edit.png"));
@@ -79,24 +82,24 @@ public class jfModificar extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(590, 550));
 
         lbl_Nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Nombre.setText("Nombre: ");
+        lbl_Nombre.setText("Nombre: *");
 
         lbl_ApePat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_ApePat.setText("Apellido Paterno:");
+        lbl_ApePat.setText("Apellido Paterno: *");
 
         lbl_ApeMat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lbl_ApeMat.setText("Apellido Materno:");
 
         lbl_Comuna.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Comuna.setText("Comuna:");
+        lbl_Comuna.setText("Comuna: *");
 
         cmbComuna.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01:Valparaiso", "02:Viña del mar", "03:Quilpue", "04:Villa Alemana", "05:Olmué", "06:Limache", "07:Quintero", "08:Concón", "09:Puchuncaví", "10:Juan Fernández", "11:Casablanca", "12:Santa María", "13:San Felipe", "14:Putaendo", "15:Panquehue", "16:Llay-Llay", "17:Catemu", "18:Santo Domingo", "19:San Antonio", "20:El Tabo", "21:El Quisco", "22:Cartagena", "23:Algarrobo", "24:Quillota", "25:Nogales", "26:La Cruz", "27:La Calera", "28:Hijuelas", "29:Zapallar", "30:Petorca", "31:Papudo", "32:La Ligua", "33:Cabildo", "34:San Esteban", "35:Rinconada", "36:Los Andes", "37:Calle Larga", "38:Isla de Pascua" }));
 
         lbl_Direccion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Direccion.setText("Direccion:");
+        lbl_Direccion.setText("Direccion: *");
 
         lbl_FechaNac.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_FechaNac.setText("Fecha de Nac.:");
+        lbl_FechaNac.setText("Fecha de Nac.: *");
 
         jAño.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -116,10 +119,10 @@ public class jfModificar extends javax.swing.JFrame {
         cmbSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
 
         lbl_Sexo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Sexo.setText("Sexo:");
+        lbl_Sexo.setText("Sexo: *");
 
         lbl_Nacionalidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Nacionalidad.setText("Nacionalidad:");
+        lbl_Nacionalidad.setText("Nacionalidad: *");
 
         lbl_Ocupacion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lbl_Ocupacion.setText("Ocupación:");
@@ -194,16 +197,6 @@ public class jfModificar extends javax.swing.JFrame {
         jPrefijoCelu.setText("+569");
         jPrefijoCelu.setEnabled(false);
 
-        jRutModi.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jRutModiFocusLost(evt);
-            }
-        });
-        jRutModi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRutModiActionPerformed(evt);
-            }
-        });
         jRutModi.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jRutModiKeyPressed(evt);
@@ -399,100 +392,91 @@ public class jfModificar extends javax.swing.JFrame {
         {BD.cerrarConexion();}
         this.dispose();
         new jfApoderado().setVisible(true);
-        //new jfMenu().setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-        BD.crearConexion();
+        if (jNombre.getText().equals("") || jApePat.getText().equals("") || jDir.getText().equals("") || jAño.getText().equals("") || jNacionalidad.getText().equals("")) {
+            msj = "Error, No deje ninguno cambo obligatorio vacio";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+        }else{
+            String nombre, apeP, apeM, dir, fechaNac, sexo, nacionalidad, NombreComuna, año, mes = "01", dia, numeroComuna, numeroString, letra, ocupacion, fono, fonoFinal, celular, celuFinal, nivelEducacion;
+            Integer Numero, comuna;
+            nombre = jNombre.getText();
+            apeP = jApePat.getText();
+            apeM = jApeMat.getText();
+            dir = jDir.getText();
 
-        if (jNombre.getText().equals("") || jApePat.getText().equals("") || jApeMat.getText().equals("") || jDir.getText().equals("") || jAño.getText().equals("") ||  jNacionalidad.getText().equals("") || jOcupacion.getText().equals("") ){
-                msj="Error, No deje ningun campo vacio";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
-            }else{
-                String nombre,apeP,apeM,dir,fechaNac,PosHermanos,Nhermanos,coma,religion,sexo,nacionalidad,transporte,NombreComuna,año,mes = "01",dia,numeroComuna,numeroString,folio,letra,ocupacion,fono,fonoFinal,celular,celuFinal,nivelEducacion,RutModi;
-                Integer folioMatricula,Posicion,Numero,comuna;
-                RutModi = jRutModi.getText();
-                nombre = jNombre.getText();
-                apeP = jApePat.getText();
-                apeM = jApeMat.getText();
-                dir = jDir.getText();
-                /* yyyy-mm-dd formato transformado para que en la base de datos quede tipo date
-                años limitados a 1900 -> 2011
-                falta validar si el año es biciesto y los meses correspondientes a los meses...*/
-        
-                año = jAño.getText();
-                Numero = cmbMes.getSelectedIndex();
-                if (Numero>=0 && Numero <9) {
-                    numeroString = Integer.toString(Numero + 1);
-                    mes = "0" + numeroString;
-                }else if (Numero>=9){
-                    mes = Integer.toString(Numero + 1);}
-                dia = (String)cmbDia.getSelectedItem();
-                fechaNac = año + "-" + mes + "-" + dia;
-                // Se obtiene el folio y se transforma al tipo de dato requerido por la bd
-                //folio = jFolio.getText();
-                //folioMatricula = Integer.parseInt(folio);
-                letra = (String)cmbSexo.getSelectedItem();
-                sexo = letra.substring(0,1);
+            año = jAño.getText();
+            Numero = cmbMes.getSelectedIndex();
+            if (Numero >= 0 && Numero < 9) {
+                numeroString = Integer.toString(Numero + 1);
+                mes = "0" + numeroString;
+            } else if (Numero >= 9) {
+                mes = Integer.toString(Numero + 1);
+            }
+            dia = (String) cmbDia.getSelectedItem();
+            fechaNac = año + "-" + mes + "-" + dia;
 
-                // Se obtienen los datos del combobox y se extrae el numero correspondiente al id_comuna
-                NombreComuna = (String)cmbComuna.getSelectedItem();
-                numeroComuna = NombreComuna.substring(0,2);
-                comuna = Integer.parseInt(numeroComuna);
-                nacionalidad = jNacionalidad.getText();
-                ocupacion = jOcupacion.getText();
-                fono = jFono.getText();
-                celular = jCelular.getText();
-                celuFinal =  jPrefijoCelu.getText() + celular;
-                fonoFinal = cmbPrefijo.getSelectedItem() + fono;
-                ocupacion = jOcupacion.getText();
-                nivelEducacion = (String)cmbNivelEducacion.getSelectedItem();
-                // Coma designada como variable para facilitar y entender mas la sintaxis de la linea de sql
-                coma = "','";
-                try {
-                    //FECHA
-                    int year = Integer.parseInt(jAño.getText());
-                    int month = cmbMes.getSelectedIndex() + 1;
-                    String cmbD = (String)cmbDia.getSelectedItem();
-                    int day = Integer.parseInt(cmbD);
-                    if (year <1900){
-                        throw new IllegalArgumentException("Año Invalido");
-                    }
-                    LocalDate today = LocalDate.of(year,month,day);
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
-                    //FIN-FECHA
-                    String sql = "UPDATE persona SET nombres = '"+nombre+"',"
-                        + "ape_paterno = '"+apeP+"',"
-                        + "ape_materno = '"+apeM+"',"
-                        + "fecha_nacimiento = '"+fechaNac+"',"
-                        + "sexo = '"+sexo+"',"
-                        + "direccion = '"+dir+"',"
-                        + "id_comuna = '"+comuna+"',"
-                        + "ocupacion = '"+ocupacion+"',"
-                        + "fono = '"+fonoFinal+"',"
-                        + "celular = '"+celuFinal+"',"
-                        + "nivel_educacion= '"+nivelEducacion+"',"
-                        + "nacionalidad = '"+nacionalidad+"'"
-                        + " WHERE rut_persona = '"+RutModi+"';"; //Espacio Necesario para el WHERE
-                    if(BD.ejecutarSQL(sql)){
-                        msj="Datos modificados";
-                        JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
-                    }else{
-                        msj="Error al intentar modificar.";
-                        JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
-                    }
-                }catch (DateTimeException ex){
-                    msj = "Error, fecha invalida";
-                    JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);   
-                }catch (Exception e){
-                    msj = "Error, hubo un problema.";
-                    JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
+            letra = (String) cmbSexo.getSelectedItem();
+            sexo = letra.substring(0, 1);
+
+            // Se obtienen los datos del combobox y se extrae el numero correspondiente al id_comuna
+            NombreComuna = (String) cmbComuna.getSelectedItem();
+            numeroComuna = NombreComuna.substring(0, 2);
+            comuna = Integer.parseInt(numeroComuna);
+            nacionalidad = jNacionalidad.getText();
+            ocupacion = jOcupacion.getText();
+            fono = jFono.getText();
+            celular = jCelular.getText();
+            celuFinal = jPrefijoCelu.getText() + celular;
+            fonoFinal = cmbPrefijo.getSelectedItem() + fono;
+            nivelEducacion = (String) cmbNivelEducacion.getSelectedItem();
+            // Coma designada como variable para facilitar y entender mas la sintaxis de la linea de sql
+            String coma = "','";
+            try {
+                BD.crearConexion();
+                //COMPROBAR FECHA
+                int year = Integer.parseInt(jAño.getText());
+                int month = cmbMes.getSelectedIndex() + 1;
+                String cmbD = (String) cmbDia.getSelectedItem();
+                int day = Integer.parseInt(cmbD);
+                if (year < 1900){
+                    throw new IllegalArgumentException("Año Invalido");
                 }
+                LocalDate today = LocalDate.of(year, month, day);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+                //FIN-FECHA
+                String sql = "UPDATE persona SET nombres = '" + nombre + "',"
+                        + "ape_paterno = '" + apeP + "',"
+                        + "ape_materno = '" + apeM + "',"
+                        + "fecha_nacimiento = '" + fechaNac + "',"
+                        + "sexo = '" + sexo + "',"
+                        + "direccion = '" + dir + "',"
+                        + "id_comuna = '" + comuna + "',"
+                        + "ocupacion = '" + ocupacion + "',"
+                        + "fono = '" + fonoFinal + "',"
+                        + "celular = '" + celuFinal + "',"
+                        + "nivel_educacion= '" + nivelEducacion + "',"
+                        + "nacionalidad = '" + nacionalidad + "'"
+                        + " WHERE rut_persona = '" + rutDesformateado + "';"; //Espacio Necesario para el WHERE
+                if (BD.ejecutarSQL(sql)){
+                    msj = "Datos modificados";
+                    JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                }else{
+                    msj = "Error al intentar modificar.";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (DateTimeException ex) {
+                msj = "Error, fecha invalida";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e) {
+                msj = "Error, hubo un problema.";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
-    private void jLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLimpiarActionPerformed
-        // TODO add your handling code here:
+    private void LimpiarDatos(){
         jNombre.setText("");
         jApePat.setText("");
         jApeMat.setText("");
@@ -508,62 +492,85 @@ public class jfModificar extends javax.swing.JFrame {
         cmbSexo.setSelectedIndex(0);
         cmbPrefijo.setSelectedIndex(0);
         cmbNivelEducacion.setSelectedIndex(0);
+    }
+    
+    private void jLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLimpiarActionPerformed
+        LimpiarDatos();
     }//GEN-LAST:event_jLimpiarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        BD.crearConexion();
-        msj = "";
-        jNombre.setText("");
-        jApePat.setText("");
-        jApeMat.setText("");
-        jDir.setText("");
-        jAño.setText("");
-        jNacionalidad.setText("");
-        //jFolio.setText("");
-        String rut = jRutModi.getText();
-        String sql1="SELECT * FROM persona WHERE RUT_PERSONA='"+rut+"'";
         try{
-            //sentencia = (com.mysql.jdbc.Statement)conexion.createStatement();
-            ResultSet lis = BD.ejecutarSQLSelect(sql1);
-            if (lis.next()){
-                String prefijo;
-                msj="Persona Existe Modifique los campos";
-                jExiste.setText(msj);
-                jNombre.setText(lis.getString(2));
-                jApePat.setText(lis.getString(3));
-                jApeMat.setText(lis.getString(4));
-                //jFolio.setText(lis.getString(6));                
-                //AÑO
-                String año = lis.getString(5);
-                año = año.substring(0,4);
-                jAño.setText(año);
-                //MES
-                String mes = lis.getString(5);
-                mes = mes.substring(5,7);
-                cmbMes.setSelectedIndex(Integer.parseInt(mes)-1);
-                //DIA
-                String dia = lis.getString(5);
-                dia = dia.substring(8,10);
-                cmbDia.setSelectedItem(dia);
-                String sexo = lis.getString(6);
-                if (sexo.equals("M")) {cmbSexo.setSelectedItem("Masculino");}
-                else {cmbSexo.setSelectedItem("Femenino");}
-                jDir.setText(lis.getString(7));
-                String comuna = lis.getString(8);
-                cmbComuna.setSelectedIndex(Integer.parseInt(comuna)-1);
-                jNacionalidad.setText(lis.getString(9));
-                prefijo = lis.getString(10).substring(0,lis.getString(10).length()-7);
-                cmbPrefijo.setSelectedItem(prefijo);
-                jFono.setText(lis.getString(10).substring(lis.getString(10).length()-7,lis.getString(10).length()));
-                jCelular.setText(lis.getString(11).substring(4,(lis.getString(11).length()))); 
-                jOcupacion.setText(lis.getString(12));
-                cmbNivelEducacion.setSelectedItem(lis.getString(13));
-                jExiste.setText(msj);
-                habilitarBotones();
+            rutFormateado = rut.formatear(jRutModi.getText());
+            if (rut.validar(rutFormateado) == false){
+                JOptionPane.showMessageDialog(null,"Rut inncorrecto","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
+                LimpiarDatos();
+                deshabilitarBotones();
+                jRutModi.requestFocus();
+            }else{
+                
+                jRutModi.setText(rutFormateado);
+                rutDesformateado = rut.desformatear(rutFormateado);
+                LimpiarDatos();
+                String sql1="SELECT * FROM persona WHERE RUT_PERSONA='"+rutDesformateado+"'";
+                try{
+                    BD.crearConexion();
+                    ResultSet lis = BD.ejecutarSQLSelect(sql1);
+                    if (lis.next()){
+                        jNombre.setText(lis.getString(2));
+                        jApePat.setText(lis.getString(3));
+                        jApeMat.setText(lis.getString(4));
+                        //AÑO
+                        String año = lis.getString(5);
+                        año = año.substring(0,4);
+                        jAño.setText(año);
+                        //MES
+                        String mes = lis.getString(5);
+                        mes = mes.substring(5,7);
+                        cmbMes.setSelectedIndex(Integer.parseInt(mes)-1);
+                        //DIA
+                        String dia = lis.getString(5);
+                        dia = dia.substring(8,10);
+                        cmbDia.setSelectedItem(dia);
+
+                        String sexo = lis.getString(6);
+                        if (sexo.equals("M")){
+                            cmbSexo.setSelectedItem("Masculino");
+                        }else{
+                            cmbSexo.setSelectedItem("Femenino");
+                        }
+                        jDir.setText(lis.getString(7));
+                        String comuna = lis.getString(8);
+                        cmbComuna.setSelectedIndex(Integer.parseInt(comuna)-1);
+                        jNacionalidad.setText(lis.getString(9));
+                        String prefijo = lis.getString(10);
+                        if (prefijo.length() > 2){
+                            prefijo = lis.getString(10).substring(0,lis.getString(10).length()-7);
+                            cmbPrefijo.setSelectedItem(prefijo);
+                            jFono.setText(lis.getString(10).substring(lis.getString(10).length()-7,lis.getString(10).length()));
+                        }else{
+                            cmbPrefijo.setSelectedItem(prefijo);
+                        }
+                        if (lis.getString(11).length() > 4){
+                            jCelular.setText(lis.getString(11).substring(4,(lis.getString(11).length()))); 
+                        }
+                        jOcupacion.setText(lis.getString(12));
+                        cmbNivelEducacion.setSelectedItem(lis.getString(13));
+                        jExiste.setText("Persona Existe Modifique los campos");
+                        habilitarBotones();
+                    }else{
+                        msj="Error, no existe el apoderado que busca";
+                        jExiste.setText(msj);
+                        JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+                    }
+                }catch(Exception e){
+                    msj="Error, no se pudo realizar la operacion";
+                    JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+                }
             }
-        }catch(Exception e){
-            msj="Error, no se pudo realizar la operacion";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Mal formato de rut","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
+            LimpiarDatos();
+            deshabilitarBotones();
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -615,41 +622,6 @@ public class jfModificar extends javax.swing.JFrame {
             jCelular.transferFocus();}
     }//GEN-LAST:event_jFonoKeyTyped
 
-    private void jRutModiFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRutModiFocusLost
-        try{
-            Rut rutv = new Rut();
-            String rut = jRutModi.getText();
-            rut = rutv.formatear(rut);
-            if (rutv.validar(rut) == false){
-                JOptionPane.showMessageDialog(null,"Rut incorrecto","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
-                jRutModi.setText("");
-                jNombre.setText("");
-                jApePat.setText("");
-                jApeMat.setText("");
-                jRutModi.setText("");
-                jDir.setText("");
-                jAño.setText("");
-                jNacionalidad.setText("");
-                //jTransporte.setText("");
-                deshabilitarBotones();
-            }else{
-                rut = rut.replace(".", "");
-                rut = rut.replace("-", "");
-                jRutModi.setText(rut);
-            }
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Mal formato de rut","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
-            jRutModi.setText("");
-            jNombre.setText("");
-            jApePat.setText("");
-            jApeMat.setText("");
-            jRutModi.setText("");
-            jDir.setText("");
-            jAño.setText("");
-            jNacionalidad.setText("");
-        }
-    }//GEN-LAST:event_jRutModiFocusLost
-
     private void habilitarBotones(){
         jNombre.setEnabled(true);
         jApePat.setEnabled(true);
@@ -688,18 +660,10 @@ public class jfModificar extends javax.swing.JFrame {
     
     private void jRutModiKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jRutModiKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            String rut = jRutModi.getText();
-            rut = rut.replace(".", "");
-            rut = rut.replace("-", "");
-            jRutModi.setText(rut);
             btnBuscar.requestFocus();
             btnBuscar.doClick();
         }
     }//GEN-LAST:event_jRutModiKeyPressed
-
-    private void jRutModiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRutModiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jRutModiActionPerformed
 
 
     public static void main(String args[]) {
