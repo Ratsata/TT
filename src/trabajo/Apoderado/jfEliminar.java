@@ -174,7 +174,6 @@ public class jfEliminar extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         BD.crearConexion();
-        msj = "";
         jRutPersona.setText("");
         jNomPersona.setText("");
         String rut = jRutEli.getText();
@@ -182,14 +181,11 @@ public class jfEliminar extends javax.swing.JFrame {
         try{
             ResultSet lis = BD.ejecutarSQLSelect(sql1);
             if (lis.next()){
-                msj="Persona Existe presione eliminar para confirmar";
-                jMensaje.setText(msj);
                 jRutPersona.setText(lis.getString(1));
                 jNomPersona.setText(lis.getString(2) + " " +  lis.getString(3) + " " + lis.getString(4));
-                jMensaje.setText(msj);
+                jMensaje.setText("Persona Existe presione eliminar para confirmar");
             }else {
-                msj="Persona No Existe busque denuevo";
-                jMensaje.setText(msj);
+                jMensaje.setText("Persona No Existe busque denuevo");
             }
         }catch(Exception e){
             msj="Error, no se pudo realizar la operacion";
@@ -235,7 +231,6 @@ public class jfEliminar extends javax.swing.JFrame {
         if (BD.getConexion() != null)
         {BD.cerrarConexion();}
         this.dispose();
-        //new jfMenu().setVisible(true);
         new jfApoderado().setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
