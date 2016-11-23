@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import trabajo.Rut;
 
@@ -483,9 +485,9 @@ public class jfModificar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void jAñoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jAñoFocusLost
-        String texto = jAño.getText();
-        Integer año = Integer.parseInt(texto);
-        Integer añoLimite = 2011;
+        Calendar calendario = new GregorianCalendar();
+        Integer año = Integer.parseInt(jAño.getText());
+        Integer añoLimite = (calendario.get(Calendar.YEAR)) - 5;
         if (año<1900 || año>añoLimite) {
             JOptionPane.showMessageDialog(null,"Año de nacimiento imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
             jAño.requestFocus();
@@ -581,7 +583,7 @@ public class jfModificar extends javax.swing.JFrame {
                         BD.cerrarConexion();
                     }catch (Exception e){
                         msj = "Error, hubo un problema.";
-                    JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
                     }
                 }catch (DateTimeException ex){
                     msj = "Error, fecha invalida";
