@@ -13,10 +13,11 @@ import trabajo.Rut;
 
 
 public class jfIngresar extends javax.swing.JFrame {
-
-
     private Conexion BD = new Conexion();
     private String msj;
+    private Rut rut;
+    private String rutFormateado;
+    private String rutDesformateado;
 
     public jfIngresar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_add.png"));
@@ -90,10 +91,10 @@ public class jfIngresar extends javax.swing.JFrame {
         });
 
         lbl_Nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Nombre.setText("Nombre: ");
+        lbl_Nombre.setText("Nombre: *");
 
         lbl_ApePat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_ApePat.setText("Apellido Paterno:");
+        lbl_ApePat.setText("Apellido Paterno: *");
 
         jApePat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,26 +106,26 @@ public class jfIngresar extends javax.swing.JFrame {
         lbl_ApeMat.setText("Apellido Materno:");
 
         lbl_Rut.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Rut.setText("Rut:");
+        lbl_Rut.setText("Rut: *");
 
         lbl_Comuna.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Comuna.setText("Comuna:");
+        lbl_Comuna.setText("Comuna: *");
 
         cmbComuna.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01:Valparaiso", "02:Viña del mar", "03:Quilpue", "04:Villa Alemana", "05:Olmué", "06:Limache", "07:Quintero", "08:Concón", "09:Puchuncaví", "10:Juan Fernández", "11:Casablanca", "12:Santa María", "13:San Felipe", "14:Putaendo", "15:Panquehue", "16:Llay-Llay", "17:Catemu", "18:Santo Domingo", "19:San Antonio", "20:El Tabo", "21:El Quisco", "22:Cartagena", "23:Algarrobo", "24:Quillota", "25:Nogales", "26:La Cruz", "27:La Calera", "28:Hijuelas", "29:Zapallar", "30:Petorca", "31:Papudo", "32:La Ligua", "33:Cabildo", "34:San Esteban", "35:Rinconada", "36:Los Andes", "37:Calle Larga", "38:Isla de Pascua" }));
 
         lbl_Direccion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Direccion.setText("Direccion:");
+        lbl_Direccion.setText("Direccion: *");
 
         lbl_FechaNac.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_FechaNac.setText("Fecha de Nac.:");
+        lbl_FechaNac.setText("Fecha de Nac.: *");
 
         lbl_Sexo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Sexo.setText("Sexo:");
+        lbl_Sexo.setText("Sexo: *");
 
         cmbSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
 
         lbl_Nacionalidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Nacionalidad.setText("Nacionalidad:");
+        lbl_Nacionalidad.setText("Nacionalidad: *");
 
         jNacionalidad.setText("Chile");
 
@@ -211,6 +212,27 @@ public class jfIngresar extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbl_Nacionalidad)
+                    .addComponent(lbl_Ocupacion1))
+                .addGap(130, 130, 130)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPrefijoCelu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbPrefijo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jFono, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jNacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jOcupacion, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -233,30 +255,6 @@ public class jfIngresar extends javax.swing.JFrame {
                         .addGap(149, 149, 149)
                         .addComponent(jDir, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(lbl_FechaNac)
-                        .addGap(119, 119, 119)
-                        .addComponent(jAño, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(13, 13, 13)
-                        .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(lbl_Sexo)
-                        .addGap(174, 174, 174)
-                        .addComponent(cmbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(lbl_Nacionalidad)
-                        .addGap(130, 130, 130)
-                        .addComponent(jNacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(lbl_Ocupacion1)
-                        .addGap(140, 140, 140)
-                        .addComponent(jOcupacion, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(51, 51, 51)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lbl_Nombre)
@@ -273,21 +271,29 @@ public class jfIngresar extends javax.swing.JFrame {
                             .addComponent(lbl_celular)
                             .addComponent(lbl_Fono1)
                             .addComponent(lbl_Fono, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(70, 70, 70)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPrefijoCelu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cmbPrefijo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jFono, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(cmbNivelEducacion, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(70, 70, 70)
                                 .addComponent(btnVolver)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnFinalizar)))))
+                                .addComponent(btnFinalizar))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(82, 82, 82)
+                                .addComponent(cmbNivelEducacion, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_FechaNac)
+                            .addComponent(lbl_Sexo))
+                        .addGap(119, 119, 119)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cmbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jAño, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13)
+                                .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(114, 114, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -333,16 +339,19 @@ public class jfIngresar extends javax.swing.JFrame {
                     .addComponent(jAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_Sexo)
-                    .addComponent(cmbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(lbl_Sexo))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(13, 13, 13)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jNacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_Nacionalidad))
                 .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_Nacionalidad)
-                    .addComponent(jNacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbl_Ocupacion1)
                     .addComponent(jOcupacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
@@ -357,7 +366,7 @@ public class jfIngresar extends javax.swing.JFrame {
                         .addComponent(lbl_Fono1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cmbPrefijo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jFono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
@@ -464,15 +473,14 @@ public class jfIngresar extends javax.swing.JFrame {
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
         BD.crearConexion();
 
-        if (jRut.getText().equals("") || jNombre.getText().equals("") || jApePat.getText().equals("") || jApeMat.getText().equals("") || jDir.getText().equals("") || jAño.getText().equals("") ||  jNacionalidad.getText().equals("") || jOcupacion.getText().equals("") ){
-                msj="Error, No deje ningun campo vacio";
+        if (jRut.getText().equals("") || jNombre.getText().equals("") || jApePat.getText().equals("") || jDir.getText().equals("") || jAño.getText().equals("") ||  jNacionalidad.getText().equals("") ){
+                msj="Error, No deje ningun campo obligatorio vacio";
                 JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
             }else{
 
-                String rut,nombre,apeP,apeM,dir,fechaNac,coma,sexo,nacionalidad,NombreComuna,año,mes = "01",dia,numeroComuna,numeroString,folio,letra,fono,celular,fonoFinal,celuFinal,ocupacion,nivelEducacion;
+                String nombre,apeP,apeM,dir,fechaNac,coma,sexo,nacionalidad,NombreComuna,año,mes = "01",dia,numeroComuna,numeroString,letra,fono,celular,fonoFinal,celuFinal,ocupacion,nivelEducacion;
                 Integer Numero,comuna;
-                // Se obtiene rut, nombre apellido paterno, apellido materno, direccion y fecha de nacimiento
-                rut = jRut.getText();
+                // Se obtiene nombre apellido paterno, apellido materno, direccion y fecha de nacimiento
                 nombre = jNombre.getText();
                 apeP = jApePat.getText();
                 apeM = jApeMat.getText();
@@ -490,6 +498,7 @@ public class jfIngresar extends javax.swing.JFrame {
                 }
                 dia = (String)cmbDia.getSelectedItem();
                 fechaNac = año + "-" + mes + "-" + dia;  
+                
                 letra = (String)cmbSexo.getSelectedItem();
                 sexo = letra.substring(0,1);
                 // Se obtienen los datos del combobox y se extrae el numero correspondiente al id_comuna
@@ -521,7 +530,7 @@ public class jfIngresar extends javax.swing.JFrame {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
                     //FIN-FECHA
                     String sql = "INSERT INTO persona(rut_persona,nombres,ape_paterno,ape_materno ,fecha_nacimiento,"
-                        + "sexo,direccion,id_comuna,nacionalidad,fono,celular,ocupacion,nivel_educacion) VALUES ('"+ rut +coma+ nombre+coma+apeP+coma+apeM+coma+fechaNac+coma+sexo+coma+dir+coma+comuna+coma+nacionalidad+coma+fonoFinal+coma+celuFinal+coma+ocupacion+coma+nivelEducacion+"')";
+                        + "sexo,direccion,id_comuna,nacionalidad,fono,celular,ocupacion,nivel_educacion) VALUES ('"+ rutDesformateado +coma+ nombre+coma+apeP+coma+apeM+coma+fechaNac+coma+sexo+coma+dir+coma+comuna+coma+nacionalidad+coma+fonoFinal+coma+celuFinal+coma+ocupacion+coma+nivelEducacion+"')";
                     if(BD.ejecutarSQL(sql)){
                         msj="Ingreso de persona realizado con exito";
                         JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
@@ -543,11 +552,9 @@ public class jfIngresar extends javax.swing.JFrame {
         {BD.cerrarConexion();}
         this.dispose();
         new jfApoderado().setVisible(true);
-        //new jfMenu().setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void jLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLimpiarActionPerformed
-        // TODO add your handling code here:
         jNombre.setText("");
         jApePat.setText("");
         jApeMat.setText("");
@@ -561,7 +568,9 @@ public class jfIngresar extends javax.swing.JFrame {
         cmbMes.setSelectedIndex(0);
         cmbDia.setSelectedIndex(0);
         cmbSexo.setSelectedIndex(0);
+        cmbPrefijo.setSelectedIndex(0);
         cmbNivelEducacion.setSelectedIndex(0);
+        
     }//GEN-LAST:event_jLimpiarActionPerformed
 
     private void none(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_none
@@ -570,15 +579,15 @@ public class jfIngresar extends javax.swing.JFrame {
 
     private void jRutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRutFocusLost
         try{
-            Rut rutv = new Rut();
-            String rut = jRut.getText();
-            rut = rutv.formatear(rut);
-            if (rutv.validar(rut) == false){
+            rutFormateado = rut.formatear(jRut.getText());
+            if (rut.validar(rutFormateado) == false){
                 JOptionPane.showMessageDialog(null,"Rut incorrecto","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
-                jRut.setText("");}else {
-                rut = rut.replace(".", "");
-                rut = rut.replace("-", "");
-                jRut.setText(rut);}}catch (Exception e) {
+                jRut.setText("");
+            }else{
+                rutDesformateado = rut.desformatear(rutFormateado);
+                jRut.setText(rutFormateado);
+            }
+        }catch (Exception e){
             JOptionPane.showMessageDialog(null,"Mal formato de rut","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
             jRut.setText("");
         }
