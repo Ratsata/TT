@@ -478,24 +478,16 @@ public class jfIngresar extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
             }else{
 
-                String nombre,apeP,apeM,dir,fechaNac,coma,sexo,nacionalidad,NombreComuna,año,mes = "01",dia,numeroComuna,numeroString,letra,fono,celular,fonoFinal,celuFinal,ocupacion,nivelEducacion;
-                Integer Numero,comuna;
+                String nombre,apeP,apeM,dir,fechaNac,coma,sexo,nacionalidad,NombreComuna,año,mes,dia,numeroComuna,letra,fono,celular,fonoFinal,celuFinal,ocupacion,nivelEducacion;
+                Integer comuna;
                 // Se obtiene nombre apellido paterno, apellido materno, direccion y fecha de nacimiento
                 nombre = jNombre.getText();
                 apeP = jApePat.getText();
                 apeM = jApeMat.getText();
                 dir = jDir.getText();
-                /* yyyy-mm-dd formato transformado para que en la base de datos quede tipo date
-                años limitados a 1900 -> 2011
-                f alta validar si el año es biciesto y los meses correspondientes a los meses...*/
+                
                 año = jAño.getText();
-                Numero = cmbMes.getSelectedIndex();
-                if (Numero>=0 && Numero <9) {
-                    numeroString = Integer.toString(Numero + 1);
-                    mes = "0" + numeroString;
-                }else if (Numero>=9){ 
-                    mes = Integer.toString(Numero + 1);
-                }
+                mes = String.format("%02d", cmbMes.getSelectedIndex()+1);
                 dia = (String)cmbDia.getSelectedItem();
                 fechaNac = año + "-" + mes + "-" + dia;  
                 

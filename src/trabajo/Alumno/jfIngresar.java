@@ -16,6 +16,9 @@ import trabajo.Rut;
 public class jfIngresar extends javax.swing.JFrame {
     private String msj;
     private Conexion BD = new Conexion();
+    private Rut rut;
+    private String rutFormateado;
+    private String rutDesformateado;
     
     public jfIngresar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_add.png"));
@@ -69,32 +72,35 @@ public class jfIngresar extends javax.swing.JFrame {
         jColegioProcedencia = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(600, 500));
+        setMaximumSize(new java.awt.Dimension(600, 510));
+        setMinimumSize(new java.awt.Dimension(600, 510));
+        setPreferredSize(new java.awt.Dimension(600, 510));
         setResizable(false);
         getContentPane().setLayout(null);
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel1.setMaximumSize(new java.awt.Dimension(600, 500));
-        jPanel1.setMinimumSize(new java.awt.Dimension(600, 500));
+        jPanel1.setMaximumSize(new java.awt.Dimension(600, 510));
+        jPanel1.setMinimumSize(new java.awt.Dimension(600, 510));
+        jPanel1.setPreferredSize(new java.awt.Dimension(600, 510));
 
         lblTitulo.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
         lblTitulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/group_add.png"))); // NOI18N
         lblTitulo.setText("Ingreso de Alumnos");
 
         lbl_Nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Nombre.setText("Nombre: ");
+        lbl_Nombre.setText("Nombre: *");
 
         lbl_ApePat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_ApePat.setText("Apellido Paterno:");
+        lbl_ApePat.setText("Apellido Paterno: *");
 
         lbl_ApeMat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lbl_ApeMat.setText("Apellido Materno:");
 
         lbl_Rut.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Rut.setText("Rut:");
+        lbl_Rut.setText("Rut: *");
 
         lbl_Direccion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Direccion.setText("Direccion:");
+        lbl_Direccion.setText("Direccion: *");
 
         jRut.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -103,7 +109,7 @@ public class jfIngresar extends javax.swing.JFrame {
         });
 
         lbl_FechaNac.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_FechaNac.setText("Fecha de Nac.:");
+        lbl_FechaNac.setText("Fecha de Nac.: *");
 
         btnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/backward.png"))); // NOI18N
         btnVolver.setText("Volver");
@@ -114,18 +120,18 @@ public class jfIngresar extends javax.swing.JFrame {
         });
 
         lbl_Sexo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Sexo.setText("Sexo:");
+        lbl_Sexo.setText("Sexo: *");
 
         cmbSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
 
         lbl_Religion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Religion.setText("Religion:");
+        lbl_Religion.setText("Religion: *");
 
         lbl_Comuna.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Comuna.setText("Comuna:");
+        lbl_Comuna.setText("Comuna: *");
 
         lbl_Nacionalidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Nacionalidad.setText("Pais Nacionalidad:");
+        lbl_Nacionalidad.setText("Pais Nacionalidad: *");
 
         jNacionalidad.setText("Chile");
 
@@ -135,7 +141,7 @@ public class jfIngresar extends javax.swing.JFrame {
         cmbComuna.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01:Valparaiso", "02:Viña del mar", "03:Quilpue", "04:Villa Alemana", "05:Olmué", "06:Limache", "07:Quintero", "08:Concón", "09:Puchuncaví", "10:Juan Fernández", "11:Casablanca", "12:Santa María", "13:San Felipe", "14:Putaendo", "15:Panquehue", "16:Llay-Llay", "17:Catemu", "18:Santo Domingo", "19:San Antonio", "20:El Tabo", "21:El Quisco", "22:Cartagena", "23:Algarrobo", "24:Quillota", "25:Nogales", "26:La Cruz", "27:La Calera", "28:Hijuelas", "29:Zapallar", "30:Petorca", "31:Papudo", "32:La Ligua", "33:Cabildo", "34:San Esteban", "35:Rinconada", "36:Los Andes", "37:Calle Larga", "38:Isla de Pascua" }));
 
         lbl_Folio.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Folio.setText("Nº de Folio:");
+        lbl_Folio.setText("Nº de Folio: *");
 
         jFolio.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -215,52 +221,6 @@ public class jfIngresar extends javax.swing.JFrame {
                         .addGap(51, 51, 51)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_ApePat)
-                                .addGap(103, 103, 103)
-                                .addComponent(jApePat, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_ApeMat)
-                                .addGap(101, 101, 101)
-                                .addComponent(jApeMat, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_Rut)
-                                .addGap(178, 178, 178)
-                                .addComponent(jRut, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_Comuna)
-                                .addGap(148, 148, 148)
-                                .addComponent(cmbComuna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_Direccion)
-                                .addGap(144, 144, 144)
-                                .addComponent(jDir, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_FechaNac)
-                                .addGap(114, 114, 114)
-                                .addComponent(jAño, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6)
-                                .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6)
-                                .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_Religion)
-                                .addGap(154, 154, 154)
-                                .addComponent(jReligion, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_Sexo)
-                                .addGap(169, 169, 169)
-                                .addComponent(cmbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbl_Nacionalidad1)
-                                    .addComponent(lbl_Nacionalidad)
-                                    .addComponent(lbl_Nacionalidad2))
-                                .addGap(59, 59, 59)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jNacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cmbTransporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jColegioProcedencia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblNombre10)
                                     .addComponent(lblNombre11))
@@ -274,9 +234,46 @@ public class jfIngresar extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnFinalizar))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(lbl_Folio)
-                                .addGap(134, 134, 134)
-                                .addComponent(jFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbl_ApeMat)
+                                    .addComponent(lbl_ApePat)
+                                    .addComponent(lbl_Rut)
+                                    .addComponent(lbl_Comuna)
+                                    .addComponent(lbl_Direccion))
+                                .addGap(91, 91, 91)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jDir, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cmbComuna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jRut, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jApePat, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jApeMat, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbl_FechaNac)
+                                    .addComponent(lbl_Religion)
+                                    .addComponent(lbl_Sexo))
+                                .addGap(102, 102, 102)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jReligion, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jAño, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbl_Nacionalidad1)
+                                    .addComponent(lbl_Nacionalidad)
+                                    .addComponent(lbl_Nacionalidad2)
+                                    .addComponent(lbl_Folio))
+                                .addGap(59, 59, 59)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jFolio, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jNacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cmbTransporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jColegioProcedencia, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(46, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -317,9 +314,10 @@ public class jfIngresar extends javax.swing.JFrame {
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbl_FechaNac)
-                    .addComponent(jAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cmbDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jAño, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lbl_Religion)
@@ -332,17 +330,14 @@ public class jfIngresar extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jNacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbl_Nacionalidad))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(lbl_Nacionalidad1))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbTransporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jColegioProcedencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lbl_Nacionalidad2))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbTransporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_Nacionalidad1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jColegioProcedencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbl_Nacionalidad2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lbl_Folio)
@@ -366,99 +361,94 @@ public class jfIngresar extends javax.swing.JFrame {
         cmbSexo.getAccessibleContext().setAccessibleName("");
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 600, 500);
+        jPanel1.setBounds(0, 0, 600, 510);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-        BD.crearConexion();
-        
-        if (jRut.getText().equals("") || jNombre.getText().equals("") || jApePat.getText().equals("") || jApeMat.getText().equals("") || jDir.getText().equals("") || jAño.getText().equals("") || jReligion.getText().equals("") || jNacionalidad.getText().equals("") ||  jFolio.getText().equals("")){
-        //if (rut.equals("") || nombre.equals("") || apeP.equals("") || apeM.equals("") || dir.equals("") || fechaNac.equals("")){
-            msj="Error, No deje ningun campo vacio";
+        if (jRut.getText().equals("") || jNombre.getText().equals("") || jApePat.getText().equals("") || jDir.getText().equals("") || jAño.getText().equals("") || jReligion.getText().equals("") || jNacionalidad.getText().equals("") ||  jFolio.getText().equals("")){
+            msj="Error, No deje ningun campo obligatorio vacio";
             JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);  
         }else{
-            
-        String rut,nombre,apeP,apeM,dir,fechaNac,PosHermanos,Nhermanos,coma,religion,sexo,nacionalidad,transporte,NombreComuna,año,mes = "01",dia,numeroComuna,numeroString,folio,letra,colegioProcedencia;
-        Integer folioMatricula,Posicion,Numero,comuna;
-        // Se obtiene rut, nombre apellido paterno, apellido materno, direccion y fecha de nacimiento
-        rut = jRut.getText();           
-        //rut aun no validado con digito verificador, se puede ingresar cualquier cosa
-        nombre = jNombre.getText();
-        apeP = jApePat.getText();
-        apeM = jApeMat.getText();
-        dir = jDir.getText();
-        //FECHA
-        //falta validar si el año es biciesto y los meses correspondientes a los meses...
-        año = jAño.getText();
-        mes = String.format("%02d", cmbMes.getSelectedIndex()+1);
-        dia = (String)cmbDia.getSelectedItem();
-        fechaNac = año + "-" + mes + "-" + dia;  
-        // Se obtiene el folio y se transforma al tipo de dato requerido por la bd
-        folio = jFolio.getText();
-        folioMatricula = Integer.parseInt(folio);
-        letra = (String)cmbSexo.getSelectedItem();
-        sexo = letra.substring(0,1);
-        religion = jReligion.getText();
-        // Se obtienen los datos del combobox y se extrae el numero correspondiente al id_comuna
-        NombreComuna = (String)cmbComuna.getSelectedItem();
-        numeroComuna = NombreComuna.substring(0,2);
-        comuna = Integer.parseInt(numeroComuna);
-        nacionalidad = jNacionalidad.getText();
-        transporte = (String)cmbTransporte.getSelectedItem();
-        //transporte = jTransporte.getText();
-        // Coma designada como variable para facilitar y entender mas la sintaxis de la linea de sql
-        coma = "','";
-        //2 variables contenidas en el otro panel//
-        PosHermanos = (String)cmbPosHermanos.getSelectedItem();
-        Posicion = Integer.parseInt(PosHermanos);
-        Nhermanos = (String)cmbNumHermanos.getSelectedItem();
-        Numero = Integer.parseInt(Nhermanos);
-        colegioProcedencia = jColegioProcedencia.getText();
-        if (Posicion > Numero){
+            String nombre,apeP,apeM,dir,fechaNac,coma,religion,sexo,nacionalidad,transporte,NombreComuna,año,mes,dia,numeroComuna,letra,colegioProcedencia;
+            Integer folioMatricula,PosHermano,NumHermano,comuna;
+            // Se obtiene nombre apellido paterno, apellido materno, direccion y fecha de nacimiento
+            nombre = jNombre.getText();
+            apeP = jApePat.getText();
+            apeM = jApeMat.getText();
+            dir = jDir.getText();
+            //FECHA
+            año = jAño.getText();
+            mes = String.format("%02d", cmbMes.getSelectedIndex()+1);
+            dia = (String)cmbDia.getSelectedItem();
+            fechaNac = año + "-" + mes + "-" + dia;  
+        
+            folioMatricula = Integer.parseInt(jFolio.getText());
+            letra = (String)cmbSexo.getSelectedItem();
+            sexo = letra.substring(0,1);
+            religion = jReligion.getText();
+        
+            // Se obtienen los datos del combobox y se extrae el numero correspondiente al id_comuna
+            NombreComuna = (String)cmbComuna.getSelectedItem();
+            numeroComuna = NombreComuna.substring(0,2);
+            comuna = Integer.parseInt(numeroComuna);
+            nacionalidad = jNacionalidad.getText();
+            transporte = (String)cmbTransporte.getSelectedItem();
+
+            PosHermano = Integer.parseInt((String)cmbPosHermanos.getSelectedItem());
+            NumHermano = Integer.parseInt((String)cmbNumHermanos.getSelectedItem());
+            colegioProcedencia = jColegioProcedencia.getText();
+            // Coma designada como variable para facilitar y entender mas la sintaxis de la linea de sql
+            coma = "','";
+        if (PosHermano > NumHermano){
             msj="No puedes estar en una posicion mayor a la de el numero de hermanos";
             JOptionPane.showMessageDialog(null,msj,"Error hermandad",JOptionPane.INFORMATION_MESSAGE);  
         }else{
-            String sql1 = "SELECT * from matricula where folio_matricula = '"+folioMatricula+"'";
+            
             try{
+                BD.crearConexion();
+                String sql1 = "SELECT * from matricula where folio_matricula = '"+folioMatricula+"'";
                 ResultSet lis = BD.ejecutarSQLSelect(sql1);
-                if (lis.next()){msj = "Folio existente";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
-                }else{
-                //FECHA
-                int year = Integer.parseInt(jAño.getText());
-                int month = cmbMes.getSelectedIndex() + 1;
-                int day = Integer.parseInt((String)cmbDia.getSelectedItem());
-                if (year <1900){
-                    throw new IllegalArgumentException("Año Invalido");
-                }
-                LocalDate today = LocalDate.of(year,month,day);
-                //FIN-FECHA
-                String sql = "INSERT INTO alumno(rut_alumno,nombres,ape_paterno,ape_materno ,fecha_nacimiento,"
-                    + "sexo,direccion,religion,id_comuna,nacionalidad,transporte,num_hermanos,"
-                    + "posicion_hermanos,"+"colegio_procedencia) VALUES ('"+ rut +coma+ nombre+coma+apeP+coma+apeM+coma+fechaNac+coma+sexo+coma+dir+coma+religion+coma+comuna+coma+nacionalidad+coma+transporte+coma+Nhermanos+coma+PosHermanos+coma+colegioProcedencia+"')";
-                if(BD.ejecutarSQL(sql)){
-                    msj="Ingreso de alumno realizado con exito";
-                    JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
-                }else{
-                    msj="Error, rut existente";
+                if (lis.next()){
+                    msj = "Folio existente";
                     JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
-                }
-                //año actual
+                }else{
+                    //FECHA
+                    int year = Integer.parseInt(jAño.getText());
+                    int month = cmbMes.getSelectedIndex() + 1;
+                    int day = Integer.parseInt((String)cmbDia.getSelectedItem());
+                    if (year <1900){
+                        throw new IllegalArgumentException("Año Invalido");
+                    }
+                    LocalDate today = LocalDate.of(year,month,day);
+                    //FIN-FECHA
+                    String sql = "INSERT INTO alumno(rut_alumno,nombres,ape_paterno,ape_materno ,fecha_nacimiento,"
+                                + "sexo,direccion,religion,id_comuna,nacionalidad,transporte,num_hermanos,"
+                                + "posicion_hermanos,"+"colegio_procedencia) VALUES ('"+ rutDesformateado +coma+ nombre+coma+apeP+coma+apeM+coma+fechaNac+coma+sexo+coma+dir+coma+religion+coma+comuna+coma+nacionalidad+coma+transporte+coma+NumHermano+coma+PosHermano+coma+colegioProcedencia+"')";
+                    if(BD.ejecutarSQL(sql)){
+                        msj="Ingreso de alumno realizado con exito";
+                        JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
+                    }else{
+                        msj="Error, rut existente";
+                        JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+                    }
+                    //año actual
                     Calendar calendario = new GregorianCalendar();
                     int anno = calendario.get(Calendar.YEAR);
                     //
                 
-                String sql2 ="INSERT INTO matricula VALUES ('"+folioMatricula+coma+anno+coma+rut+"')";
-                if(BD.ejecutarSQL(sql2)){
-                    msj="Ingreso de matricula realizado con exito";
-                    JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
-                }else{
-                    msj="Error, Folio existente";
-                    JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+                    String sql2 ="INSERT INTO matricula VALUES ('"+folioMatricula+coma+anno+coma+rutDesformateado+"')";
+                    if(BD.ejecutarSQL(sql2)){
+                        msj="Ingreso de matricula realizado con exito";
+                        JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
+                    }else{
+                        msj="Error, Folio existente";
+                        JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+                    }
+                    BD.cerrarConexion();
                 }
-            }}catch (DateTimeException ex){
+            }catch (DateTimeException ex){
                 msj = "Error, fecha invalida";
                 JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);   
             }catch (Exception e){
@@ -481,16 +471,16 @@ public class jfIngresar extends javax.swing.JFrame {
         //metodo para que no se ingresen letras en el campo jAño
         int k=(int)evt.getKeyChar();
         if (k >= 97 && k <= 122 || k>=65 && k<=90){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+            evt.setKeyChar((char)KeyEvent.VK_CLEAR);
+            JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
         }
         if(k==241 || k==209){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+            evt.setKeyChar((char)KeyEvent.VK_CLEAR);
+            JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
         }
         if(k==10){
-        jAño.transferFocus();
-}
+            jAño.transferFocus();
+        }
     }//GEN-LAST:event_jAñoKeyTyped
 
     private void jAñoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jAñoFocusLost
@@ -515,12 +505,16 @@ public class jfIngresar extends javax.swing.JFrame {
     }//GEN-LAST:event_jAñoFocusLost
 
     private void jFolioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFolioFocusLost
-        String texto = jFolio.getText();
-        Integer Numeros = Integer.parseInt(texto);     
-        if (Numeros<0 || Numeros>999999) {
-            JOptionPane.showMessageDialog(null,"Folio imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
-            jFolio.requestFocus();
-            jFolio.setText("");
+        try {
+            String texto = jFolio.getText();
+            Integer Numeros = Integer.parseInt(texto);     
+            if (Numeros<0 || Numeros>999999) {
+                JOptionPane.showMessageDialog(null,"Folio imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
+                jFolio.requestFocus();
+                jFolio.setText("");
+            }
+        }catch (Exception e){
+            
         }
     }//GEN-LAST:event_jFolioFocusLost
 
@@ -548,7 +542,6 @@ public class jfIngresar extends javax.swing.JFrame {
         jDir.setText("");
         jReligion.setText("");
         jAño.setText("");
-        jNacionalidad.setText("");
         jFolio.setText("");
         cmbComuna.setSelectedIndex(0);
         cmbMes.setSelectedIndex(0);
@@ -559,18 +552,14 @@ public class jfIngresar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiarActionPerformed
     
     private void jRutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRutFocusLost
-        
         try{
-            Rut rutv = new Rut();
-            String rut = jRut.getText();
-            rut = rutv.formatear(rut);
-            if (rutv.validar(rut) == false){
+            rutFormateado = rut.formatear(jRut.getText());
+            if (rut.validar(rutFormateado) == false){
                 JOptionPane.showMessageDialog(null,"Rut incorrecto","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
                 jRut.setText("");
             }else{
-                rut = rut.replace(".", "");
-                rut = rut.replace("-", "");
-                jRut.setText(rut);
+                rutDesformateado = rut.desformatear(rutFormateado);
+                jRut.setText(rutFormateado);
             }
         }catch (Exception e) {
             JOptionPane.showMessageDialog(null,"Mal formato de rut","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
@@ -578,9 +567,7 @@ public class jfIngresar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jRutFocusLost
 
-    
     public static void main(String args[]) {
-        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
