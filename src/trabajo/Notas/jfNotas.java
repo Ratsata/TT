@@ -47,7 +47,7 @@ public class jfNotas extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jNota = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnIngresar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
@@ -70,8 +70,13 @@ public class jfNotas extends javax.swing.JFrame {
 
         jLabel5.setText("Nota:");
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disk.png"))); // NOI18N
-        jButton1.setText("Modificar/Ingresar");
+        btnIngresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disk.png"))); // NOI18N
+        btnIngresar.setText("Modificar/Ingresar");
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresarActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("*Para eliminar todas las notas de una evaluación");
 
@@ -88,6 +93,13 @@ public class jfNotas extends javax.swing.JFrame {
         lblTitulo.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
         lblTitulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_add.png"))); // NOI18N
         lblTitulo.setText("Notas");
+
+        cmbAlumnos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Alumno" }));
+        cmbAlumnos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbAlumnosActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -114,7 +126,7 @@ public class jfNotas extends javax.swing.JFrame {
                                         .addComponent(jNota, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(jLabel6)
                                     .addComponent(jLabel7)
-                                    .addComponent(jButton1)))))
+                                    .addComponent(btnIngresar)))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblTitulo)))
@@ -137,7 +149,7 @@ public class jfNotas extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(cmbAlumnos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(btnIngresar)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -173,7 +185,9 @@ public class jfNotas extends javax.swing.JFrame {
     private void cmbEvaluacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEvaluacionActionPerformed
         if (actualizando.equals("n")) {
             try {
+                actualizando = "s";
                 cmbAlumnos.removeAllItems();
+                cmbAlumnos.addItem("Seleccione evaluacion");
                 BD.crearConexion();
                 String codigo = (String)cmbEvaluacion.getSelectedItem();
                 String curso = codigo.substring(0, 3);
@@ -190,8 +204,33 @@ public class jfNotas extends javax.swing.JFrame {
                 msj = "Error, hubo un problema.";
                 JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
             }
+            actualizando ="n";
         }
     }//GEN-LAST:event_cmbEvaluacionActionPerformed
+
+    private void cmbAlumnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAlumnosActionPerformed
+        if (actualizando.equals("n")) {
+        try {
+                BD.crearConexion();
+                String codigo = (String)cmbAlumnos.getSelectedItem();
+                String rutA = codigo.substring(0,codigo.indexOf(" "));      
+                codigo = (String)cmbEvaluacion.getSelectedItem();
+                String sql = "SELECT nota FROM notas where rut_alumno = '"+rutA+"' and id_evaluacion = '"+codigo+"'";
+                rs = BD.ejecutarSQLSelect(sql);
+                while (rs.next()) {
+                    jNota.setText(rs.getString("nota"));
+                }
+                BD.cerrarConexion();
+            } catch (Exception e) {
+                msj = "Error, hubo un problema.";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_cmbAlumnosActionPerformed
+
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+        
+    }//GEN-LAST:event_btnIngresarActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -223,10 +262,10 @@ public class jfNotas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> cmbAlumnos;
     private javax.swing.JComboBox<String> cmbEvaluacion;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
