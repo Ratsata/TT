@@ -54,9 +54,9 @@ public class jfAsignarCurso extends javax.swing.JFrame {
         lblTitulo = new javax.swing.JLabel();
         btn_volver = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
-        cmbCurso = new javax.swing.JComboBox<String>();
+        cmbCurso = new javax.swing.JComboBox<>();
         lblCurso = new javax.swing.JLabel();
-        cmbAsignatura = new javax.swing.JComboBox<String>();
+        cmbAsignatura = new javax.swing.JComboBox<>();
         lblAsignatura = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);

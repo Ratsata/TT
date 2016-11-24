@@ -63,6 +63,7 @@
                               <Component id="btnEliminar" alignment="0" max="32767" attributes="0"/>
                               <Component id="btnModificar" alignment="0" max="32767" attributes="0"/>
                               <Component id="btnIngresar" alignment="0" max="32767" attributes="0"/>
+                              <Component id="btn_EliRelacion" alignment="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -83,7 +84,9 @@
                   <Component id="btnEliminar" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="btnAsignar" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="57" max="32767" attributes="0"/>
+                  <EmptySpace pref="10" max="32767" attributes="0"/>
+                  <Component id="btn_EliRelacion" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="btnVolver" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -152,6 +155,17 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAsignarActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btn_EliRelacion">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/imagenes/book_delete.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Eliminar Relacion Apoderado/Alumno"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_EliRelacionActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

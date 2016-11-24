@@ -24,6 +24,7 @@ public class jfApoderado extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         jInstruccion = new javax.swing.JLabel();
         btnAsignar = new javax.swing.JButton();
+        btn_EliRelacion = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(500, 400));
@@ -77,6 +78,14 @@ public class jfApoderado extends javax.swing.JFrame {
             }
         });
 
+        btn_EliRelacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_delete.png"))); // NOI18N
+        btn_EliRelacion.setText("Eliminar Relacion Apoderado/Alumno");
+        btn_EliRelacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_EliRelacionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -95,7 +104,8 @@ public class jfApoderado extends javax.swing.JFrame {
                             .addComponent(btnAsignar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnIngresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btnIngresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btn_EliRelacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(136, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -111,7 +121,9 @@ public class jfApoderado extends javax.swing.JFrame {
                 .addComponent(btnEliminar)
                 .addGap(18, 18, 18)
                 .addComponent(btnAsignar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(btn_EliRelacion)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnVolver)
                 .addContainerGap())
         );
@@ -153,6 +165,13 @@ public class jfApoderado extends javax.swing.JFrame {
         asig.setVisible(true);
     }//GEN-LAST:event_btnAsignarActionPerformed
 
+    private void btn_EliRelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_EliRelacionActionPerformed
+        jfEliminarRelacion eli = new jfEliminarRelacion();
+        this.dispose();
+        eli.setVisible(true);
+
+    }//GEN-LAST:event_btn_EliRelacionActionPerformed
+
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -188,6 +207,9 @@ public class jfApoderado extends javax.swing.JFrame {
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnVolver;
+    private javax.swing.JButton btn_EliAsigCurso;
+    private javax.swing.JButton btn_EliAsigCurso1;
+    private javax.swing.JButton btn_EliRelacion;
     private javax.swing.JLabel jInstruccion;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
