@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 public class jfModificar extends javax.swing.JFrame {
+
     private Conexion BD = new Conexion();
     private String msj;
     private ResultSet rs;
@@ -16,39 +17,35 @@ public class jfModificar extends javax.swing.JFrame {
     private Boolean cmbAsignaturainiciado = false;
     private Boolean cmbCursoiniciado = false;
     private Boolean cmbEvaluacionesiniciado = false;
-    
+    private String actualizando = "s";
+
     public jfModificar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_edit.png"));
         setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
-        
+
         //Llenar ComboBoxs
-        try{
-            
+        try {
+
             BD.crearConexion();
             //PRIMER COMBOBOX
-            sql = "SELECT c.nombre FROM asignatura_curso ac, curso c WHERE ac.id_curso = c.id_curso";
+            sql = "SELECT c.id_curso,c.nombre FROM asignatura_curso ac, curso c WHERE ac.id_curso = c.id_curso";
             rs = BD.ejecutarSQLSelect(sql);
-            while(rs.next()){
-                cmbCurso.addItem(rs.getString("c.nombre"));
-                
+            while (rs.next()) {
+                cmbCurso.addItem(rs.getString("c.id_curso") + "," + rs.getString("c.nombre"));
             }
+            actualizando = "n";
             cmbCursoiniciado = true;
             //SEGUNDO COMBOBOX
-            sql = "SELECT DISTINCT(a.nombre) FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura";
-            rs = BD.ejecutarSQLSelect(sql);
-            while(rs.next()){
-                cmbAsignatura.addItem(rs.getString("a.nombre"));
-                
-            }
+
             BD.cerrarConexion();
             cmbAsignaturainiciado = true;
             //Evaluaciones
             llenarCmbEvaluaciones();
-        }catch (Exception e){
+        } catch (Exception e) {
             msj = "Error, hubo un problema.";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -98,6 +95,7 @@ public class jfModificar extends javax.swing.JFrame {
 
         lblTitulo2.setText("Evaluaciones a la fecha (haga click sobre ella para ver detalles)");
 
+        cmbAsignatura.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Asignatura" }));
         cmbAsignatura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbAsignaturaActionPerformed(evt);
@@ -106,6 +104,7 @@ public class jfModificar extends javax.swing.JFrame {
 
         lblAsignatura.setText("Seleccione Asignatura");
 
+        cmbCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Curso" }));
         cmbCurso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbCursoActionPerformed(evt);
@@ -189,38 +188,43 @@ public class jfModificar extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void llenarCmbEvaluaciones(){
-        if (cmbAsignaturainiciado && cmbCursoiniciado) {
-            try {
-                cmbEvaluacionesiniciado = false;
-                cmbEvaluaciones.removeAllItems();
-                BD.crearConexion();
-                sql = "SELECT ac.id_curso, ac.id_asignatura, anno FROM asignatura_curso ac, curso c, asignatura a WHERE ac.id_curso = c.id_curso AND ac.id_asignatura = a.id_asignatura AND a.nombre = '" + cmbAsignatura.getSelectedItem() + "' AND c.nombre = '" + cmbCurso.getSelectedItem() + "';";
-                rs = BD.ejecutarSQLSelect(sql);
-                while (rs.next()) {
-                    id_curso = rs.getString("ac.id_curso");
-                    id_asignatura = rs.getString("ac.id_asignatura");
+    private void llenarCmbEvaluaciones() {
+        if (actualizando.equals("n")) {
+            if (cmbAsignaturainiciado && cmbCursoiniciado) {
+                try {
+                    cmbEvaluacionesiniciado = false;
+                    cmbEvaluaciones.removeAllItems();
+                    BD.crearConexion();
+                    String nombre = (String) cmbCurso.getSelectedItem();
+                    nombre = nombre.substring(nombre.indexOf(",") + 1, nombre.length());
+                    sql = "SELECT ac.id_curso, ac.id_asignatura, anno FROM asignatura_curso ac, curso c, asignatura a WHERE ac.id_curso = c.id_curso AND ac.id_asignatura = a.id_asignatura AND a.nombre = '" + cmbAsignatura.getSelectedItem() + "' AND c.nombre = '" + nombre + "';";
+                    rs = BD.ejecutarSQLSelect(sql);
+                    while (rs.next()) {
+                        id_curso = rs.getString("ac.id_curso");
+                        id_asignatura = rs.getString("ac.id_asignatura");
+                    }
+                    sql = "SELECT id_evaluacion FROM evaluacion WHERE id_curso = '" + id_curso + "' AND id_asignatura = '" + id_asignatura + "'";
+                    rs = BD.ejecutarSQLSelect(sql);
+                    while (rs.next()) {
+                        cmbEvaluaciones.addItem(rs.getString("id_evaluacion"));
+                    }
+                    BD.cerrarConexion();
+                    cmbEvaluacionesiniciado = true;
+                } catch (Exception e) {
+                    msj = "Error, hubo un problema.";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                sql = "SELECT id_evaluacion FROM evaluacion WHERE id_curso = '" + id_curso + "' AND id_asignatura = '" + id_asignatura + "'";
-                rs = BD.ejecutarSQLSelect(sql);
-                while (rs.next()) {
-                    cmbEvaluaciones.addItem(rs.getString("id_evaluacion"));
-                }
-                BD.cerrarConexion();
-                cmbEvaluacionesiniciado = true;
-            } catch (Exception e) {
-                msj = "Error, hubo un problema.";
-                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                LlenarDescripcion();
             }
-            LlenarDescripcion();
         }
     }
+
     private void LlenarDescripcion() {
         try {
-            if (cmbEvaluacionesiniciado){
+            if (cmbEvaluacionesiniciado) {
                 txtDescripcion.setText("");
                 BD.crearConexion();
-                sql = "SELECT detalle FROM evaluacion WHERE id_evaluacion = '"+ cmbEvaluaciones.getSelectedItem() +"'";
+                sql = "SELECT detalle FROM evaluacion WHERE id_evaluacion = '" + cmbEvaluaciones.getSelectedItem() + "'";
                 rs = BD.ejecutarSQLSelect(sql);
                 while (rs.next()) {
                     txtDescripcion.setText(rs.getString("detalle"));
@@ -233,7 +237,7 @@ public class jfModificar extends javax.swing.JFrame {
         }
 
     }
-    
+
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         jfEvaluaciones eva = new jfEvaluaciones();
         this.dispose();
@@ -241,7 +245,32 @@ public class jfModificar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void cmbCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCursoActionPerformed
-        llenarCmbEvaluaciones();
+        Integer index = cmbCurso.getSelectedIndex();
+        if (!(index == 0)) {
+            if (actualizando.equals("n")) {
+                String codigo = (String) cmbCurso.getSelectedItem();
+                codigo = codigo.substring(0, codigo.indexOf(","));
+                cmbAsignatura.removeAllItems();
+                cmbAsignatura.addItem("Seleccione asignatura");
+                BD.crearConexion();
+                try {
+
+                    actualizando = "s";
+                    sql = "SELECT a.id_asignatura,a.nombre FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura and ac.id_curso = '" + codigo + "'";
+                    rs = BD.ejecutarSQLSelect(sql);
+                    while (rs.next()) {
+                        cmbAsignatura.addItem(rs.getString("a.nombre"));
+                    }
+                } catch (Exception e) {
+                }
+                BD.cerrarConexion();
+            }
+            actualizando = "n";
+            llenarCmbEvaluaciones();
+        } else {
+            cmbAsignatura.removeAllItems();
+            cmbAsignatura.addItem("Seleccione asignatura");
+        }
     }//GEN-LAST:event_cmbCursoActionPerformed
 
     private void cmbAsignaturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAsignaturaActionPerformed
@@ -249,22 +278,23 @@ public class jfModificar extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbAsignaturaActionPerformed
 
     private void cmbEvaluacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEvaluacionesActionPerformed
+
         LlenarDescripcion();
     }//GEN-LAST:event_cmbEvaluacionesActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        try{
+        try {
             BD.crearConexion();
             sql = "UPDATE evaluacion SET "
-                   + "detalle = '"+ txtDescripcion.getText() +"'"
-                   + " WHERE id_evaluacion = '"+ cmbEvaluaciones.getSelectedItem() +"';";
+                    + "detalle = '" + txtDescripcion.getText() + "'"
+                    + " WHERE id_evaluacion = '" + cmbEvaluaciones.getSelectedItem() + "';";
             BD.ejecutarSQL(sql);
             BD.cerrarConexion();
-            msj="Se guardo su modificacion correctamente";
-            JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
-        }catch (Exception e){
+            msj = "Se guardo su modificacion correctamente";
+            JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
             msj = "Error, hubo un problema.";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 

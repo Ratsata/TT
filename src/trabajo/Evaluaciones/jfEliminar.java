@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 public class jfEliminar extends javax.swing.JFrame {
+
     private Conexion BD = new Conexion();
     private String msj;
     private String ID;
@@ -16,7 +17,7 @@ public class jfEliminar extends javax.swing.JFrame {
         setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
-        
+
         txtDetalle.setLineWrap(true);
         txtDetalle.setWrapStyleWord(true);
     }
@@ -142,43 +143,48 @@ public class jfEliminar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        try{
+        try {
             BD.crearConexion();
-            String sql="SELECT e.id_evaluacion, c.nombre, a.nombre, e.anno, e.semestre, e.num_evaluacion, e.fecha FROM evaluacion e, curso c, asignatura a WHERE e.id_curso = c.id_curso AND e.id_asignatura = a.id_asignatura AND e.id_evaluacion = '"+ txtId_evaluacion.getText() +"'";
+            String sql = "SELECT e.id_evaluacion, c.nombre, a.nombre, e.anno, e.semestre, e.num_evaluacion, e.fecha FROM evaluacion e, curso c, asignatura a WHERE e.id_curso = c.id_curso AND e.id_asignatura = a.id_asignatura AND e.id_evaluacion = '" + txtId_evaluacion.getText() + "'";
             ResultSet lis = BD.ejecutarSQLSelect(sql);
-            if (lis.next()){
-                msj="Evaluacion encontrada";
+            if (lis.next()) {
+                msj = "Evaluacion encontrada";
                 ID = lis.getString("e.id_evaluacion");
                 txtDetalle.setText("Usted va a eliminar la evaluacion numero " + lis.getString("e.num_evaluacion") + " correspondiente al\n" + lis.getString("c.nombre") + " , de la asignatura " + lis.getString("a.nombre") + " del Semestre " + lis.getString("e.semestre") + " puesta en la fecha: " + lis.getString("e.fecha"));
-            }else {
-                msj="Evaluacion no existe, busque denuevo";
+            } else {
+                msj = "Evaluacion no existe, busque denuevo";
             }
             lblMensaje.setText(msj);
             BD.cerrarConexion();
-        }catch(Exception e){
-            msj="Error, no se pudo realizar la operacion";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            msj = "Error, no se pudo realizar la operacion";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        String sql ="DELETE FROM evaluacion WHERE id_evaluacion = '" + ID + "' ";
-        if(!txtId_evaluacion.getText().equals("")){
-            try{
-                BD.crearConexion();
-                BD.ejecutarSQL(sql);
-                msj="Datos eliminados con exito";
-                JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
-                txtDetalle.setText("");
-                txtId_evaluacion.setText("");
-                BD.cerrarConexion();
-            }catch(Exception e){
-                msj="Error, no se pudo realizar la operacion";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        String sql = "DELETE FROM evaluacion WHERE id_evaluacion = '" + ID + "' ";
+        String sql2 = "DELETE FROM notas WHERE id_evaluacion = '" + ID + "' ";
+        int resp = JOptionPane.showConfirmDialog(null, "Esta seguro que desea eliminar la Evaluacion?, tenga en cuenta que se eliminaran todas las notas correspondientes a esa evaluacion", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
+        if (resp == 0) {
+            if (!txtId_evaluacion.getText().equals("")) {
+                try {
+                    BD.crearConexion();
+                    BD.ejecutarSQL(sql);
+                    BD.ejecutarSQL(sql2);
+                    msj = "Datos eliminados con exito";
+                    JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                    txtDetalle.setText("");
+                    txtId_evaluacion.setText("");
+                    BD.cerrarConexion();
+                } catch (Exception e) {
+                    msj = "Error, no se pudo realizar la operacion";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                msj = "Error, ningún ID ah sido escrito";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }else{
-            msj="Error, ningún ID ah sido escrito";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 

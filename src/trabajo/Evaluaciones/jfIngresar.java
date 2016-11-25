@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 
 public class jfIngresar extends javax.swing.JFrame {
+
     private Conexion BD = new Conexion();
     private String msj;
     private ResultSet rs;
@@ -20,35 +21,31 @@ public class jfIngresar extends javax.swing.JFrame {
     private String anno;
     private String num_evaluacion;
     private String fecha;
-    
-    
+    private String actualizando = "s";
+
     public jfIngresar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_add.png"));
         setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
-        
+
         //Llenar ComboBoxs
-        try{
+        try {
             BD.crearConexion();
-            
+
             //PRIMER COMBOBOX
-            String sql = "SELECT c.nombre FROM asignatura_curso ac, curso c WHERE ac.id_curso = c.id_curso";
+            String sql = "SELECT c.id_curso,c.nombre FROM asignatura_curso ac, curso c WHERE ac.id_curso = c.id_curso";
             rs = BD.ejecutarSQLSelect(sql);
-            while(rs.next()){
-                cmbCurso.addItem(rs.getString("c.nombre"));
+            while (rs.next()) {
+                cmbCurso.addItem(rs.getString("c.id_curso") + "," + rs.getString("c.nombre"));
             }
-            
+            actualizando = "n";
             //SEGUNDO COMBOBOX
-            sql = "SELECT DISTINCT(a.nombre) FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura";
-            rs = BD.ejecutarSQLSelect(sql);
-            while(rs.next()){
-                cmbAsignatura.addItem(rs.getString("a.nombre"));
-            }
+
             BD.cerrarConexion();
-        }catch (Exception e){
+        } catch (Exception e) {
             msj = "Error, hubo un problema.";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -78,9 +75,18 @@ public class jfIngresar extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(350, 343));
         setResizable(false);
 
+        cmbCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Curso" }));
+        cmbCurso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCursoActionPerformed(evt);
+            }
+        });
+
         lblCurso.setText("Seleccione Curso");
 
         lblAsignatura.setText("Seleccione asignatura");
+
+        cmbAsignatura.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Asignatura" }));
 
         lblSemestre.setText("Semestre");
 
@@ -143,7 +149,7 @@ public class jfIngresar extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnVolver)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGenerar))
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
@@ -217,14 +223,16 @@ public class jfIngresar extends javax.swing.JFrame {
         String coma = "','";
         try {
             BD.crearConexion();
-            String sql = "SELECT ac.id_curso, ac.id_asignatura, anno FROM asignatura_curso ac, curso c, asignatura a WHERE ac.id_curso = c.id_curso AND ac.id_asignatura = a.id_asignatura AND a.nombre = '" + cmbAsignatura.getSelectedItem() + "' AND c.nombre = '" + cmbCurso.getSelectedItem() + "';";
+            String curso = (String) cmbCurso.getSelectedItem();
+            curso = curso.substring(curso.indexOf(",") + 1, curso.length());
+            String sql = "SELECT ac.id_curso, ac.id_asignatura, anno FROM asignatura_curso ac, curso c, asignatura a WHERE ac.id_curso = c.id_curso AND ac.id_asignatura = a.id_asignatura AND a.nombre = '" + cmbAsignatura.getSelectedItem() + "' AND c.nombre = '" + curso + "';";
             rs = BD.ejecutarSQLSelect(sql);
             //Armar id_evaluacion
             while (rs.next()) {
                 id_curso = rs.getString("ac.id_curso");
                 id_asignatura = rs.getString("ac.id_asignatura");
-                anno = rs.getString("ac.anno");
-                id_evaluacion = id_curso + id_asignatura + anno + (int)(cmbSemestre.getSelectedIndex() + 1);
+                anno = txtAño.getText();
+                id_evaluacion = id_curso + id_asignatura + anno + (int) (cmbSemestre.getSelectedIndex() + 1);
             }
             //Agregar el numero de la Evaluacion
             sql = "SELECT COUNT(id_evaluacion)+1 as n_evaluacion FROM evaluacion WHERE id_asignatura = '" + id_asignatura + "' AND id_curso = '" + id_curso + "' AND anno = '" + anno + "' AND semestre = '" + (int) (cmbSemestre.getSelectedIndex() + 1) + "'";
@@ -235,10 +243,10 @@ public class jfIngresar extends javax.swing.JFrame {
             id_evaluacion = id_evaluacion + num_evaluacion;
             //FECHA
             String año = txtAño.getText();
-            String mes = String.format("%02d", cmbMes.getSelectedIndex()+1);
-            String dia = (String)cmbDia.getSelectedItem();
+            String mes = String.format("%02d", cmbMes.getSelectedIndex() + 1);
+            String dia = (String) cmbDia.getSelectedItem();
             fecha = año + "-" + mes + "-" + dia;
-            LocalDate today = LocalDate.of(Integer.parseInt(año),Integer.parseInt(mes),Integer.parseInt(dia));
+            LocalDate today = LocalDate.of(Integer.parseInt(año), Integer.parseInt(mes), Integer.parseInt(dia));
             //INSERT
             sql = "INSERT INTO evaluacion(id_evaluacion,id_curso,id_asignatura,anno,semestre,num_evaluacion,fecha,detalle) VALUES ('" + id_evaluacion + coma + id_curso + coma + id_asignatura + coma + anno + coma + (int) (cmbSemestre.getSelectedIndex() + 1) + coma + num_evaluacion + coma + fecha + coma + txtDetalle.getText() + "')";
             if (BD.ejecutarSQL(sql)) {
@@ -256,18 +264,18 @@ public class jfIngresar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGenerarActionPerformed
 
     private void txtAñoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAñoFocusLost
-        try{
+        try {
             //Objeto con fecha actual
             Calendar calendario = new GregorianCalendar();
 
             Integer año = Integer.parseInt(txtAño.getText());
-            if (año<2002) {
-                JOptionPane.showMessageDialog(null,"Año imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
+            if (año < 2002) {
+                JOptionPane.showMessageDialog(null, "Año imposible", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
                 txtAño.requestFocus();
                 txtAño.setText("");
             }
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Año imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Año imposible", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
             txtAño.requestFocus();
             txtAño.setText("");
         }
@@ -276,16 +284,16 @@ public class jfIngresar extends javax.swing.JFrame {
 
     private void txtAñoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAñoKeyTyped
         //metodo para que no se ingresen letras en el campo jAño
-        int k=(int)evt.getKeyChar();
-        if (k >= 97 && k <= 122 || k>=65 && k<=90){
-            evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-            JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+        int k = (int) evt.getKeyChar();
+        if (k >= 97 && k <= 122 || k >= 65 && k <= 90) {
+            evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+            JOptionPane.showMessageDialog(null, "No puede ingresar letras!!!", "Ventana Error Datos", JOptionPane.ERROR_MESSAGE);
         }
-        if(k==241 || k==209){
-            evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-            JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+        if (k == 241 || k == 209) {
+            evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+            JOptionPane.showMessageDialog(null, "No puede ingresar letras!!!", "Ventana Error Datos", JOptionPane.ERROR_MESSAGE);
         }
-        if(k==10){
+        if (k == 10) {
             txtAño.transferFocus();
         }
     }//GEN-LAST:event_txtAñoKeyTyped
@@ -293,6 +301,34 @@ public class jfIngresar extends javax.swing.JFrame {
     private void cmbSemestreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbSemestreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbSemestreActionPerformed
+
+    private void cmbCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCursoActionPerformed
+        Integer index = cmbCurso.getSelectedIndex();
+        if (!(index == 0)) {
+            if (actualizando.equals("n")) {
+                String codigo = (String) cmbCurso.getSelectedItem();
+                codigo = codigo.substring(0, codigo.indexOf(","));
+                cmbAsignatura.removeAllItems();
+                cmbAsignatura.addItem("Seleccione asignatura");
+                BD.crearConexion();
+                try {
+
+                    actualizando = "s";
+                    String sql = "SELECT a.id_asignatura,a.nombre FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura and ac.id_curso = '" + codigo + "'";
+                    rs = BD.ejecutarSQLSelect(sql);
+                    while (rs.next()) {
+                        cmbAsignatura.addItem(rs.getString("a.nombre"));
+                    }
+                } catch (Exception e) {
+                }
+                BD.cerrarConexion();
+            }
+            actualizando = "n";
+        } else {
+            cmbAsignatura.removeAllItems();
+            cmbAsignatura.addItem("Seleccione asignatura");
+        }
+    }//GEN-LAST:event_cmbCursoActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

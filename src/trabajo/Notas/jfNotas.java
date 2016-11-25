@@ -46,13 +46,13 @@ public class jfNotas extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jNota = new javax.swing.JTextField();
         btnIngresar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         btnVolver = new javax.swing.JButton();
         lblTitulo = new javax.swing.JLabel();
         cmbAlumnos = new javax.swing.JComboBox<>();
+        cmbNota = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -101,36 +101,41 @@ public class jfNotas extends javax.swing.JFrame {
             }
         });
 
+        cmbNota.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "n/a", "7,0", "6,9", "6,8", "6,7", "6,6", "6,5", "6,4", "6,3", "6,2", "6,1", "6,0", "5,9", "5,8", "5,7", "5,6", "5,5", "5,4", "5,3", "5,2", "5,1", "5,0", "4,9", "4,8", "4,7", "4,6", "4,5", "4,4", "4,3", "4,2", "4,1", "4,0", "3,9", "3,8", "3,7", "3,6", "3,6", "3,5", "3,4", "3,3", "3,2", "3,1", "3,0", "2,9", "2,8", "2,7", "2,6", "2,5", "2,4", "2,3", "2,2", "2,1", "2,0", "1,9", "1,8", "1,7", "1,6", "1,5", "1,4", "1,3", "1,2", "1,1", "1,0", "0,9", "0,8", "0,7", "0,6", "0,5", "0,4", "0,3", "0,2", "0,1", "0,0" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblTitulo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(36, 36, 36)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel4)
+                        .addComponent(jLabel4)
+                        .addGap(139, 139, 139)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbNota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnIngresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(cmbEvaluacion, 0, 170, Short.MAX_VALUE)
-                                        .addComponent(cmbAlumnos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(btnVolver))
-                                .addGap(40, 40, 40)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(50, 50, 50)
-                                        .addComponent(jNota, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7)
-                                    .addComponent(btnIngresar)))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblTitulo)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                                .addComponent(btnVolver)
+                                .addGap(111, 111, 111))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(cmbAlumnos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(7, 7, 7)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)))
+                    .addComponent(cmbEvaluacion, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -142,15 +147,14 @@ public class jfNotas extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(cmbEvaluacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jNota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
                     .addComponent(jLabel5)
-                    .addComponent(cmbAlumnos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbNota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnIngresar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnIngresar)
-                .addGap(18, 18, 18)
+                .addComponent(cmbAlumnos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(65, 65, 65)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -184,41 +188,50 @@ public class jfNotas extends javax.swing.JFrame {
 
     private void cmbEvaluacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEvaluacionActionPerformed
         if (actualizando.equals("n")) {
-            try {
+            Integer index = cmbEvaluacion.getSelectedIndex();
+            cmbNota.setSelectedIndex(0);
+            if (!(index == 0)) {
+                try {
+                    actualizando = "s";
+                    cmbAlumnos.removeAllItems();
+                    cmbAlumnos.addItem("Seleccione Alumno");
+                    BD.crearConexion();
+                    String codigo = (String) cmbEvaluacion.getSelectedItem();
+                    String curso = codigo.substring(0, 3);
+                    String año = codigo.substring(7, 11);
+                    //String sql = "SELECT rut_alumno FROM alumno_curso where id_curso = '" + curso + "' and anno = " + año;
+                    String sql = "SELECT ac.rut_alumno, a.nombres, a.ape_paterno FROM alumno_curso ac,alumno a where ac.id_curso = '" + curso + "' and ac.anno = " + año + " and ac.rut_alumno = a.rut_alumno";
+                    //String sql = "SELECT rut_alumno FROM alumno_curso ";
+                    rs = BD.ejecutarSQLSelect(sql);
+                    while (rs.next()) {
+                        cmbAlumnos.addItem(rs.getString("ac.rut_alumno") + " " + rs.getString("a.nombres") + " " + rs.getString("a.ape_paterno"));
+                    }
+                    BD.cerrarConexion();
+                } catch (Exception e) {
+                    msj = "Error, hubo un problema.";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
                 actualizando = "s";
                 cmbAlumnos.removeAllItems();
-                cmbAlumnos.addItem("Seleccione evaluacion");
-                BD.crearConexion();
-                String codigo = (String)cmbEvaluacion.getSelectedItem();
-                String curso = codigo.substring(0, 3);
-                String año = codigo.substring(7, 11);
-                //String sql = "SELECT rut_alumno FROM alumno_curso where id_curso = '" + curso + "' and anno = " + año;
-                String sql = "SELECT ac.rut_alumno, a.nombres, a.ape_paterno FROM alumno_curso ac,alumno a where ac.id_curso = '"+ curso +"' and ac.anno = "+ año + " and ac.rut_alumno = a.rut_alumno";
-                //String sql = "SELECT rut_alumno FROM alumno_curso ";
-                rs = BD.ejecutarSQLSelect(sql);
-                while (rs.next()) {
-                    cmbAlumnos.addItem(rs.getString("ac.rut_alumno")+" "+rs.getString("a.nombres")+" "+rs.getString("a.ape_paterno"));
-                }
-                BD.cerrarConexion();
-            } catch (Exception e) {
-                msj = "Error, hubo un problema.";
-                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                cmbAlumnos.addItem("Seleccione Alumno");
             }
-            actualizando ="n";
+            actualizando = "n";
         }
     }//GEN-LAST:event_cmbEvaluacionActionPerformed
 
     private void cmbAlumnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAlumnosActionPerformed
         if (actualizando.equals("n")) {
-        try {
+            try {
+                cmbNota.setSelectedIndex(0);
                 BD.crearConexion();
-                String codigo = (String)cmbAlumnos.getSelectedItem();
-                String rutA = codigo.substring(0,codigo.indexOf(" "));      
-                codigo = (String)cmbEvaluacion.getSelectedItem();
-                String sql = "SELECT nota FROM notas where rut_alumno = '"+rutA+"' and id_evaluacion = '"+codigo+"'";
+                String codigo = (String) cmbAlumnos.getSelectedItem();
+                String rutA = codigo.substring(0, codigo.indexOf(" "));
+                codigo = (String) cmbEvaluacion.getSelectedItem();
+                String sql = "SELECT nota FROM notas where rut_alumno = '" + rutA + "' and id_evaluacion = '" + codigo + "'";
                 rs = BD.ejecutarSQLSelect(sql);
                 while (rs.next()) {
-                    jNota.setText(rs.getString("nota"));
+                    cmbNota.setSelectedItem(rs.getString("nota"));
                 }
                 BD.cerrarConexion();
             } catch (Exception e) {
@@ -229,7 +242,36 @@ public class jfNotas extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbAlumnosActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        
+        String nota = (String) cmbNota.getSelectedItem();
+        if (!(nota.equals("n/a"))) {
+            try {
+                BD.crearConexion();
+                String codigo = (String) cmbAlumnos.getSelectedItem();
+                String rutA = codigo.substring(0, codigo.indexOf(" "));
+                codigo = (String) cmbEvaluacion.getSelectedItem();
+                String sql = "SELECT nota FROM notas where rut_alumno = '" + rutA + "' and id_evaluacion = '" + codigo + "'";
+                rs = BD.ejecutarSQLSelect(sql);
+                if (rs.next()) {
+                    sql = "UPDATE notas set nota = '" + nota + "' where rut_alumno = '" + rutA + "' and id_evaluacion = '" + codigo + "'";
+                    BD.ejecutarSQL(sql);
+                    msj = "Se guardo su modificación correctamente";
+                    JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    String coma = "','";
+                    sql = "INSERT INTO notas VALUES('" + codigo + coma + rutA + coma + nota + "')";
+                    BD.ejecutarSQL(sql);
+                    msj = "Se ingresó su nota correctamente";
+                    JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                }
+                BD.cerrarConexion();
+            } catch (Exception e) {
+                msj = "Error, hubo un problema al intentar ingresar o modificar la nota.";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            msj = "No puede asignarle una nota vacia a un alumno.";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     public static void main(String args[]) {
@@ -266,12 +308,12 @@ public class jfNotas extends javax.swing.JFrame {
     private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> cmbAlumnos;
     private javax.swing.JComboBox<String> cmbEvaluacion;
+    private javax.swing.JComboBox<String> cmbNota;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JTextField jNota;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblTitulo;
     // End of variables declaration//GEN-END:variables
