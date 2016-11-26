@@ -234,27 +234,23 @@ public class jfIngresarMatricula extends javax.swing.JFrame {
                 txtAño.setText("");
             } else {
                 try {
-                    String texto = txtFolio.getText();
-                    Integer Numeros = Integer.parseInt(texto);
-                    if (Numeros < 0 || Numeros > 999999) {
+                    Integer folio = Integer.parseInt(txtFolio.getText());
+                    if (folio < 0 || folio > 999999) {
                         JOptionPane.showMessageDialog(null, "Folio imposible", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
                         txtFolio.requestFocus();
                         txtFolio.setText("");
                     } else {
-                        BD.crearConexion();
                         String msj;
                         if (txtRut.getText().equals("") || txtFolio.getText().equals("") || txtAño.getText().equals("")) {
                             msj = "Error, No deje ningun campo vacio";
                             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                         } else {
-                            Integer año, folio;
-                            año = Integer.parseInt(txtAño.getText());
                             String coma = "','";
-                            folio = Integer.parseInt(txtFolio.getText());
-                            String sqlFolio = "SELECT rut_alumno FROM matricula WHERE folio_matricula = '" + folio + "'";
                             try {
+                                BD.crearConexion();
+                                String sqlFolio = "SELECT rut_alumno FROM matricula WHERE folio_matricula = '" + folio + "'";
                                 ResultSet lis = BD.ejecutarSQLSelect(sqlFolio);
-                                if (lis.next()) {
+                                if (lis.next()){
                                     msj = "Folio ya asociado a un alumno";
                                     JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.INFORMATION_MESSAGE);
                                 } else {
@@ -265,7 +261,7 @@ public class jfIngresarMatricula extends javax.swing.JFrame {
                                             msj = "alumno ya tiene folio asociado a ese año";
                                             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                                         } else {
-                                            String sql = "INSERT INTO matricula(folio_matricula,rut_alumno,anno) values ('" + folio + coma + rut + coma + año + " ')";
+                                            String sql = "INSERT INTO matricula(folio_matricula,rut_alumno,anno) values ('" + folio + coma + rutDesformateado + coma + año + " ')";
                                             if (BD.ejecutarSQL(sql)) {
                                                 msj = "Ingreso realizado con exito";
                                                 JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
@@ -275,13 +271,13 @@ public class jfIngresarMatricula extends javax.swing.JFrame {
                                             }
                                         }
                                     } catch (Exception e) {
-                                        msj = "continue";
-                                        JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                                        msj="Error, no se pudo ingresar los datos";
+                                        JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
                                     }
                                 }
                             } catch (Exception e) {
-                                msj = "continue";
-                                JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                                msj="Error, no se pudo ingresar los datos";
+                                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
                             }
                         }
                     }
@@ -289,7 +285,6 @@ public class jfIngresarMatricula extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Folio vacio", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
                     txtFolio.requestFocus();
                     txtFolio.setText("");
-
                 }
             }
         } catch (Exception e) {
