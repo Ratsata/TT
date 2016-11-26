@@ -12,7 +12,10 @@ import trabajo.Rut;
 
 public class jfIngresarMatricula extends javax.swing.JFrame {
     private Conexion BD = new Conexion();
+    private ResultSet rs;
     private Rut rut;
+    private String rutFormateado;
+    private String rutDesformateado;
     
     public jfIngresarMatricula() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_add.png"));
@@ -42,11 +45,11 @@ public class jfIngresarMatricula extends javax.swing.JFrame {
 
         jInstruccion.setText("Ingrese Datos Matricula");
 
-        lblFolio.setText("Ingrese Nº Folio:");
+        lblFolio.setText("Ingrese Nº Folio: *");
 
-        lblRut.setText("Ingrese rut alumno:");
+        lblRut.setText("Ingrese rut alumno: *");
 
-        lblAño.setText("Ingrese año en el que se matriculó");
+        lblAño.setText("Ingrese año en el que se matriculó: *");
 
         txtFolio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -218,86 +221,92 @@ public class jfIngresarMatricula extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-        try{
+        try {
             //Objeto con la fecha actual
             Calendar calendario = new GregorianCalendar();
-            
+
             Integer año = Integer.parseInt(txtAño.getText());
             Integer añoLimite = calendario.get(Calendar.YEAR);
-            
+
             if (año < 2001 || año > añoLimite) {
-                JOptionPane.showMessageDialog(null,"Año de matricula imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Año de matricula imposible", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
                 txtAño.requestFocus();
                 txtAño.setText("");
+            } else {
+                try {
+                    String texto = txtFolio.getText();
+                    Integer Numeros = Integer.parseInt(texto);
+                    if (Numeros < 0 || Numeros > 999999) {
+                        JOptionPane.showMessageDialog(null, "Folio imposible", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
+                        txtFolio.requestFocus();
+                        txtFolio.setText("");
+                    } else {
+                        BD.crearConexion();
+                        String msj;
+                        if (txtRut.getText().equals("") || txtFolio.getText().equals("") || txtAño.getText().equals("")) {
+                            msj = "Error, No deje ningun campo vacio";
+                            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            Integer año, folio;
+                            año = Integer.parseInt(txtAño.getText());
+                            String coma = "','";
+                            folio = Integer.parseInt(txtFolio.getText());
+                            String sqlFolio = "SELECT rut_alumno FROM matricula WHERE folio_matricula = '" + folio + "'";
+                            try {
+                                ResultSet lis = BD.ejecutarSQLSelect(sqlFolio);
+                                if (lis.next()) {
+                                    msj = "Folio ya asociado a un alumno";
+                                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.INFORMATION_MESSAGE);
+                                } else {
+                                    String sqlFolio2 = "SELECT * FROM matricula WHERE rut_alumno = '" + rutDesformateado + "' and anno = '" + año + "'";
+                                    try {
+                                        lis = BD.ejecutarSQLSelect(sqlFolio2);
+                                        if (lis.next()) {
+                                            msj = "alumno ya tiene folio asociado a ese año";
+                                            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                                        } else {
+                                            String sql = "INSERT INTO matricula(folio_matricula,rut_alumno,anno) values ('" + folio + coma + rut + coma + año + " ')";
+                                            if (BD.ejecutarSQL(sql)) {
+                                                msj = "Ingreso realizado con exito";
+                                                JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                                            } else {
+                                                msj = "Error, folio existente";
+                                                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                                            }
+                                        }
+                                    } catch (Exception e) {
+                                        msj = "continue";
+                                        JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                                    }
+                                }
+                            } catch (Exception e) {
+                                msj = "continue";
+                                JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Folio vacio", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
+                    txtFolio.requestFocus();
+                    txtFolio.setText("");
+
+                }
             }
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Año de matricula imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Año de matricula imposible", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
             txtAño.requestFocus();
             txtAño.setText("");
         }
-        try{
-            String texto = txtFolio.getText();
-            Integer Numeros = Integer.parseInt(texto);
-            if (Numeros<0 || Numeros>999999) {
-                JOptionPane.showMessageDialog(null,"Folio imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
-                txtFolio.requestFocus();
-                txtFolio.setText("");
-            }
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Folio vacio","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
-            txtFolio.requestFocus();
-            txtFolio.setText("");
-        }
-        BD.crearConexion();
-        String msj;
-        if (txtRut.getText().equals("") || txtFolio.getText().equals("") || txtAño.getText().equals("")){
-            msj="Error, No deje ningun campo vacio";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);         
-        }else{Integer año, folio;
-            rut = txtRut.getText();
-            año = Integer.parseInt(txtAño.getText());
-            String coma = "','";
-            folio = Integer.parseInt(txtFolio.getText());
-            String sqlFolio = "SELECT rut_alumno FROM matricula WHERE folio_matricula = '" + folio + "'";
-            try {
-            ResultSet lis = BD.ejecutarSQLSelect(sqlFolio);        
-                if (lis.next()){
-                msj="Folio ya asociado a un alumno";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.INFORMATION_MESSAGE);  }
-                else{
-                    String sqlFolio2 = "SELECT * FROM matricula WHERE rut_alumno = '" + rut + "' and anno = '" +año+ "'";
-                    try {
-                        lis = BD.ejecutarSQLSelect(sqlFolio2);        
-                        if (lis.next()){msj ="alumno ya tiene folio asociado a ese año";
-                        JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
-                        }else{
-                    String sql = "INSERT INTO matricula(folio_matricula,rut_alumno,anno) values ('"+ folio +coma+rut+coma+año+ " ')";
-                    if(BD.ejecutarSQL(sql)){
-                msj="Ingreso realizado con exito";
-                JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
-            }else{
-                msj="Error, folio existente";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
-                 }
-                }
-        }catch (Exception e){ msj = "continue";
-            JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);}
-                }
-            }catch (Exception e){ msj = "continue";
-            JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);} } 
-    
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
     private void txtRutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRutKeyReleased
         try{
-            String RutFormateado = rut.formatear(txtRutPersona.getText());
-            String RutDesformateado = rut.desformatear(RutFormateado);
-            String sql = "SELECT nombres FROM persona WHERE rut_persona = '"+ RutDesformateado +"'";
-            rs = BD.ejecutarSQLSelect(sql);
-            txtNomPersona.setText("");
-            while (rs.next()){
-                txtNomPersona.setText(rs.getString("nombres"));
+            rutFormateado = rut.formatear(txtRut.getText());
+            if (rut.validar(rutFormateado)){
+                txtRut.setText(rutFormateado);
+                rutDesformateado = rut.desformatear(rutFormateado);
             }
+            
         }catch (Exception e){
             
         }
