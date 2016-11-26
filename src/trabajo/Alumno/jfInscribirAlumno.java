@@ -13,12 +13,13 @@ public class jfInscribirAlumno extends javax.swing.JFrame {
     private String msj;
     private ResultSet rs;
     private Integer añoActual;
-    
+    private Boolean actualizando = true;
     public jfInscribirAlumno() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/group_add.png"));
         setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
+        
         
         //Llenar ComboBoxs
         try{
@@ -30,16 +31,12 @@ public class jfInscribirAlumno extends javax.swing.JFrame {
             while(rs.next()){
                 cmbCurso.addItem(rs.getString("nombre"));
             }
+           
+            BD.cerrarConexion();
+            actualizando = false;
             
             //SEGUNDO COMBOBOX
-            Calendar calendario = new GregorianCalendar();
-            añoActual = (calendario.get(Calendar.YEAR));
-            sql = "Select a.rut_alumno, a.nombres, a.ape_paterno, a.ape_materno FROM alumno a, matricula m, alumno_curso ac WHERE NOT a.rut_alumno = ac.rut_alumno AND (a.rut_alumno = m.rut_alumno AND m.anno = '"+ añoActual +"')";
-            rs = BD.ejecutarSQLSelect(sql);
-            while(rs.next()){
-                cmbAlu.addItem(rs.getString("a.rut_alumno")+" "+rs.getString("a.nombres")+" "+rs.getString("a.ape_paterno")+" "+rs.getString("a.ape_materno"));
-            }
-            BD.cerrarConexion();
+            llenarComboboxAlu();
         }catch (Exception e){
             msj = "Error, hubo un problema.";
             JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
@@ -90,6 +87,12 @@ public class jfInscribirAlumno extends javax.swing.JFrame {
         lblTitulo.setFont(new java.awt.Font("Tempus Sans ITC", 1, 18)); // NOI18N
         lblTitulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/group_add.png"))); // NOI18N
         lblTitulo.setText("Inscribir Alumno");
+
+        cmbCurso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCursoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -171,11 +174,35 @@ public class jfInscribirAlumno extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
             }
             BD.cerrarConexion();
+            llenarComboboxAlu();
         }catch (Exception e){
             msj = "Error, hubo un problema.";
             JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnInscribirActionPerformed
+
+    private void llenarComboboxAlu(){
+        if (!actualizando){
+            try{
+                cmbAlu.removeAllItems();
+                Calendar calendario = new GregorianCalendar();
+                BD.crearConexion();
+                añoActual = (calendario.get(Calendar.YEAR));
+                String sql = "Select a.rut_alumno, a.nombres, a.ape_paterno, a.ape_materno FROM alumno a WHERE NOT (a.rut_alumno IN (Select ac.rut_alumno FROM alumno_curso ac WHERE a.rut_alumno = ac.rut_alumno)) AND (a.rut_alumno IN (SELECT rut_alumno FROM matricula WHERE anno = '"+ añoActual +"'))";
+                rs = BD.ejecutarSQLSelect(sql);
+                while(rs.next()){
+                    cmbAlu.addItem(rs.getString("a.rut_alumno")+" "+rs.getString("a.nombres")+" "+rs.getString("a.ape_paterno")+" "+rs.getString("a.ape_materno"));
+                }
+                BD.cerrarConexion();
+            }catch (Exception e){
+            
+            }
+        }
+    }
+    
+    private void cmbCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCursoActionPerformed
+        llenarComboboxAlu();
+    }//GEN-LAST:event_cmbCursoActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
