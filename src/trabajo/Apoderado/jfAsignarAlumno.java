@@ -286,8 +286,10 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
             BD.crearConexion();
             String coma = "','";
             
-            rut_persona = txtRutPersona.getText();
-            rut_alumno = txtRutAlu.getText();
+            rut_persona = rut.formatear(txtRutPersona.getText());
+            rut_persona = rut.desformatear(rut_persona);
+            rut_alumno = rut.formatear(txtRutAlu.getText());
+            rut_alumno = rut.desformatear(rut_alumno);
             parentesco = String.valueOf(cmbParentesco.getSelectedItem());
             if (chkApoderado.isSelected()){
                 apoderado = "S";
