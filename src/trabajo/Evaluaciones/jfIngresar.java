@@ -34,7 +34,7 @@ public class jfIngresar extends javax.swing.JFrame {
             BD.crearConexion();
 
             //PRIMER COMBOBOX
-            String sql = "SELECT c.id_curso,c.nombre FROM asignatura_curso ac, curso c WHERE ac.id_curso = c.id_curso";
+            String sql = "SELECT DISTINCT c.id_curso,c.nombre FROM asignatura_curso ac, curso c WHERE ac.id_curso = c.id_curso";
             rs = BD.ejecutarSQLSelect(sql);
             while (rs.next()) {
                 cmbCurso.addItem(rs.getString("c.id_curso") + "," + rs.getString("c.nombre"));
