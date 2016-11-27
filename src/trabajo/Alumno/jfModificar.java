@@ -471,7 +471,7 @@ public class jfModificar extends javax.swing.JFrame {
                         cmbPosHermanos.setSelectedItem(lis.getString(13));
                         jColegioProcedencia.setText(lis.getString(14));
                         BD.cerrarConexion();
-                    }
+                    }else{jExiste.setText("Alumno NO EXISTE");}
                 }catch(Exception e){
                     msj="Error, no se pudo realizar la operación";
                     JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
@@ -628,7 +628,19 @@ public class jfModificar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void jRutModiFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRutModiFocusLost
-        
+        try {
+            rutFormateado = rut.formatear(jRutModi.getText());
+            if (rut.validar(rutFormateado) == false) {
+                JOptionPane.showMessageDialog(null, "Rut incorrecto", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
+                jRutModi.setText("");
+            } else {
+                rutDesformateado = rut.desformatear(rutFormateado);
+                jRutModi.setText(rutFormateado);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Mal formato de rut", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
+            jRutModi.setText("");
+        }
     }//GEN-LAST:event_jRutModiFocusLost
 
     

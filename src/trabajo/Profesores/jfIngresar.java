@@ -70,16 +70,16 @@ public class jfIngresar extends javax.swing.JFrame {
         });
 
         lbl_Nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Nombre.setText("Nombre: ");
+        lbl_Nombre.setText("Nombre:* ");
 
         lbl_ApePat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_ApePat.setText("Apellido Paterno:");
+        lbl_ApePat.setText("Apellido Paterno:*");
 
         lbl_ApeMat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lbl_ApeMat.setText("Apellido Materno:");
 
         lbl_Rut.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Rut.setText("Rut:");
+        lbl_Rut.setText("Rut:*");
 
         jRut.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -104,7 +104,7 @@ public class jfIngresar extends javax.swing.JFrame {
         });
 
         lbl_celular.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_celular.setText("Celular:");
+        lbl_celular.setText("Celular:*");
 
         jCelular.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -118,7 +118,7 @@ public class jfIngresar extends javax.swing.JFrame {
         });
 
         lbl_Fono.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Fono.setText("Telefono Fijo:");
+        lbl_Fono.setText("Telefono Fijo:*");
 
         jFono.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -132,7 +132,7 @@ public class jfIngresar extends javax.swing.JFrame {
         });
 
         lbl_celular1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_celular1.setText("Email:");
+        lbl_celular1.setText("Email:*");
 
         cmbPrefijo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "32", "2", "33", "34", "35", "39", "41", "42", "43", "44", "45", "51", "52", "53", "55", "57", "58", "61", "63", "64", "65", "67", "71", "72", "73", "75" }));
 
@@ -168,7 +168,7 @@ public class jfIngresar extends javax.swing.JFrame {
                                     .addComponent(lbl_celular)
                                     .addComponent(lbl_celular1)
                                     .addComponent(lbl_Rut))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jPrefijoCelu)
                                     .addComponent(cmbPrefijo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -181,7 +181,7 @@ public class jfIngresar extends javax.swing.JFrame {
                                     .addComponent(jMail, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jFono, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -259,8 +259,8 @@ public class jfIngresar extends javax.swing.JFrame {
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
         BD.crearConexion();
-        if (jRut.getText().equals("")|| jNombre.getText().equals("")|| jApePat.getText().equals("")|| jApeMat.getText().equals("")||jFono.getText().equals("")||jCelular.getText().equals("")|| jMail.getText().equals("")){
-                msj="Error, No deje ningun campo vacio";
+        if (jRut.getText().equals("")|| jNombre.getText().equals("")|| jApePat.getText().equals("")|| jFono.getText().equals("")||jCelular.getText().equals("")|| jMail.getText().equals("")){
+                msj="Error, No deje ningun campo obligatorio vacio";
                 JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);}
         else{
             try{
@@ -312,6 +312,7 @@ public class jfIngresar extends javax.swing.JFrame {
         }
         if(k==10){
         jCelular.transferFocus();}
+        if (jCelular.getText().length()== 8){evt.consume();}
     }//GEN-LAST:event_jCelularKeyTyped
 
     private void jFonoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFonoFocusLost
@@ -336,6 +337,7 @@ public class jfIngresar extends javax.swing.JFrame {
         }
         if(k==10){
         jCelular.transferFocus();}
+        if (jFono.getText().length()== 7){evt.consume();}
     }//GEN-LAST:event_jFonoKeyTyped
 
     private void jRutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRutFocusLost

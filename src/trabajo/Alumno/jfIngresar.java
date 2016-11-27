@@ -12,14 +12,14 @@ import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import trabajo.Rut;
 
-
 public class jfIngresar extends javax.swing.JFrame {
+
     private String msj;
     private Conexion BD = new Conexion();
     private Rut rut;
     private String rutFormateado;
     private String rutDesformateado;
-    
+
     public jfIngresar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_add.png"));
         setIconImage(icon);
@@ -28,7 +28,6 @@ public class jfIngresar extends javax.swing.JFrame {
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -367,12 +366,12 @@ public class jfIngresar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
-        if (jRut.getText().equals("") || jNombre.getText().equals("") || jApePat.getText().equals("") || jDir.getText().equals("") || jAño.getText().equals("") || jReligion.getText().equals("") || jNacionalidad.getText().equals("") ||  jFolio.getText().equals("")){
-            msj="Error, No deje ningun campo obligatorio vacio";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);  
-        }else{
-            String nombre,apeP,apeM,dir,fechaNac,coma,religion,sexo,nacionalidad,transporte,NombreComuna,año,mes,dia,numeroComuna,letra,colegioProcedencia;
-            Integer folioMatricula,PosHermano,NumHermano,comuna;
+        if (jRut.getText().equals("") || jNombre.getText().equals("") || jApePat.getText().equals("") || jDir.getText().equals("") || jAño.getText().equals("") || jReligion.getText().equals("") || jNacionalidad.getText().equals("") || jFolio.getText().equals("")) {
+            msj = "Error, No deje ningun campo obligatorio vacio";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            String nombre, apeP, apeM, dir, fechaNac, coma, religion, sexo, nacionalidad, transporte, NombreComuna, año, mes, dia, numeroComuna, letra, colegioProcedencia;
+            Integer folioMatricula, PosHermano, NumHermano, comuna;
             // Se obtiene nombre apellido paterno, apellido materno, direccion y fecha de nacimiento
             nombre = jNombre.getText();
             apeP = jApePat.getText();
@@ -380,157 +379,177 @@ public class jfIngresar extends javax.swing.JFrame {
             dir = jDir.getText();
             //FECHA
             año = jAño.getText();
-            mes = String.format("%02d", cmbMes.getSelectedIndex()+1);
-            dia = (String)cmbDia.getSelectedItem();
-            fechaNac = año + "-" + mes + "-" + dia;  
-        
+            mes = String.format("%02d", cmbMes.getSelectedIndex() + 1);
+            dia = (String) cmbDia.getSelectedItem();
+            fechaNac = año + "-" + mes + "-" + dia;
+
             folioMatricula = Integer.parseInt(jFolio.getText());
-            letra = (String)cmbSexo.getSelectedItem();
-            sexo = letra.substring(0,1);
+            letra = (String) cmbSexo.getSelectedItem();
+            sexo = letra.substring(0, 1);
             religion = jReligion.getText();
-        
+
             // Se obtienen los datos del combobox y se extrae el numero correspondiente al id_comuna
-            NombreComuna = (String)cmbComuna.getSelectedItem();
-            numeroComuna = NombreComuna.substring(0,2);
+            NombreComuna = (String) cmbComuna.getSelectedItem();
+            numeroComuna = NombreComuna.substring(0, 2);
             comuna = Integer.parseInt(numeroComuna);
             nacionalidad = jNacionalidad.getText();
-            transporte = (String)cmbTransporte.getSelectedItem();
+            transporte = (String) cmbTransporte.getSelectedItem();
 
-            PosHermano = Integer.parseInt((String)cmbPosHermanos.getSelectedItem());
-            NumHermano = Integer.parseInt((String)cmbNumHermanos.getSelectedItem());
+            PosHermano = Integer.parseInt((String) cmbPosHermanos.getSelectedItem());
+            NumHermano = Integer.parseInt((String) cmbNumHermanos.getSelectedItem());
             colegioProcedencia = jColegioProcedencia.getText();
             // Coma designada como variable para facilitar y entender mas la sintaxis de la linea de sql
             coma = "','";
-        if (PosHermano > NumHermano){
-            msj="No puedes estar en una posicion mayor a la de el numero de hermanos";
-            JOptionPane.showMessageDialog(null,msj,"Error hermandad",JOptionPane.INFORMATION_MESSAGE);  
-        }else{
-            
-            try{
-                BD.crearConexion();
-                String sql1 = "SELECT * from matricula where folio_matricula = '"+folioMatricula+"'";
-                ResultSet lis = BD.ejecutarSQLSelect(sql1);
-                if (lis.next()){
-                    msj = "Folio existente";
-                    JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
-                }else{
-                    //FECHA
-                    int year = Integer.parseInt(jAño.getText());
-                    int month = cmbMes.getSelectedIndex() + 1;
-                    int day = Integer.parseInt((String)cmbDia.getSelectedItem());
-                    if (year <1900){
-                        throw new IllegalArgumentException("Año Invalido");
-                    }
-                    LocalDate today = LocalDate.of(year,month,day);
-                    //FIN-FECHA
-                    String sql = "INSERT INTO alumno(rut_alumno,nombres,ape_paterno,ape_materno ,fecha_nacimiento,"
+            if (PosHermano > NumHermano) {
+                msj = "No puedes estar en una posicion mayor a la de el numero de hermanos";
+                JOptionPane.showMessageDialog(null, msj, "Error hermandad", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+
+                try {
+                    BD.crearConexion();
+                    String sql1 = "SELECT * from matricula where folio_matricula = '" + folioMatricula + "'";
+                    ResultSet lis = BD.ejecutarSQLSelect(sql1);
+                    if (lis.next()) {
+                        msj = "Folio existente";
+                        JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        //FECHA
+                        int year = Integer.parseInt(jAño.getText());
+                        int month = cmbMes.getSelectedIndex() + 1;
+                        int day = Integer.parseInt((String) cmbDia.getSelectedItem());
+                        if (year < 1900) {
+                            throw new IllegalArgumentException("Año Invalido");
+                        }
+                        LocalDate today = LocalDate.of(year, month, day);
+                        //FIN-FECHA
+                        String sql = "INSERT INTO alumno(rut_alumno,nombres,ape_paterno,ape_materno ,fecha_nacimiento,"
                                 + "sexo,direccion,religion,id_comuna,nacionalidad,transporte,num_hermanos,"
-                                + "posicion_hermanos,"+"colegio_procedencia) VALUES ('"+ rutDesformateado +coma+ nombre+coma+apeP+coma+apeM+coma+fechaNac+coma+sexo+coma+dir+coma+religion+coma+comuna+coma+nacionalidad+coma+transporte+coma+NumHermano+coma+PosHermano+coma+colegioProcedencia+"')";
-                    if(BD.ejecutarSQL(sql)){
-                        msj="Ingreso de alumno realizado con exito";
-                        JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
-                    }else{
-                        msj="Error, rut existente";
-                        JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
-                    }
-                    //año actual
-                    Calendar calendario = new GregorianCalendar();
-                    int anno = calendario.get(Calendar.YEAR);
-                    //
-                
-                    String sql2 ="INSERT INTO matricula VALUES ('"+folioMatricula+coma+anno+coma+rutDesformateado+"')";
+                                + "posicion_hermanos," + "colegio_procedencia) VALUES ('" + rutDesformateado + coma + nombre + coma + apeP + coma + apeM + coma + fechaNac + coma + sexo + coma + dir + coma + religion + coma + comuna + coma + nacionalidad + coma + transporte + coma + NumHermano + coma + PosHermano + coma + colegioProcedencia + "')";
+                        if (BD.ejecutarSQL(sql)) {
+                            msj = "Ingreso de alumno realizado con exito";
+                            JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            msj = "Error, rut existente";
+                            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                        //año actual
+                        Calendar calendario = new GregorianCalendar();
+                        int anno = calendario.get(Calendar.YEAR);
+                        //
+                        String sqlFolio2 = "SELECT * FROM matricula WHERE rut_alumno = '" + rutDesformateado + "' and anno = '" + anno + "'";
+                        try {
+                            lis = BD.ejecutarSQLSelect(sqlFolio2);
+                            if (lis.next()) {
+                                msj = "alumno ya tiene folio asociado a ese año";
+                                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                            } else {
+                                sql = "INSERT INTO matricula(folio_matricula,rut_alumno,anno) values ('" + folioMatricula + coma + rutDesformateado + coma + anno + " ')";
+                                if (BD.ejecutarSQL(sql)) {
+                                    msj = "Ingreso realizado con exito";
+                                    JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                                } else {
+                                    msj = "Error, folio existente";
+                                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                                }
+                            }
+                        } catch (Exception e) {
+                            msj = "Error, no se pudo ingresar los datos";
+                            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                        /*String sql2 ="INSERT INTO matricula VALUES ('"+folioMatricula+coma+anno+coma+rutDesformateado+"')";
                     if(BD.ejecutarSQL(sql2)){
                         msj="Ingreso de matricula realizado con exito";
                         JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
                     }else{
                         msj="Error, Folio existente";
                         JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+                    }*/
+                        BD.cerrarConexion();
                     }
-                    BD.cerrarConexion();
+                } catch (DateTimeException ex) {
+                    msj = "Error, fecha invalida";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception e) {
+                    msj = "Error, hubo un problema.";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            }catch (DateTimeException ex){
-                msj = "Error, fecha invalida";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);   
-            }catch (Exception e){
-                msj = "Error, hubo un problema.";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
             }
         }
-    }
-        
+
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        if (BD.getConexion() != null) 
-            {BD.cerrarConexion();}
+        if (BD.getConexion() != null) {
+            BD.cerrarConexion();
+        }
         this.dispose();
         new jfAlumno().setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void jAñoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jAñoKeyTyped
         //metodo para que no se ingresen letras en el campo jAño
-        int k=(int)evt.getKeyChar();
-        if (k >= 97 && k <= 122 || k>=65 && k<=90){
-            evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-            JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+        int k = (int) evt.getKeyChar();
+        if (k >= 97 && k <= 122 || k >= 65 && k <= 90) {
+            evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+            JOptionPane.showMessageDialog(null, "No puede ingresar letras!!!", "Ventana Error Datos", JOptionPane.ERROR_MESSAGE);
         }
-        if(k==241 || k==209){
-            evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-            JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+        if (k == 241 || k == 209) {
+            evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+            JOptionPane.showMessageDialog(null, "No puede ingresar letras!!!", "Ventana Error Datos", JOptionPane.ERROR_MESSAGE);
         }
-        if(k==10){
+        if (k == 10) {
             jAño.transferFocus();
         }
     }//GEN-LAST:event_jAñoKeyTyped
 
     private void jAñoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jAñoFocusLost
-        try{
+        try {
             //Objeto con fecha actual
             Calendar calendario = new GregorianCalendar();
 
             Integer año = Integer.parseInt(jAño.getText());
             Integer añoLimite = (calendario.get(Calendar.YEAR)) - 5;
 
-            if (año<1900 || año>añoLimite) {
-                JOptionPane.showMessageDialog(null,"Año de nacimiento imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
+            if (año < 1900 || año > añoLimite) {
+                JOptionPane.showMessageDialog(null, "Año de nacimiento imposible", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
                 jAño.requestFocus();
                 jAño.setText("");
             }
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Año de nacimiento imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Año de nacimiento imposible", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
             jAño.requestFocus();
             jAño.setText("");
         }
-        
+
     }//GEN-LAST:event_jAñoFocusLost
 
     private void jFolioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFolioFocusLost
         try {
             String texto = jFolio.getText();
-            Integer Numeros = Integer.parseInt(texto);     
-            if (Numeros<0 || Numeros>999999) {
-                JOptionPane.showMessageDialog(null,"Folio imposible","Ventana Error Año",JOptionPane.ERROR_MESSAGE);
+            Integer Numeros = Integer.parseInt(texto);
+            if (Numeros < 0 || Numeros > 999999) {
+                JOptionPane.showMessageDialog(null, "Folio imposible", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
                 jFolio.requestFocus();
                 jFolio.setText("");
             }
-        }catch (Exception e){
-            
+        } catch (Exception e) {
+
         }
     }//GEN-LAST:event_jFolioFocusLost
 
     private void jFolioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFolioKeyTyped
-        int k=(int)evt.getKeyChar();
-        if (k >= 97 && k <= 122 || k>=65 && k<=90){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+        int k = (int) evt.getKeyChar();
+        if (k >= 97 && k <= 122 || k >= 65 && k <= 90) {
+            evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+            JOptionPane.showMessageDialog(null, "No puede ingresar letras!!!", "Ventana Error Datos", JOptionPane.ERROR_MESSAGE);
         }
-        if(k==241 || k==209){
-        evt.setKeyChar((char)KeyEvent.VK_CLEAR);
-        JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
+        if (k == 241 || k == 209) {
+            evt.setKeyChar((char) KeyEvent.VK_CLEAR);
+            JOptionPane.showMessageDialog(null, "No puede ingresar letras!!!", "Ventana Error Datos", JOptionPane.ERROR_MESSAGE);
         }
-        if(k==10){
-        jAño.transferFocus();
-}
+        if (k == 10) {
+            jAño.transferFocus();
+        }
     }//GEN-LAST:event_jFolioKeyTyped
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -550,19 +569,19 @@ public class jfIngresar extends javax.swing.JFrame {
         cmbNumHermanos.setSelectedIndex(0);
         cmbPosHermanos.setSelectedIndex(0);
     }//GEN-LAST:event_btnLimpiarActionPerformed
-    
+
     private void jRutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRutFocusLost
-        try{
+        try {
             rutFormateado = rut.formatear(jRut.getText());
-            if (rut.validar(rutFormateado) == false){
-                JOptionPane.showMessageDialog(null,"Rut incorrecto","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
+            if (rut.validar(rutFormateado) == false) {
+                JOptionPane.showMessageDialog(null, "Rut incorrecto", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
                 jRut.setText("");
-            }else{
+            } else {
                 rutDesformateado = rut.desformatear(rutFormateado);
                 jRut.setText(rutFormateado);
             }
-        }catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"Mal formato de rut","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Mal formato de rut", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
             jRut.setText("");
         }
     }//GEN-LAST:event_jRutFocusLost

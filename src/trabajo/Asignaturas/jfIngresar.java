@@ -47,6 +47,12 @@ public class jfIngresar extends javax.swing.JFrame {
 
         jLabel3.setText("Codigo asignatura:");
 
+        jCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jCodigoKeyTyped(evt);
+            }
+        });
+
         btn_finalizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disk.png"))); // NOI18N
         btn_finalizar.setText("Finalizar");
         btn_finalizar.addActionListener(new java.awt.event.ActionListener() {
@@ -172,6 +178,10 @@ public class jfIngresar extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btn_finalizarActionPerformed
+
+    private void jCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jCodigoKeyTyped
+        if (jCodigo.getText().length()== 4){evt.consume();}
+    }//GEN-LAST:event_jCodigoKeyTyped
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

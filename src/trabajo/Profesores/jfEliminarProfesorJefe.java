@@ -8,14 +8,14 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 
-public class jfProfesorJefe extends javax.swing.JFrame {
-
+public class jfEliminarProfesorJefe extends javax.swing.JFrame {
+    
     private Conexion BD = new Conexion();
     private String msj;
     private ResultSet rs;
     String actualizando = "s";
-
-    public jfProfesorJefe() {
+    
+    public jfEliminarProfesorJefe() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_delete.png"));
         setIconImage(icon);
         initComponents();
@@ -27,17 +27,12 @@ public class jfProfesorJefe extends javax.swing.JFrame {
             Calendar calendario = new GregorianCalendar();
             Integer añoLimite = (calendario.get(Calendar.YEAR));
             String año = String.valueOf(añoLimite);
-            String sql = "SELECT id_curso,nombre FROM curso where id_curso not in(Select distinct id_curso from profesorjefe_curso where anno = '" + año + "')";
+            String sql = "SELECT id_curso,nombre FROM curso where id_curso in(Select distinct id_curso from profesorjefe_curso where anno = '" + año + "')";
             rs = BD.ejecutarSQLSelect(sql);
             while (rs.next()) {
                 cmbCursos.addItem(rs.getString("id_curso") + " " + rs.getString("nombre"));
             }
-            actualizando = "n";
-            sql = "SELECT rut_profesor,nombres,ape_paterno FROM profesor";
-            rs = BD.ejecutarSQLSelect(sql);
-            while (rs.next()) {
-                cmbProfesores.addItem(rs.getString("rut_profesor") + " " + rs.getString("nombres") + " " + rs.getString("ape_paterno"));
-            }
+            actualizando = "n";           
 
             BD.cerrarConexion();
         } catch (Exception e) {
@@ -45,12 +40,11 @@ public class jfProfesorJefe extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
+   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btnVolver = new javax.swing.JButton();
         btnFinalizar = new javax.swing.JButton();
@@ -59,17 +53,6 @@ public class jfProfesorJefe extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -81,7 +64,7 @@ public class jfProfesorJefe extends javax.swing.JFrame {
             }
         });
 
-        btnFinalizar.setText("Asociar");
+        btnFinalizar.setText("Eliminar");
         btnFinalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFinalizarActionPerformed(evt);
@@ -89,6 +72,11 @@ public class jfProfesorJefe extends javax.swing.JFrame {
         });
 
         cmbCursos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Curso" }));
+        cmbCursos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbCursosActionPerformed(evt);
+            }
+        });
 
         cmbProfesores.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Profesor" }));
 
@@ -176,43 +164,96 @@ public class jfProfesorJefe extends javax.swing.JFrame {
         Calendar calendario = new GregorianCalendar();
         Integer añoLimite = (calendario.get(Calendar.YEAR));
         String año = String.valueOf(añoLimite);
-        if (!(indexC == 0) || !(indexP == 0)) {
-            String rut = (String) cmbProfesores.getSelectedItem();
-            rut = rut.substring(0, rut.indexOf(" "));
-            String curso = (String) cmbCursos.getSelectedItem();
-            curso = curso.substring(0, curso.indexOf(" "));
-            try {
-                BD.crearConexion();
-                String coma = "','";
-                String sql = "INSERT INTO profesorjefe_curso VALUES ('" + rut + coma + curso + coma + año + "')";
-                if (BD.ejecutarSQL(sql)) {
-                    msj = "Se realizó la asociación con éxito.";
-                    JOptionPane.showMessageDialog(null, msj, "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    msj = "Ya existe esta asociacion entre profesor y curso.";
+        int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea eliminar esta relacion?", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
+        if (resp == 0) {
+            if (!(indexC == 0) || !(indexP == 0)) {
+                String rut = (String) cmbProfesores.getSelectedItem();
+                rut = rut.substring(0, rut.indexOf(" "));
+                String curso = (String) cmbCursos.getSelectedItem();
+                curso = curso.substring(0, curso.indexOf(" "));
+                try {
+                    BD.crearConexion();
+                    String sql = "Select * from profesorjefe_curso where rut_profesor = '" + rut + "' and id_curso = '" + curso + "' and anno = '" + año + "'";
+                    ResultSet lis = BD.ejecutarSQLSelect(sql);
+                    if (lis.next()) {
+                        sql = "Delete from profesorjefe_curso where rut_profesor = '" + rut + "' and id_curso = '" + curso + "' and anno = '" + año + "'";
+                        if (BD.ejecutarSQL(sql)) {
+                            msj = "Se realizó la eliminacion con éxito.";
+                            JOptionPane.showMessageDialog(null, msj, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            msj = "Error al intentar eliminar";
+                            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                } catch (Exception e) {
+                    
+                    msj = "Error, hubo un problema.";
                     JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (Exception e) {
-                msj = "Error, hubo un problema.";
-                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            }            
         }
         cmbCursos.removeAllItems();
         cmbCursos.addItem("Seleccione Curso");
         try {
-            String sql = "SELECT id_curso,nombre FROM curso where id_curso not in(Select distinct id_curso from profesorjefe_curso where anno = '" + año + "')";
+
+            BD.crearConexion();
+            //PRIMER COMBOBOX            
+            String sql = "SELECT id_curso,nombre FROM curso where id_curso in(Select distinct id_curso from profesorjefe_curso where anno = '" + año + "')";
             rs = BD.ejecutarSQLSelect(sql);
             while (rs.next()) {
                 cmbCursos.addItem(rs.getString("id_curso") + " " + rs.getString("nombre"));
             }
-            actualizando = "n";
+            actualizando = "n";           
+
+            BD.cerrarConexion();
         } catch (Exception e) {
             msj = "Error, hubo un problema.";
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
+        
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
+    private void cmbCursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCursosActionPerformed
+        if (actualizando.equals("n")) {
+            Integer index = cmbCursos.getSelectedIndex();
+            cmbProfesores.setSelectedIndex(0);
+            if (!(index == 0)) {
+                try {
+                    actualizando = "s";
+                    cmbProfesores.removeAllItems();
+                    cmbProfesores.addItem("Seleccione Profesor");
+                    BD.crearConexion();
+                    Calendar calendario = new GregorianCalendar();
+                    Integer añoLimite = (calendario.get(Calendar.YEAR));
+                    String año = String.valueOf(añoLimite);
+                    String codigo = (String) cmbCursos.getSelectedItem();
+                    String curso = codigo.substring(0, 3);
+                    //String sql = "SELECT rut_alumno FROM alumno_curso where id_curso = '" + curso + "' and anno = " + año;
+                    String sql = "SELECT pjc.rut_profesor, p.nombres, p.ape_paterno FROM profesorjefe_curso pjc , profesor p where pjc.id_curso = '" + curso + "' and pjc.anno = " + año + " and pjc.rut_profesor = p.rut_profesor";
+                    //String sql = "SELECT rut_alumno FROM alumno_curso ";
+                    rs = BD.ejecutarSQLSelect(sql);
+                    while (rs.next()) {
+                        cmbProfesores.addItem(rs.getString("pjc.rut_profesor") + " " + rs.getString("p.nombres") + " " + rs.getString("p.ape_paterno"));
+                    }
+                    BD.cerrarConexion();
+                } catch (Exception e) {
+                    msj = "Error, hubo un problema.";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                actualizando = "s";
+                cmbProfesores.removeAllItems();
+                cmbProfesores.addItem("Seleccione Profesor");
+            }
+            actualizando = "n";
+        }
+    }//GEN-LAST:event_cmbCursosActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -225,18 +266,20 @@ public class jfProfesorJefe extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(jfProfesorJefe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfEliminarProfesorJefe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(jfProfesorJefe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfEliminarProfesorJefe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(jfProfesorJefe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfEliminarProfesorJefe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(jfProfesorJefe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(jfEliminarProfesorJefe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new jfProfesorJefe().setVisible(true);
+                new jfEliminarProfesorJefe().setVisible(true);
             }
         });
     }
@@ -249,7 +292,6 @@ public class jfProfesorJefe extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }

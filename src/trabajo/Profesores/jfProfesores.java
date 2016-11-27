@@ -25,6 +25,8 @@ public class jfProfesores extends javax.swing.JFrame {
         btnAsignarProfJefe = new javax.swing.JButton();
         btnAsignarProgAsig = new javax.swing.JButton();
         jInstruccion = new javax.swing.JLabel();
+        btnAsignarProgAsig1 = new javax.swing.JButton();
+        btnEliminarProfJefe = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(540, 400));
@@ -84,6 +86,20 @@ public class jfProfesores extends javax.swing.JFrame {
         jInstruccion.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jInstruccion.setText("Elija la opción que desee");
 
+        btnAsignarProgAsig1.setText("Eliminar Profesor de una asignatura");
+        btnAsignarProgAsig1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAsignarProgAsig1ActionPerformed(evt);
+            }
+        });
+
+        btnEliminarProfJefe.setText("Eliminar Profesor jefe de un curso");
+        btnEliminarProfJefe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarProfJefeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -95,23 +111,22 @@ public class jfProfesores extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(161, 161, 161)
+                        .addComponent(jInstruccion)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnModificar)
-                            .addComponent(btnIngresar))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnAsignarProgAsig, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnAsignarProfJefe, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(btnIngresar)
+                            .addComponent(btnEliminar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 128, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(161, 161, 161)
-                                .addComponent(jInstruccion))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(btnEliminar)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(btnAsignarProgAsig1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnAsignarProgAsig, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnAsignarProfJefe, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnEliminarProfJefe, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(44, 44, 44))
         );
         jPanel1Layout.setVerticalGroup(
@@ -128,8 +143,12 @@ public class jfProfesores extends javax.swing.JFrame {
                     .addComponent(btnAsignarProfJefe, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(btnEliminar)
-                .addGap(66, 66, 66)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEliminar)
+                    .addComponent(btnAsignarProgAsig1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnEliminarProfJefe, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
                 .addComponent(btnVolver)
                 .addGap(177, 177, 177))
         );
@@ -178,6 +197,18 @@ public class jfProfesores extends javax.swing.JFrame {
         ProfJefe.setVisible(true);
     }//GEN-LAST:event_btnAsignarProfJefeActionPerformed
 
+    private void btnAsignarProgAsig1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarProgAsig1ActionPerformed
+        jfEliminarProfesorAsignatura EliAsigProf = new jfEliminarProfesorAsignatura();
+        this.dispose();
+        EliAsigProf.setVisible(true);
+    }//GEN-LAST:event_btnAsignarProgAsig1ActionPerformed
+
+    private void btnEliminarProfJefeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProfJefeActionPerformed
+        jfEliminarProfesorJefe EliProfJefe = new jfEliminarProfesorJefe();
+        this.dispose();
+        EliProfJefe.setVisible(true);
+    }//GEN-LAST:event_btnEliminarProfJefeActionPerformed
+
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -210,7 +241,9 @@ public class jfProfesores extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignarProfJefe;
     private javax.swing.JButton btnAsignarProgAsig;
+    private javax.swing.JButton btnAsignarProgAsig1;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnEliminarProfJefe;
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnVolver;

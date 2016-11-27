@@ -60,6 +60,11 @@ public class jfEliminar extends javax.swing.JFrame {
         jLabel1.setText("Rut alumno a eliminar");
 
         jRutEli.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jRutEli.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jRutEliFocusLost(evt);
+            }
+        });
         jRutEli.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jRutEliKeyPressed(evt);
@@ -217,12 +222,12 @@ public class jfEliminar extends javax.swing.JFrame {
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         try {
             BD.crearConexion();
-            String sql1 = "Select * from alumno_curso where rut_alumno = '" + rutDesformateado + "' ";
+            String sql1 = "Select * from alumno_curso where rut_alumno = '" + jRutAlumno.getText() + "' ";
             ResultSet rs = BD.ejecutarSQLSelect(sql1);
             if (rs.next()){
                 if (!jNomAlumno.getText().equals("")) {
                     try {
-                        String sql2 = "UPDATE alumno_curso SET activo = 'n' where rut_alumno = '" + rutDesformateado + "' ";
+                        String sql2 = "UPDATE alumno_curso SET activo = 'n' where rut_alumno = '" + jRutAlumno.getText() + "' ";
                         BD.ejecutarSQL(sql2);
                         msj = "Alumno eliminado con exito";
                         JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
@@ -254,6 +259,22 @@ public class jfEliminar extends javax.swing.JFrame {
             btnBuscar.requestFocus();
             btnBuscar.doClick();}
     }//GEN-LAST:event_jRutEliKeyPressed
+
+    private void jRutEliFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRutEliFocusLost
+        try {
+            rutFormateado = rut.formatear(jRutEli.getText());
+            if (rut.validar(rutFormateado) == false) {
+                JOptionPane.showMessageDialog(null, "Rut incorrecto", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
+                jRutEli.setText("");
+            } else {
+                rutDesformateado = rut.desformatear(rutFormateado);
+                jRutEli.setText(rutFormateado);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Mal formato de rut", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
+            jRutEli.setText("");
+        }
+    }//GEN-LAST:event_jRutEliFocusLost
 
     
     public static void main(String args[]) {

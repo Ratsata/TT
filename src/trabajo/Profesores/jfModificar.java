@@ -66,10 +66,10 @@ public class jfModificar extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         lbl_Nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Nombre.setText("Nombre: ");
+        lbl_Nombre.setText("Nombre:*");
 
         lbl_ApePat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_ApePat.setText("Apellido Paterno:");
+        lbl_ApePat.setText("Apellido Paterno:*");
 
         lbl_ApeMat.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lbl_ApeMat.setText("Apellido Materno:");
@@ -86,10 +86,10 @@ public class jfModificar extends javax.swing.JFrame {
         });
 
         lbl_celular.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_celular.setText("Celular:");
+        lbl_celular.setText("Celular:*");
 
         lbl_Fono.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_Fono.setText("Telefono Fijo:");
+        lbl_Fono.setText("Telefono Fijo:*");
 
         jFono.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -140,7 +140,7 @@ public class jfModificar extends javax.swing.JFrame {
         lblTitulo1.setText("Modificar Profesor");
 
         lbl_celular1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbl_celular1.setText("Email:");
+        lbl_celular1.setText("Email:*");
 
         jPrefijoCelu.setText("+569");
         jPrefijoCelu.setEnabled(false);
@@ -332,7 +332,7 @@ public class jfModificar extends javax.swing.JFrame {
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
         BD.crearConexion();
-        if (jNombre.getText().equals("") || jApePat.getText().equals("") || jApeMat.getText().equals("") || jMail.getText().equals("") || jFono.getText().equals("") || jCelular.getText().equals("")){
+        if (jNombre.getText().equals("") || jApePat.getText().equals("") || jMail.getText().equals("") || jFono.getText().equals("") || jCelular.getText().equals("")){
             msj="Error, No deje ningun campo vacio";
             JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
         }else{
@@ -387,7 +387,8 @@ public class jfModificar extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null,"No puede ingresar letras!!!","Ventana Error Datos",JOptionPane.ERROR_MESSAGE);
         }
         if(k==10){
-        jCelular.transferFocus();}
+        jFono.transferFocus();}
+        if (jFono.getText().length()== 7){evt.consume();}
     }//GEN-LAST:event_jFonoKeyTyped
 
     private void jFonoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFonoFocusLost
@@ -412,6 +413,7 @@ public class jfModificar extends javax.swing.JFrame {
         }
         if(k==10){
         jCelular.transferFocus();}
+        if (jCelular.getText().length()== 8){evt.consume();}
     }//GEN-LAST:event_jCelularKeyTyped
 
     private void jCelularFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jCelularFocusLost

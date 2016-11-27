@@ -8,20 +8,17 @@ import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
-
 public class jfEliminar extends javax.swing.JFrame {
-
 
     private Conexion BD = new Conexion();
     private String msj;
-    
+
     public jfEliminar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_delete.png"));
         setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
     }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -187,48 +184,65 @@ public class jfEliminar extends javax.swing.JFrame {
         jRutProfesor.setText("");
         jNomProfesor.setText("");
         String rut = jRutEli.getText();
-        String sql1="SELECT * FROM profesor WHERE rut_profesor='"+rut+"'";
-        try{
+        String sql1 = "SELECT * FROM profesor WHERE rut_profesor='" + rut + "'";
+        try {
             ResultSet lis = BD.ejecutarSQLSelect(sql1);
-            if (lis.next()){
-                msj="Persona Existe presione eliminar para confirmar";
+            if (lis.next()) {
+                msj = "Persona Existe presione eliminar para confirmar";
                 jMensaje.setText(msj);
                 jRutProfesor.setText(lis.getString(1));
-                jNomProfesor.setText(lis.getString(2) + " " +  lis.getString(3) + " " + lis.getString(4));
+                jNomProfesor.setText(lis.getString(2) + " " + lis.getString(3) + " " + lis.getString(4));
                 jMensaje.setText(msj);
-            }else {
-                msj="Persona No Existe busque denuevo";
+            } else {
+                msj = "Persona No Existe busque denuevo";
                 jMensaje.setText(msj);
             }
-        }catch(Exception e){
-            msj="Error, no se pudo realizar la operacion";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            msj = "Error, no se pudo realizar la operacion";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         String rut = jRutEli.getText();
-        String sql ="DELETE FROM profesor WHERE rut_profesor = '" + rut + "' ";
-        if(!jNomProfesor.getText().equals("")){
-            try{
-                BD.ejecutarSQL(sql);
-                msj="Datos eliminados con exito";
-                JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
-                jRutEli.setText("");
-                jNomProfesor.setText("");
-                jRutProfesor.setText("");
-            }catch(Exception e){
-                msj="Error, no se pudo realizar la operacion";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea eliminar a este profesor?", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
+        if (resp == 0) {
+            try {
+                String sql = "Select * from asignatura_profesor where rut_profesor = '" + rut + "'";
+                ResultSet rs = BD.ejecutarSQLSelect(sql);
+                sql = "Select * from profesorjefe_curso where rut_profesor = '" + rut + "'";
+                ResultSet lis = BD.ejecutarSQLSelect(sql);
+                if (rs.next() || lis.next()) {
+                    msj = "Profesor asociado a un curso o asignatura no puede eliminarse";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    sql = "DELETE FROM profesor WHERE rut_profesor = '" + rut + "' ";
+                    if (!jNomProfesor.getText().equals("")) {
+                        try {
+                            BD.ejecutarSQL(sql);
+                            msj = "Datos eliminados con exito";
+                            JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                            jRutEli.setText("");
+                            jNomProfesor.setText("");
+                            jRutProfesor.setText("");
+                        } catch (Exception e) {
+                            msj = "Error, no se pudo realizar la operacion";
+                            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        msj = "Error, ningún Rut ah sido digitado";
+                        JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } catch (Exception e) {
+                msj = "Error, hubo un problema.";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }else{
-            msj="Error, ningún Rut ah sido digitado";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        if (BD.getConexion() != null){
+        if (BD.getConexion() != null) {
             BD.cerrarConexion();
         }
         this.dispose();
@@ -255,13 +269,14 @@ public class jfEliminar extends javax.swing.JFrame {
     }//GEN-LAST:event_jRutEliFocusLost
 
     private void jRutEliKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jRutEliKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             String rut = jRutEli.getText();
             rut = rut.replace(".", "");
             rut = rut.replace("-", "");
             jRutEli.setText(rut);
             btnBuscar.requestFocus();
-            btnBuscar.doClick();}
+            btnBuscar.doClick();
+        }
     }//GEN-LAST:event_jRutEliKeyPressed
 
     public static void main(String args[]) {

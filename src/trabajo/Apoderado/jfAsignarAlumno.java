@@ -299,7 +299,7 @@ public class jfAsignarAlumno extends javax.swing.JFrame {
             if (chkSostenedor.isSelected()){
                 sostenedor = "S";
             }else{
-                apoderado = "N";
+                sostenedor = "N";
             }
             String sql = "INSERT INTO relacion_persona_alumno(rut_persona,rut_alumno,parentesco,apoderado,sostenedor) VALUES ('" + rut_persona + coma + rut_alumno + coma + parentesco + coma + apoderado + coma + sostenedor +"')";
             if (BD.ejecutarSQL(sql)){

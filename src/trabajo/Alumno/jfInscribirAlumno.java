@@ -170,8 +170,10 @@ public class jfInscribirAlumno extends javax.swing.JFrame {
                 msj="Se ah inscrito el alumno correctamente.";
                 JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
             }else{
-                msj="Error, esta relacion ya existe.";
-                JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+                sql = "UPDATE alumno_curso SET activo = 's' where rut_alumno = '"+rut+"' and id_curso = '"+idCurso+"' and anno = '"+añoActual+"'";
+                BD.ejecutarSQL(sql);
+                msj="Alumno inscrito correctamente(Este alumno ya pertenecia a este curso pero se encontraba inactivo)";
+                JOptionPane.showMessageDialog(null,msj,"Informacion",JOptionPane.INFORMATION_MESSAGE);
             }
             BD.cerrarConexion();
             llenarComboboxAlu();
@@ -188,7 +190,7 @@ public class jfInscribirAlumno extends javax.swing.JFrame {
                 Calendar calendario = new GregorianCalendar();
                 BD.crearConexion();
                 añoActual = (calendario.get(Calendar.YEAR));
-                String sql = "Select a.rut_alumno, a.nombres, a.ape_paterno, a.ape_materno FROM alumno a WHERE NOT (a.rut_alumno IN (Select ac.rut_alumno FROM alumno_curso ac WHERE a.rut_alumno = ac.rut_alumno)) AND (a.rut_alumno IN (SELECT rut_alumno FROM matricula WHERE anno = '"+ añoActual +"'))";
+                String sql = "Select a.rut_alumno, a.nombres, a.ape_paterno, a.ape_materno FROM alumno a WHERE NOT (a.rut_alumno IN (Select ac.rut_alumno FROM alumno_curso ac WHERE a.rut_alumno = ac.rut_alumno and ac.activo = 's')) AND (a.rut_alumno IN (SELECT rut_alumno FROM matricula WHERE anno = '"+ añoActual +"'))";
                 rs = BD.ejecutarSQLSelect(sql);
                 while(rs.next()){
                     cmbAlu.addItem(rs.getString("a.rut_alumno")+" "+rs.getString("a.nombres")+" "+rs.getString("a.ape_paterno")+" "+rs.getString("a.ape_materno"));
