@@ -30,6 +30,7 @@ public class jfInformes extends javax.swing.JFrame {
 
         btnGenerarAlumnos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_add.png"))); // NOI18N
         btnGenerarAlumnos.setText("Generar informe de alumnos");
+        btnGenerarAlumnos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGenerarAlumnos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerarAlumnosActionPerformed(evt);
@@ -38,6 +39,7 @@ public class jfInformes extends javax.swing.JFrame {
 
         btnGenerarNotas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_add.png"))); // NOI18N
         btnGenerarNotas.setText("Generar informe de notas");
+        btnGenerarNotas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGenerarNotas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerarNotasActionPerformed(evt);

@@ -41,6 +41,7 @@ public class jfAsignaturas extends javax.swing.JFrame {
 
         btn_Ingresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_add.png"))); // NOI18N
         btn_Ingresar.setText("Ingresar Asignatura");
+        btn_Ingresar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btn_Ingresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_IngresarActionPerformed(evt);
@@ -49,6 +50,7 @@ public class jfAsignaturas extends javax.swing.JFrame {
 
         btn_modificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_edit.png"))); // NOI18N
         btn_modificar.setText("Modificar Asignatura");
+        btn_modificar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btn_modificar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_modificarActionPerformed(evt);
@@ -57,6 +59,7 @@ public class jfAsignaturas extends javax.swing.JFrame {
 
         btn_Eliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_delete.png"))); // NOI18N
         btn_Eliminar.setText("Eliminar Asignatura");
+        btn_Eliminar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btn_Eliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_EliminarActionPerformed(evt);
@@ -73,6 +76,7 @@ public class jfAsignaturas extends javax.swing.JFrame {
 
         btn_Ingresar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_edit.png"))); // NOI18N
         btn_Ingresar1.setText("Asignar Curso");
+        btn_Ingresar1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btn_Ingresar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_Ingresar1ActionPerformed(evt);
@@ -81,6 +85,7 @@ public class jfAsignaturas extends javax.swing.JFrame {
 
         btn_EliAsigCurso.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/book_delete.png"))); // NOI18N
         btn_EliAsigCurso.setText("Eliminar asig de un curso");
+        btn_EliAsigCurso.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btn_EliAsigCurso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_EliAsigCursoActionPerformed(evt);

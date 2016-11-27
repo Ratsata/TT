@@ -84,6 +84,7 @@
               <Image iconType="3" name="/imagenes/book_add.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Generar informe de alumnos"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerarAlumnosActionPerformed"/>
@@ -95,6 +96,7 @@
               <Image iconType="3" name="/imagenes/book_add.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Generar informe de notas"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerarNotasActionPerformed"/>
