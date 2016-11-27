@@ -26,17 +26,17 @@ public class jfAsignarCurso extends javax.swing.JFrame {
             
             BD.crearConexion();
             //PRIMER COMBOBOX
-            String sql = "SELECT nombre FROM curso";
+            String sql = "SELECT id_curso,nombre FROM curso";
             rs = BD.ejecutarSQLSelect(sql);
             while(rs.next()){
-                cmbCurso.addItem(rs.getString("nombre"));
+                cmbCurso.addItem(rs.getString("id_curso")+" " +rs.getString("nombre"));
                 
             }
             //SEGUNDO COMBOBOX
-            sql = "SELECT nombre FROM asignatura";
+            sql = "SELECT id_asignatura,nombre FROM asignatura";
             rs = BD.ejecutarSQLSelect(sql);
             while(rs.next()){
-                cmbAsignatura.addItem(rs.getString("nombre"));
+                cmbAsignatura.addItem(rs.getString("id_asignatura")+" " +rs.getString("nombre"));
                 
             }
             BD.cerrarConexion();
@@ -101,23 +101,25 @@ public class jfAsignarCurso extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblTitulo))
+                        .addComponent(btn_volver)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAceptar))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblAsignatura)
-                            .addComponent(cmbAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(61, 61, 61)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblCurso))))
-                .addContainerGap(113, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btn_volver)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAceptar)
-                .addGap(18, 18, 18))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(lblTitulo))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblAsignatura)
+                                    .addComponent(cmbAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(61, 61, 61)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblCurso))))
+                        .addGap(0, 103, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,11 +134,11 @@ public class jfAsignarCurso extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmbCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAceptar)
-                    .addComponent(btn_volver))
-                .addGap(39, 39, 39))
+                    .addComponent(btn_volver)
+                    .addComponent(btnAceptar))
+                .addGap(35, 35, 35))
         );
 
         getContentPane().add(jPanel1);
@@ -154,17 +156,15 @@ public class jfAsignarCurso extends javax.swing.JFrame {
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         String coma = "','";
         try {
-            BD.crearConexion();
-            String sql = "SELECT a.id_asignatura, c.id_curso FROM asignatura a, curso c WHERE a.nombre = '"+ cmbAsignatura.getSelectedItem() +"' AND c.nombre = '"+ cmbCurso.getSelectedItem() +"'";
-            rs = BD.ejecutarSQLSelect(sql);
-            while (rs.next()) {
-                id_curso = rs.getString("c.id_curso");
-                id_asignatura = rs.getString("a.id_asignatura");
-            }
+            BD.crearConexion();        
+                id_curso = (String)cmbCurso.getSelectedItem();
+                id_curso = id_curso.substring(0,id_curso.indexOf(" "));
+                id_asignatura = (String)cmbAsignatura.getSelectedItem();
+                id_asignatura = id_asignatura.substring(0,id_asignatura.indexOf(" "));            
             //Fecha
             Calendar fecha = Calendar.getInstance();
             int anno = fecha.get(Calendar.YEAR);
-            sql = "INSERT INTO asignatura_curso(id_curso,id_asignatura,anno) VALUES ('" + id_curso + coma + id_asignatura + coma + anno + "')";
+            String sql = "INSERT INTO asignatura_curso(id_curso,id_asignatura,anno) VALUES ('" + id_curso + coma + id_asignatura + coma + anno + "')";
             if (BD.ejecutarSQL(sql)) {
                 msj = "Se registro la asociacion correctamente";
                 JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
