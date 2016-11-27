@@ -64,7 +64,6 @@ public class jfAlumnos extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(500, 445));
         setMinimumSize(new java.awt.Dimension(500, 445));
-        setPreferredSize(new java.awt.Dimension(500, 445));
         setResizable(false);
 
         jPanel1.setMaximumSize(new java.awt.Dimension(500, 445));
@@ -429,6 +428,7 @@ public class jfAlumnos extends javax.swing.JFrame {
             String nomcurso = cmbCursoTodos.getSelectedItem().toString().replace(idcurso + ",", "");
             try {
                 ficheroPdf = new FileOutputStream("C:\\Users\\s_dbz\\AppData\\Local\\Temp\\" + nomArchivo + ".pdf");
+                //ficheroPdf = new FileOutputStream("C:\\Users\\%USERNAME%\\Desktop\\" + nomArchivo + ".pdf");
                 PdfWriter.getInstance(
                         documento,
                         ficheroPdf
