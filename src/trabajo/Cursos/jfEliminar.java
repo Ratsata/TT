@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 public class jfEliminar extends javax.swing.JFrame {
     private Conexion BD = new Conexion();
     private String msj;
+    private ResultSet rs;
     
     public jfEliminar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_delete.png"));
@@ -164,12 +165,11 @@ public class jfEliminar extends javax.swing.JFrame {
             String sql="SELECT * FROM curso WHERE id_curso='"+ txtCurso.getText() +"'";
             ResultSet lis = BD.ejecutarSQLSelect(sql);
             if (lis.next()){
-                lblMensaje.setText(msj);
+                lblMensaje.setText("Alumno encontrado con exito");
                 txtNom.setText(lis.getString("nombre"));
             }else {
-                msj="Curso no existe, busque denuevo";
+                lblMensaje.setText("Curso no existe, busque denuevo");
             }
-            lblMensaje.setText(msj);
             BD.cerrarConexion();
         }catch(Exception e){
             msj="Error, no se pudo realizar la operacion";
@@ -178,15 +178,22 @@ public class jfEliminar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        String sql ="DELETE FROM curso WHERE id_curso = '" + txtCurso.getText() + "' ";
         if(!txtNom.getText().equals("")){
             try{
                 BD.crearConexion();
-                BD.ejecutarSQL(sql);
-                msj="Datos eliminados con exito";
-                JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
-                txtCurso.setText("");
-                txtNom.setText("");
+                String sql = "SELECT * FROM alumno_curso WHERE id_curso = '"+ txtCurso.getText() +"'";
+                rs = BD.ejecutarSQLSelect(sql);
+                if (rs.next()){
+                    msj="Error, este curso se encuentra con alumnos inscritos a el.";
+                    JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+                }else{
+                    sql ="DELETE FROM curso WHERE id_curso = '" + txtCurso.getText() + "' ";
+                    BD.ejecutarSQL(sql);
+                    lblMensaje.setText("Datos eliminados con exito");
+                    JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
+                    txtCurso.setText("");
+                    txtNom.setText("");    
+                }
                 BD.cerrarConexion();
             }catch(Exception e){
                 msj="Error, no se pudo realizar la operacion";
