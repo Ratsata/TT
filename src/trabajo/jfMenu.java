@@ -15,15 +15,23 @@ import trabajo.Notas.jfNotas;
 
 
 public class jfMenu extends javax.swing.JFrame {
-
-    /**
-     * CONSTRUCTOR VACIO DEL MENU
-     */
+    private String contraseñaMaestra = "contraseña";
+    
+    //CONSTRUCTOR VACIO DEL MENU
     public jfMenu() {        
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/gorro.png"));
         setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
+        
+        deshabilitarBotones();
+    }
+    //CONSTRUCTOR DE CONTRASEÑA
+    
+    public jfMenu(String contraseña){
+        
+        contraseñaMaestra = contraseña;
+        deshabilitarBotones();
     }
 
     
@@ -31,6 +39,7 @@ public class jfMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -47,6 +56,13 @@ public class jfMenu extends javax.swing.JFrame {
         btnContraseña = new javax.swing.JButton();
         jContraseña = new javax.swing.JPasswordField();
         btnGenerarInforme = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        menuArchivo = new javax.swing.JMenu();
+        menuCerrarSesion = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        menuCerrar = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        menuConfig = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(600, 500));
@@ -87,7 +103,7 @@ public class jfMenu extends javax.swing.JFrame {
         );
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 600, 260);
+        jPanel1.setBounds(0, 0, 600, 240);
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
         jPanel2.setMaximumSize(new java.awt.Dimension(600, 200));
@@ -258,7 +274,42 @@ public class jfMenu extends javax.swing.JFrame {
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnAlumno, btnApoderado, btnAsignaturas, btnCursos, btnEvaluacion, btnGenerarInforme, btnNotas, btnProfesores, btnSalir});
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(0, 260, 600, 220);
+        jPanel2.setBounds(0, 240, 600, 220);
+
+        menuArchivo.setText("Archivo");
+
+        menuCerrarSesion.setText("Cerrar Sesión");
+        menuCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCerrarSesionActionPerformed(evt);
+            }
+        });
+        menuArchivo.add(menuCerrarSesion);
+        menuArchivo.add(jSeparator1);
+
+        menuCerrar.setText("Cerrar");
+        menuCerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCerrarActionPerformed(evt);
+            }
+        });
+        menuArchivo.add(menuCerrar);
+
+        jMenuBar1.add(menuArchivo);
+
+        jMenu2.setText("Herramientas");
+
+        menuConfig.setText("Configuraciones");
+        menuConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuConfigActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuConfig);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -287,26 +338,51 @@ public class jfMenu extends javax.swing.JFrame {
               
     }//GEN-LAST:event_btnProfesoresActionPerformed
 
+    public void habilitarBotones(){
+        btnAlumno.setEnabled(true);
+        btnApoderado.setEnabled(true);
+        btnCursos.setEnabled(true);
+        btnNotas.setEnabled(true);
+        btnProfesores.setEnabled(true);
+        btnAsignaturas.setEnabled(true);
+        btnEvaluacion.setEnabled(true);
+        btnGenerarInforme.setEnabled(true);
+
+        menuConfig.setEnabled(true);
+        menuCerrarSesion.setEnabled(true);
+
+        jContraseña.setVisible(false);
+        btnContraseña.setVisible(false);
+        lblContraseña.setVisible(false);
+    }
+    
+    private void deshabilitarBotones(){
+        btnAlumno.setEnabled(false);
+        btnApoderado.setEnabled(false);
+        btnCursos.setEnabled(false);
+        btnNotas.setEnabled(false);
+        btnProfesores.setEnabled(false);
+        btnAsignaturas.setEnabled(false);
+        btnEvaluacion.setEnabled(false);
+        btnGenerarInforme.setEnabled(false);
+
+        menuConfig.setEnabled(false);
+        menuCerrarSesion.setEnabled(false);
+
+        jContraseña.setVisible(true);
+        btnContraseña.setVisible(true);
+        lblContraseña.setVisible(true);
+    }
+    
     private void btnContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContraseñaActionPerformed
         String contraseña;
         contraseña = jContraseña.getText();
-        if (contraseña.equals("contraseña")){
-            btnAlumno.setEnabled(true);
-            btnApoderado.setEnabled(true);
-            btnCursos.setEnabled(true);
-            btnNotas.setEnabled(true);
-            btnProfesores.setEnabled(true);
-            btnAsignaturas.setEnabled(true);
-            btnEvaluacion.setEnabled(true);
-            btnGenerarInforme.setEnabled(true);
-            
-            jContraseña.setVisible(false);
-            btnContraseña.setVisible(false);
-            lblContraseña.setVisible(false);
-            
+        if (contraseña.equals(contraseñaMaestra)){
+            habilitarBotones();
         }else{
             JOptionPane.showMessageDialog(null,"Contraseña erronea","Error",JOptionPane.INFORMATION_MESSAGE);
             jContraseña.setText("");
+            deshabilitarBotones();
         }
     }//GEN-LAST:event_btnContraseñaActionPerformed
 
@@ -349,6 +425,21 @@ public class jfMenu extends javax.swing.JFrame {
         this.dispose();
         inf.setVisible(true);
     }//GEN-LAST:event_btnGenerarInformeActionPerformed
+
+    private void menuCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCerrarActionPerformed
+        // boton salir
+        System.exit(0);
+    }//GEN-LAST:event_menuCerrarActionPerformed
+
+    private void menuConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConfigActionPerformed
+        JConfiguracion config = new JConfiguracion();
+        this.dispose();
+        config.setVisible(true);
+    }//GEN-LAST:event_menuConfigActionPerformed
+
+    private void menuCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCerrarSesionActionPerformed
+        deshabilitarBotones();
+    }//GEN-LAST:event_menuCerrarSesionActionPerformed
 
     
     public static void main(String args[]) {
@@ -393,9 +484,17 @@ public class jfMenu extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JPasswordField jContraseña;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JLabel lblContraseña;
     private javax.swing.JLabel lblTitulo;
+    private javax.swing.JMenu menuArchivo;
+    private javax.swing.JMenuItem menuCerrar;
+    private javax.swing.JMenuItem menuCerrarSesion;
+    private javax.swing.JMenuItem menuConfig;
     // End of variables declaration//GEN-END:variables
 }
