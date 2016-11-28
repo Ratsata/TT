@@ -14,6 +14,7 @@ public class JConfiguracion extends javax.swing.JFrame {
     private String msj;
     private Boolean swContraseña = false;
     private Boolean swCerrarAño = false;
+    private String origen;
     
     public JConfiguracion() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/settings.png"));
@@ -245,10 +246,15 @@ public class JConfiguracion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCerrarAñoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarAñoActionPerformed
-        confirmarContraseña.setLocationRelativeTo(null);
-        txtContraseñaActual.setText("");
-        txtContraseñaActual2.setText("");
-        confirmarContraseña.setVisible(true);
+        int resp = JOptionPane.showConfirmDialog(null, "Al confirmar se cambiara el estado de todos los alumnos a inactivo \n dando como finalizado el año ¿Esta seguro que desea hacerlo?", "Alerta!", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (resp == 0){
+            confirmarContraseña.setLocationRelativeTo(null);
+            txtContraseñaActual.setText("");
+            txtContraseñaActual2.setText("");
+            
+            origen = "cerrar";
+            confirmarContraseña.setVisible(true);
+        }
     }//GEN-LAST:event_btnCerrarAñoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -256,7 +262,7 @@ public class JConfiguracion extends javax.swing.JFrame {
         this.dispose();
         menu.setVisible(true);
     }//GEN-LAST:event_btnCancelarActionPerformed
-
+    
     private void btnCambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarActionPerformed
         confirmarContraseña.setLocationRelativeTo(null);
         txtContraseñaActual.setText("");
@@ -270,17 +276,38 @@ public class JConfiguracion extends javax.swing.JFrame {
                     contraseñaMaestra = rs.getString("contraseñaMaestra");
                 }
                 BD.cerrarConexion();
-
-                confirmarContraseña.setVisible(true);
-
             }catch (Exception e){
                 msj = "Error, hubo un problema.";
                 JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);            
             }
         }
+        origen = "contraseña";
+        confirmarContraseña.setVisible(true);
     }//GEN-LAST:event_btnCambiarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
+        if (swContraseña){
+            try{
+                BD.crearConexion();
+                String sql = "UPDATE contraseña SET contraseñaMaestra='"+ contraseñaNueva +"'";
+                BD.ejecutarSQL(sql);
+                BD.cerrarConexion();
+            }catch (Exception e){
+                msj = "Error, no se lograron realizar los cambios respecto al cambio de contraseña.";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        if (swCerrarAño){
+            try{
+                BD.crearConexion();
+                String sql = "UPDATE alumno_curso SET activo='n' WHERE activo = 's'";
+                BD.ejecutarSQL(sql);
+                BD.cerrarConexion();
+            }catch (Exception e){
+                msj = "Error, no se lograron realizar los cambios respecto al cierre de año.";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
         jfMenu menu = new jfMenu(contraseñaNueva);
         this.dispose();
         menu.setVisible(true);
@@ -290,12 +317,16 @@ public class JConfiguracion extends javax.swing.JFrame {
         confirmarContraseña.hide();
     }//GEN-LAST:event_btnContraseñaCancelarActionPerformed
 
-    private void btnContraseñaAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContraseñaAceptarActionPerformed
+    private void aceptarContraseña(String origen){
         if (txtContraseñaActual.getText().equals(txtContraseñaActual2.getText())){
             if (txtContraseñaActual.getText().equals(contraseñaMaestra)){
-                swContraseña = true;
-                contraseñaNueva = txtContraseñaNueva.getText();
-                contraseñaMaestra = contraseñaNueva;
+                if (origen.equals("contraseña")){
+                    swContraseña = true;
+                    contraseñaNueva = txtContraseñaNueva.getText();
+                    contraseñaMaestra = contraseñaNueva;
+                }else{
+                    swCerrarAño = true;
+                }
                 confirmarContraseña.hide();
             }else{
                 msj = "Error, contraseña incorrecta.";
@@ -305,6 +336,10 @@ public class JConfiguracion extends javax.swing.JFrame {
             msj = "Error, las contraseñas no coinciden.";
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private void btnContraseñaAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContraseñaAceptarActionPerformed
+        aceptarContraseña(origen);
     }//GEN-LAST:event_btnContraseñaAceptarActionPerformed
 
     public static void main(String args[]) {
