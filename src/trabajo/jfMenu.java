@@ -24,6 +24,19 @@ public class jfMenu extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
         
+        //Obtener Contraseña
+        try{
+            BD.crearConexion();
+            String sql = "SELECT contraseñaMaestre FROM contraseña";
+            rs = BD.ejecutarSQLSelect(sql);
+            if (rs.next()){
+                contraseñaMaestra = rs.getString("contraseñaMaestra");
+            }
+        }catch (Exception e){
+            String msj = "Error, hubo un error al intentar conectar a la BD.";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
         deshabilitarBotones();
     }
     //CONSTRUCTOR DE CONTRASEÑA
