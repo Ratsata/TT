@@ -437,7 +437,7 @@ public class jfMenu extends javax.swing.JFrame {
 
     private void menuOpcionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcionesActionPerformed
         JConfiguracion config = new JConfiguracion();
-        //this.dispose();
+        this.dispose();
         config.setVisible(true);
     }//GEN-LAST:event_menuOpcionesActionPerformed
 

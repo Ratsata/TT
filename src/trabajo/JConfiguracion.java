@@ -324,6 +324,7 @@ public class JConfiguracion extends javax.swing.JFrame {
                     swContraseña = true;
                     contraseñaNueva = txtContraseñaNueva.getText();
                     contraseñaMaestra = contraseñaNueva;
+                    txtContraseñaNueva.setText("");
                 }else{
                     swCerrarAño = true;
                 }
@@ -331,10 +332,14 @@ public class JConfiguracion extends javax.swing.JFrame {
             }else{
                 msj = "Error, contraseña incorrecta.";
                 JOptionPane.showMessageDialog(confirmarContraseña, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                txtContraseñaActual.setText("");
+                txtContraseñaActual2.setText("");
             }
         }else{
             msj = "Error, las contraseñas no coinciden.";
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            txtContraseñaActual.setText("");
+            txtContraseñaActual2.setText("");
         }
     }
     
