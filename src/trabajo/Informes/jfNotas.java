@@ -5,12 +5,13 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.Image;
 import java.awt.Toolkit;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.sql.ResultSet;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import trabajo.Rut;
 
 public class jfNotas extends javax.swing.JFrame {
@@ -33,16 +34,18 @@ public class jfNotas extends javax.swing.JFrame {
         //Llenar ComboBox
         try{
             BD.crearConexion();
-            String sql = "SELECT id_curso, nombre FROM curso";
+            String sql = "SELECT c.id_curso, c.nombre, ac.anno FROM curso c, alumno_curso ac WHERE ac.id_curso = c.id_curso";
             rs = BD.ejecutarSQLSelect(sql);
             while(rs.next()){
-                cmbCursoTodos.addItem(rs.getString("id_curso")+","+rs.getString("nombre"));
+                cmbCursoTodos.addItem(rs.getString("c.id_curso")+","+rs.getString("c.nombre")+","+rs.getString("ac.anno"));
             }
             BD.cerrarConexion();
         }catch (Exception e){
             msj = "Error, hubo un problema.";
             JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
         }
+        deshabilitarBotones();
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -72,7 +75,6 @@ public class jfNotas extends javax.swing.JFrame {
         lblInstruccion4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(500, 500));
         setMinimumSize(new java.awt.Dimension(500, 500));
         setResizable(false);
 
@@ -114,17 +116,6 @@ public class jfNotas extends javax.swing.JFrame {
         lblNombre.setText("Nombre alumno:");
 
         txtNombre.setEditable(false);
-
-        txtRut.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtRutFocusLost(evt);
-            }
-        });
-        txtRut.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtRutKeyReleased(evt);
-            }
-        });
 
         cmbCursoAlu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
@@ -196,7 +187,7 @@ public class jfNotas extends javax.swing.JFrame {
 
         lblInstruccion2.setText("Si desea el informe de las notas de un curso eliga el curso en cuestion:");
 
-        cmbCursoTodos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        cmbCursoTodos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione un curso:" }));
 
         btnGenerarTodos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept.png"))); // NOI18N
         btnGenerarTodos.setText("Generar informe");
@@ -219,9 +210,10 @@ public class jfNotas extends javax.swing.JFrame {
                         .addComponent(lblInstruccion2)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(panelTodosLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addGroup(panelTodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cmbCursoTodos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbSemestreTodos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbSemestreTodos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbCursoTodos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnGenerarTodos)))
                 .addContainerGap())
@@ -235,10 +227,12 @@ public class jfNotas extends javax.swing.JFrame {
                 .addGroup(panelTodosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelTodosLayout.createSequentialGroup()
                         .addComponent(cmbCursoTodos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cmbSemestreTodos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnGenerarTodos))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelTodosLayout.createSequentialGroup()
+                        .addComponent(btnGenerarTodos)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
         lblInstruccion4.setText("Para las Notas de un Alumno en especifico:");
@@ -305,119 +299,134 @@ public class jfNotas extends javax.swing.JFrame {
         inf.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    public void deshabilitarBotones(){
+        cmbCursoAlu.removeAllItems();
+        txtNombre.setText("");
+        cmbCursoAlu.setEnabled(false);
+        cmbSemestre.setEnabled(false);
+        btnGenerarAlu.setEnabled(false);
+    }
+    public void habilitarBotones(){
+        cmbCursoAlu.setEnabled(true);
+        cmbSemestre.setEnabled(true);
+        btnGenerarAlu.setEnabled(true);
+    }
+    
     private void btnGenerarAluActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarAluActionPerformed
+        String rutPDF = rutDesformateado;
+        String nombreCompleto = txtNombre.getText();
+        String curso = cmbCursoAlu.getSelectedItem().toString();
+        String idCurso = curso.substring(0, 3);
+        String año = curso.substring(curso.length()-4, curso.length());
+        Document documento = new Document();
+        FileOutputStream ficheroPdf;
         try {
-            String sql = "SELECT * FROM alumno WHERE rut_alumno = '" + rutDesformateado + "'";
-            BD.crearConexion();
-            ResultSet rs = BD.ejecutarSQLSelect(sql);
-            if (rs.next()) {
-                String rutPDF = rs.getString(1);
-                String nombreCompleto = rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);
+            JFileChooser file=new JFileChooser();
+            file.setSelectedFile(new File("Notas_"+rutPDF +"_"+ nombreCompleto +"_"+  idCurso +"_"+  año +".pdf"));
+            file.setFileFilter(new FileNameExtensionFilter("pdf", "pdf"));
+            file.showSaveDialog(this);
+            String Ubicacion = String.valueOf(file.getSelectedFile());
             
-                Document documento = new Document();
-                FileOutputStream ficheroPdf;
-                try {
-                    ficheroPdf = new FileOutputStream("C:\\Users\\s_dbz\\AppData\\Local\\Temp\\notas_" + rutPDF + nombreCompleto + ".pdf");
-                    PdfWriter.getInstance(
-                            documento,
-                            ficheroPdf
-                    ).setInitialLeading(20);
-                } catch (Exception ex) {
-                    msj = ex.toString();
-                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            ficheroPdf = new FileOutputStream(Ubicacion);
+            PdfWriter.getInstance(
+                    documento,
+                    ficheroPdf
+            ).setInitialLeading(20);
+        } catch (Exception ex) {
+            msj = ex.toString();
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        try{
+            documento.open();
+            Font fuente = new Font();
+            String imageUrl = "http://www.fundacioncondell.cl/images/noticias/plynch/22.jpg";
+            Image foto = Image.getInstance(new URL(imageUrl));
+            foto.scaleToFit(100, 100);
+            foto.setAbsolutePosition(0f, 750f);
+            foto.setAlignment(Chunk.ALIGN_LEFT);
+            documento.add(foto);
+            //Titulo//
+            fuente.setSize(18);
+            fuente.setStyle(Font.BOLD);
+            Paragraph parrafoTitulo = new Paragraph("Informe de Notas", fuente);
+            parrafoTitulo.setAlignment(1);
+            documento.add(parrafoTitulo);
+            documento.add(new Paragraph(" "));
+            documento.add(new Paragraph(" "));
+            //Titulo Parrafo 1//
+            fuente.setStyle(Font.BOLD);
+            fuente.setSize(12);
+            documento.add(new Paragraph("NOMBRE     :" + nombre, fuente));
+            documento.add(new Paragraph("RUT              :" + rutFormateado, fuente));
+            documento.add(new Paragraph("CURSO         :" + cmbCursoAlu.getSelectedItem().toString().replace(","+año, "").replace(",", " - "), fuente));
+            documento.add(new Paragraph("SEMESTRE  :" + String.valueOf(cmbSemestre.getSelectedIndex() + 1), fuente));
+            documento.add(new Paragraph("AÑO              :" + año, fuente));
+            documento.add(new Paragraph(" "));
+            //Datos//
+            fuente.setStyle(Font.NORMAL);
+            fuente.setSize(12);
+            PdfPTable tabla = new PdfPTable(12);
+            try {
+                Integer contadorNotas;
+                Integer promedio;
+                Integer promedioFinal = 0;
+                Integer contadorPromedio = 0;
+                //Cabecera Tabla//
+                tabla.addCell("Asignatura");
+                for (int i = 0; i <= 9; i++) {
+                    tabla.addCell(String.valueOf(i + 1));
                 }
+                tabla.addCell("Promedio");
+                //Fin_cabecera//
                 
-                documento.open();
-                Font fuente = new Font();
-                String imageUrl = "http://www.fundacioncondell.cl/images/noticias/plynch/22.jpg";
-                Image foto = Image.getInstance(new URL(imageUrl));
-                foto.scaleToFit(100, 100);
-                foto.setAbsolutePosition(0f, 750f);
-                foto.setAlignment(Chunk.ALIGN_LEFT);
-                documento.add(foto);
-                //Titulo//
-                fuente.setSize(18);
-                fuente.setStyle(Font.BOLD);
-                Paragraph parrafoTitulo = new Paragraph("Informe de Notas", fuente);
-                parrafoTitulo.setAlignment(1);
-                documento.add(parrafoTitulo);
-                documento.add(new Paragraph(" "));
-                documento.add(new Paragraph(" "));
-                //Titulo Parrafo 1//
-                fuente.setStyle(Font.BOLD);
-                fuente.setSize(12);
-                documento.add(new Paragraph("NOMBRE     :"+nombre, fuente));
-                documento.add(new Paragraph("RUT              :"+rutFormateado, fuente));
-                documento.add(new Paragraph("CURSO         :"+cmbCursoAlu.getSelectedItem().toString().replace(",", " - "), fuente));
-                documento.add(new Paragraph("SEMESTRE :"+String.valueOf(cmbSemestre.getSelectedIndex()+1), fuente));
-                documento.add(new Paragraph(" "));
-                //Datos//
-                fuente.setStyle(Font.NORMAL);
-                fuente.setSize(12);
-                PdfPTable tabla = new PdfPTable(12);
-                try {
-                    String idcurso = cmbCursoAlu.getSelectedItem().toString().substring(0,3);
-                    Integer contadorNotas;
-                    Integer promedio;
-                    Integer promedioFinal=0;
-                    Integer contadorPromedio = 0;
-                    //Cabecera Tabla//
-                    tabla.addCell("Asignatura");
-                    for (int i = 0; i <= 9 ; i++) {
-                            tabla.addCell(String.valueOf(i+1));
-                        }
-                    tabla.addCell("Prom.");
-                    //Fin_cabecera//
-                    sql = "SELECT a.nombre, a.id_asignatura FROM asignatura a, asignatura_curso ac WHERE a.id_asignatura = ac.id_asignatura AND ac.id_curso = '"+  idcurso +"'";
-                    rs = BD.ejecutarSQLSelect(sql);
-                    while (rs.next()){
-                        tabla.addCell(rs.getString("a.nombre"));
-                        promedio = 0;
-                        contadorNotas = 0;
-                        sql = "SELECT n.nota, e.id_evaluacion FROM notas n, evaluacion e WHERE n.id_evaluacion = e.id_evaluacion AND e.semestre = '"+ String.valueOf(cmbSemestre.getSelectedIndex()+1) +"' AND n.rut_alumno = '"+ rutDesformateado +"' AND e.id_curso = '"+ idcurso +"' AND e.id_asignatura = '"+ rs.getString("a.id_asignatura") +"'";
-                        rs2 = BD.ejecutarSQLSelect(sql);
-                        while (rs2.next()){
-                            tabla.addCell(rs2.getString("n.nota"));
-                            contadorNotas ++;
-                            promedio = promedio + rs2.getInt("n.nota");
-                        }
-                        for (int i = 0; i <= 9 - contadorNotas; i++) {
-                            tabla.addCell(String.valueOf(""));
-                        }
-                        if (contadorNotas > 0) {
-                            promedio = promedio / contadorNotas;
-                            promedioFinal = promedioFinal + promedio;
-                            contadorPromedio ++;
-                            tabla.addCell(String.valueOf(promedio));
-                        }else{
-                            tabla.addCell("");
-                        }
+                BD.crearConexion();
+                String sql = "SELECT a.nombre, a.id_asignatura FROM asignatura a, asignatura_curso ac WHERE a.id_asignatura = ac.id_asignatura AND ac.id_curso = '" + idCurso + "' AND ac.anno = '"+ año +"'";
+                rs = BD.ejecutarSQLSelect(sql);
+                while (rs.next()) {
+                    tabla.addCell(rs.getString("a.nombre"));
+                    promedio = 0;
+                    contadorNotas = 0;
+                    sql = "SELECT n.nota, e.id_evaluacion FROM notas n, evaluacion e WHERE n.id_evaluacion = e.id_evaluacion AND e.semestre = '" + String.valueOf(cmbSemestre.getSelectedIndex() + 1) + "' AND n.rut_alumno = '" + rutDesformateado + "' AND e.id_curso = '" + idCurso + "' AND e.id_asignatura = '" + rs.getString("a.id_asignatura") + "'";
+                    rs2 = BD.ejecutarSQLSelect(sql);
+                    while (rs2.next()) {
+                        tabla.addCell(rs2.getString("n.nota"));
+                        contadorNotas++;
+                        promedio = promedio + rs2.getInt("n.nota");
                     }
-                    PdfPCell celdaFinal = new PdfPCell(new Paragraph("Promedio Final"));
-                    celdaFinal.setColspan(11);
-                    tabla.addCell(celdaFinal);
-                    if (contadorPromedio > 0) {
-                        promedioFinal = promedioFinal / contadorPromedio;
-                        tabla.addCell(String.valueOf(promedioFinal));
-                    }else{
+                    for (int i = 0; i <= 9 - contadorNotas; i++) {
+                        tabla.addCell(String.valueOf(""));
+                    }
+                    if (contadorNotas > 0) {
+                        promedio = promedio / contadorNotas;
+                        promedioFinal = promedioFinal + promedio;
+                        contadorPromedio++;
+                        tabla.addCell(String.valueOf(promedio));
+                    } else {
                         tabla.addCell("");
                     }
-                    float[] medidaCeldas = {5f,1f,1f,1f,1f,1f,1f,1f,1f,1f,1f,2f};
-                    tabla.setWidths(medidaCeldas);
-                    documento.add(tabla);
-                    documento.close();
-                } catch (Exception ex) {
-                    msj = ex.toString();
-                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            } else {
-                msj = "No existe tal alumno.";
+                PdfPCell celdaFinal = new PdfPCell(new Paragraph("Promedio Final"));
+                celdaFinal.setColspan(11);
+                tabla.addCell(celdaFinal);
+                if (contadorPromedio > 0) {
+                    promedioFinal = promedioFinal / contadorPromedio;
+                    tabla.addCell(String.valueOf(promedioFinal));
+                } else {
+                    tabla.addCell("");
+                }
+                float[] medidaCeldas = {5f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 2.5f};
+                tabla.setWidths(medidaCeldas);
+                documento.add(tabla);
+                documento.close();
+                msj="Exito, se creo el informe correctamente.";
+                JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                msj = ex.toString();
                 JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
             }
             BD.cerrarConexion();
-        } catch (Exception e) {
-            msj = "Error, no existe tal alumno.";
-            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+        }catch (Exception e){
+            
         }
         
     }//GEN-LAST:event_btnGenerarAluActionPerformed
@@ -428,18 +437,20 @@ public class jfNotas extends javax.swing.JFrame {
             if (rut.validar(rutFormateado) == false) {
                 JOptionPane.showMessageDialog(null, "Rut incorrecto", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
                 txtRut.setText("");
+                deshabilitarBotones();
             } else {
+                habilitarBotones();
                 rutDesformateado = rut.desformatear(rutFormateado);
                 txtRut.setText(rutFormateado);
                 try {
                     BD.crearConexion();
                     cmbCursoAlu.removeAllItems();
-                    String sql = "SELECT a.nombres, a.ape_paterno, a.ape_materno, c.id_curso,c.nombre FROM curso c, alumno_curso ac, alumno a WHERE ac.id_curso = c.id_curso and ac.rut_alumno = '"+ rutDesformateado +"'  AND a.rut_alumno = '"+ rutDesformateado +"'";
+                    String sql = "SELECT a.nombres, a.ape_paterno, a.ape_materno, c.id_curso,c.nombre, ac.anno FROM curso c, alumno_curso ac, alumno a WHERE ac.id_curso = c.id_curso and ac.rut_alumno = '"+ rutDesformateado +"'  AND a.rut_alumno = ac.rut_alumno";
                     rs = BD.ejecutarSQLSelect(sql);
                     while (rs.next()) {
                         nombre = rs.getString("a.nombres")+" "+rs.getString("a.ape_paterno")+" "+rs.getString("a.ape_materno");
                         txtNombre.setText(nombre);
-                        cmbCursoAlu.addItem(rs.getString("c.id_curso")+","+rs.getString("c.nombre"));
+                        cmbCursoAlu.addItem(rs.getString("c.id_curso")+","+rs.getString("c.nombre")+","+rs.getString("ac.anno"));
                     }
                     BD.cerrarConexion();
                 } catch (Exception e) {
@@ -456,14 +467,6 @@ public class jfNotas extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void txtRutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRutFocusLost
-        
-    }//GEN-LAST:event_txtRutFocusLost
-
-    private void txtRutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRutKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtRutKeyReleased
-
     private void btnGenerarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarTodosActionPerformed
         if (cmbCursoTodos.getSelectedIndex() == 0) {
             msj = "Seleccione un curso";
@@ -471,12 +474,19 @@ public class jfNotas extends javax.swing.JFrame {
         } else {
             Document documento = new Document();
             FileOutputStream ficheroPdf;
+            String curso = cmbCursoTodos.getSelectedItem().toString();
+            String idCurso = curso.substring(0, 3);
+            String año = curso.substring(curso.length()-4, curso.length());
+            String nomCurso = curso.replace(","+año, "").replace(idCurso+",", "");
+            String semestre = String.valueOf(cmbSemestreTodos.getSelectedIndex()+1);
             String nomArchivo = cmbCursoTodos.getSelectedItem().toString().replace(",", "_");
-            String idcurso = cmbCursoTodos.getSelectedItem().toString().substring(0, 3);
-            String nomcurso = cmbCursoTodos.getSelectedItem().toString().replace(idcurso + ",", "");
             try {
-                ficheroPdf = new FileOutputStream("C:\\Users\\s_dbz\\AppData\\Local\\Temp\\notas" + nomArchivo + String.valueOf(cmbSemestreTodos.getSelectedIndex()+1) + ".pdf");
-                //ficheroPdf = new FileOutputStream("C:\\Users\\%USERNAME%\\Desktop\\" + nomArchivo + ".pdf");
+                JFileChooser file=new JFileChooser();
+                file.setSelectedFile(new File("Notas_"+ nomArchivo + "_" + semestre + ".pdf"));
+                file.setFileFilter(new FileNameExtensionFilter("pdf", "pdf"));
+                file.showSaveDialog(this);
+                String Ubicacion = String.valueOf(file.getSelectedFile());
+                ficheroPdf = new FileOutputStream(Ubicacion);
                 PdfWriter.getInstance(
                         documento,
                         ficheroPdf
@@ -493,13 +503,13 @@ public class jfNotas extends javax.swing.JFrame {
                 //Titulo//
                 fuente.setSize(18);
                 fuente.setStyle(Font.BOLD);
-                Paragraph parrafoTitulo = new Paragraph("Informe de Notas " + idcurso, fuente);
+                Paragraph parrafoTitulo = new Paragraph("Informe de Notas " + idCurso, fuente);
                 parrafoTitulo.setAlignment(1);
                 documento.add(parrafoTitulo);
-                Paragraph parrafoTitulo2 = new Paragraph(nomcurso, fuente);
+                Paragraph parrafoTitulo2 = new Paragraph(nomCurso, fuente);
                 parrafoTitulo2.setAlignment(1);
                 documento.add(parrafoTitulo2);
-                Paragraph parrafoTitulo3 = new Paragraph("Semestre N°"+String.valueOf(cmbSemestreTodos.getSelectedIndex()+1), fuente);
+                Paragraph parrafoTitulo3 = new Paragraph("Semestre N°"+semestre+" Año "+año, fuente);
                 parrafoTitulo3.setAlignment(1);
                 documento.add(parrafoTitulo3);
                 documento.add(new Paragraph(" "));
@@ -517,17 +527,17 @@ public class jfNotas extends javax.swing.JFrame {
                     tabla.addCell("Nombre");
                     tabla.addCell("Promedio");
                     //Fin_cabecera//
-                    String sql = "SELECT a.rut_alumno, a.nombres, a.ape_paterno, a.ape_materno FROM alumno a, alumno_curso ac WHERE a.rut_alumno = ac.rut_alumno AND ac.id_curso = '"+ idcurso +"'";
+                    String sql = "SELECT a.rut_alumno, a.nombres, a.ape_paterno, a.ape_materno FROM alumno a, alumno_curso ac WHERE ac.anno = '"+ año +"' AND a.rut_alumno = ac.rut_alumno AND ac.id_curso = '"+ idCurso +"'";
                     rs = BD.ejecutarSQLSelect(sql);
                     while (rs.next()){
                         tabla.addCell(rut.formatear(rs.getString("a.rut_alumno")));
                         tabla.addCell(rs.getString("a.nombres")+" "+rs.getString("a.ape_paterno")+" "+rs.getString("a.ape_materno"));
-                        sql = "SELECT a.nombre, a.id_asignatura FROM asignatura a, asignatura_curso ac WHERE a.id_asignatura = ac.id_asignatura AND ac.id_curso = '"+  idcurso +"'";
+                        sql = "SELECT a.nombre, a.id_asignatura FROM asignatura a, asignatura_curso ac WHERE ac.anno = '"+ año +"' AND a.id_asignatura = ac.id_asignatura AND ac.id_curso = '"+  idCurso +"'";
                         rs2 = BD.ejecutarSQLSelect(sql);
                         while (rs2.next()) {
                             promedio = 0;
                             Integer contadorNotas = 0;
-                            sql = "SELECT n.nota, e.id_evaluacion FROM notas n, evaluacion e WHERE n.id_evaluacion = e.id_evaluacion AND e.semestre = '" + String.valueOf(cmbSemestreTodos.getSelectedIndex() + 1) + "' AND n.rut_alumno = '" + rs.getString("a.rut_alumno") + "' AND e.id_curso = '" + idcurso + "' AND e.id_asignatura = '" + rs2.getString("a.id_asignatura") + "'";
+                            sql = "SELECT n.nota, e.id_evaluacion FROM notas n, evaluacion e WHERE n.id_evaluacion = e.id_evaluacion AND e.semestre = '" + String.valueOf(cmbSemestreTodos.getSelectedIndex() + 1) + "' AND n.rut_alumno = '" + rs.getString("a.rut_alumno") + "' AND e.id_curso = '" + idCurso + "' AND e.id_asignatura = '" + rs2.getString("a.id_asignatura") + "'";
                             rs3 = BD.ejecutarSQLSelect(sql);
                             while (rs3.next()) {
                                 contadorNotas++;
@@ -550,6 +560,8 @@ public class jfNotas extends javax.swing.JFrame {
                     tabla.setWidths(medidaCeldas);
                     documento.add(tabla);
                     documento.close();
+                    msj="Exito, se creo el informe correctamente.";
+                    JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
                     BD.cerrarConexion();
                 }catch(Exception ex) {
                     msj = ex.toString();

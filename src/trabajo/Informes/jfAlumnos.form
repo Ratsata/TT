@@ -237,10 +237,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtRut">
-              <Events>
-                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtRutFocusLost"/>
-                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtRutKeyReleased"/>
-              </Events>
             </Component>
           </SubComponents>
         </Container>

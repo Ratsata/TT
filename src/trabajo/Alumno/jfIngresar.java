@@ -456,14 +456,6 @@ public class jfIngresar extends javax.swing.JFrame {
                             msj = "Error, no se pudo ingresar los datos";
                             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                         }
-                        /*String sql2 ="INSERT INTO matricula VALUES ('"+folioMatricula+coma+anno+coma+rutDesformateado+"')";
-                    if(BD.ejecutarSQL(sql2)){
-                        msj="Ingreso de matricula realizado con exito";
-                        JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
-                    }else{
-                        msj="Error, Folio existente";
-                        JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
-                    }*/
                         BD.cerrarConexion();
                     }
                 } catch (DateTimeException ex) {

@@ -5,10 +5,13 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.itextpdf.text.Image;
 import java.awt.Toolkit;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.sql.ResultSet;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import trabajo.Rut;
 
 public class jfAlumnos extends javax.swing.JFrame {
@@ -28,16 +31,17 @@ public class jfAlumnos extends javax.swing.JFrame {
         //Llenar ComboBox
         try{
             BD.crearConexion();
-            String sql = "SELECT id_curso, nombre FROM curso";
+            String sql = "SELECT c.id_curso, c.nombre, ac.anno FROM curso c, alumno_curso ac WHERE ac.id_curso = c.id_curso";
             rs = BD.ejecutarSQLSelect(sql);
             while(rs.next()){
-                cmbCursoTodos.addItem(rs.getString("id_curso")+","+rs.getString("nombre"));
+                cmbCursoTodos.addItem(rs.getString("c.id_curso")+","+rs.getString("c.nombre")+","+rs.getString("ac.anno"));
             }
             BD.cerrarConexion();
         }catch (Exception e){
             msj = "Error, hubo un problema.";
             JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
         }
+        deshabilitarBotones();
     }
 
     @SuppressWarnings("unchecked")
@@ -104,17 +108,6 @@ public class jfAlumnos extends javax.swing.JFrame {
         lblNombre.setText("Nombre alumno:");
 
         txtNombre.setEditable(false);
-
-        txtRut.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtRutFocusLost(evt);
-            }
-        });
-        txtRut.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtRutKeyReleased(evt);
-            }
-        });
 
         javax.swing.GroupLayout panelAlumnoLayout = new javax.swing.GroupLayout(panelAlumno);
         panelAlumno.setLayout(panelAlumnoLayout);
@@ -265,7 +258,11 @@ public class jfAlumnos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    private void deshabilitarBotones(){
+        txtNombre.setText("");
+        btnGenerarAlu.setEnabled(false);
+    }
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         jfInformes inf = new jfInformes();
         this.dispose();
@@ -284,7 +281,12 @@ public class jfAlumnos extends javax.swing.JFrame {
                 Document documento = new Document();
                 FileOutputStream ficheroPdf;
                 try {
-                    ficheroPdf = new FileOutputStream("C:\\Users\\s_dbz\\AppData\\Local\\Temp\\" + rutPDF + nombreCompleto + ".pdf");
+                    JFileChooser file=new JFileChooser();
+                    file.setSelectedFile(new File("Datos_"+ rutPDF + "_" + nombreCompleto + ".pdf"));
+                    file.setFileFilter(new FileNameExtensionFilter("pdf", "pdf"));
+                    file.showSaveDialog(this);
+                    String Ubicacion = String.valueOf(file.getSelectedFile());
+                    ficheroPdf = new FileOutputStream(Ubicacion);
                     PdfWriter.getInstance(
                             documento,
                             ficheroPdf
@@ -311,6 +313,7 @@ public class jfAlumnos extends javax.swing.JFrame {
                         Paragraph parrafoTitulo = new Paragraph("Informe del alumno",fuente);
                         parrafoTitulo.setAlignment(1);
                         documento.add(parrafoTitulo);
+                        documento.add(new Paragraph(" "));
                         documento.add(new Paragraph(" "));
                         //Titulo Parrafo 1//
                         fuente.setStyle(Font.BOLD);
@@ -360,6 +363,8 @@ public class jfAlumnos extends javax.swing.JFrame {
                             contador ++;
                         }
                         documento.close();
+                        msj="Exito, se creo el informe correctamente.";
+                        JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
                     }
                 } catch (Exception ex) {
                     msj = ex.toString();
@@ -383,7 +388,9 @@ public class jfAlumnos extends javax.swing.JFrame {
             if (rut.validar(rutFormateado) == false) {
                 JOptionPane.showMessageDialog(null, "Rut incorrecto", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
                 txtRut.setText("");
+                deshabilitarBotones();
             } else {
+                btnGenerarAlu.setEnabled(true);
                 rutDesformateado = rut.desformatear(rutFormateado);
                 txtRut.setText(rutFormateado);
                 try {
@@ -408,14 +415,6 @@ public class jfAlumnos extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnBuscarActionPerformed
 
-    private void txtRutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRutFocusLost
-        
-    }//GEN-LAST:event_txtRutFocusLost
-
-    private void txtRutKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRutKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtRutKeyReleased
-
     private void btnGenerarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarTodosActionPerformed
         if (cmbCursoTodos.getSelectedIndex() == 0) {
             msj = "Seleccione un curso";
@@ -424,11 +423,17 @@ public class jfAlumnos extends javax.swing.JFrame {
             Document documento = new Document();
             FileOutputStream ficheroPdf;
             String nomArchivo = cmbCursoTodos.getSelectedItem().toString().replace(",", "_");
-            String idcurso = cmbCursoTodos.getSelectedItem().toString().substring(0, 3);
-            String nomcurso = cmbCursoTodos.getSelectedItem().toString().replace(idcurso + ",", "");
+            String curso = cmbCursoTodos.getSelectedItem().toString();
+            String idcurso = curso.substring(0, 3);
+            String año = curso.substring(curso.length()-4, curso.length());
+            String nomcurso = curso.replace(","+año,"").replace(idcurso + ",", "");
             try {
-                ficheroPdf = new FileOutputStream("C:\\Users\\s_dbz\\AppData\\Local\\Temp\\" + nomArchivo + ".pdf");
-                //ficheroPdf = new FileOutputStream("C:\\Users\\%USERNAME%\\Desktop\\" + nomArchivo + ".pdf");
+                JFileChooser file=new JFileChooser();
+                file.setSelectedFile(new File("Datos_"+nomArchivo +".pdf"));
+                file.setFileFilter(new FileNameExtensionFilter("pdf", "pdf"));
+                file.showSaveDialog(this);
+                String Ubicacion = String.valueOf(file.getSelectedFile());
+                ficheroPdf = new FileOutputStream(Ubicacion);
                 PdfWriter.getInstance(
                         documento,
                         ficheroPdf
@@ -495,6 +500,8 @@ public class jfAlumnos extends javax.swing.JFrame {
                 }
                     
                 documento.close();
+                msj="Exito, se creo el informe correctamente.";
+                JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 msj = ex.toString();
                 JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
