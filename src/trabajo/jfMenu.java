@@ -29,6 +29,10 @@ public class jfMenu extends javax.swing.JFrame {
     //CONSTRUCTOR DE CONTRASEÑA
     
     public jfMenu(String contraseña){
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/gorro.png"));
+        setIconImage(icon);
+        initComponents();
+        this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
         
         contraseñaMaestra = contraseña;
         deshabilitarBotones();
@@ -61,8 +65,8 @@ public class jfMenu extends javax.swing.JFrame {
         menuCerrarSesion = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         menuCerrar = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        menuConfig = new javax.swing.JMenuItem();
+        menuHerramientas = new javax.swing.JMenu();
+        menuOpciones = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(600, 500));
@@ -297,17 +301,17 @@ public class jfMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(menuArchivo);
 
-        jMenu2.setText("Herramientas");
+        menuHerramientas.setText("Herramientas");
 
-        menuConfig.setText("Configuraciones");
-        menuConfig.addActionListener(new java.awt.event.ActionListener() {
+        menuOpciones.setText("Opciones");
+        menuOpciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuConfigActionPerformed(evt);
+                menuOpcionesActionPerformed(evt);
             }
         });
-        jMenu2.add(menuConfig);
+        menuHerramientas.add(menuOpciones);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(menuHerramientas);
 
         setJMenuBar(jMenuBar1);
 
@@ -348,7 +352,7 @@ public class jfMenu extends javax.swing.JFrame {
         btnEvaluacion.setEnabled(true);
         btnGenerarInforme.setEnabled(true);
 
-        menuConfig.setEnabled(true);
+        menuOpciones.setEnabled(true);
         menuCerrarSesion.setEnabled(true);
 
         jContraseña.setVisible(false);
@@ -366,7 +370,7 @@ public class jfMenu extends javax.swing.JFrame {
         btnEvaluacion.setEnabled(false);
         btnGenerarInforme.setEnabled(false);
 
-        menuConfig.setEnabled(false);
+        menuOpciones.setEnabled(false);
         menuCerrarSesion.setEnabled(false);
 
         jContraseña.setVisible(true);
@@ -431,11 +435,11 @@ public class jfMenu extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_menuCerrarActionPerformed
 
-    private void menuConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuConfigActionPerformed
+    private void menuOpcionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpcionesActionPerformed
         JConfiguracion config = new JConfiguracion();
-        this.dispose();
+        //this.dispose();
         config.setVisible(true);
-    }//GEN-LAST:event_menuConfigActionPerformed
+    }//GEN-LAST:event_menuOpcionesActionPerformed
 
     private void menuCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCerrarSesionActionPerformed
         deshabilitarBotones();
@@ -484,7 +488,6 @@ public class jfMenu extends javax.swing.JFrame {
     private javax.swing.JButton btnSalir;
     private javax.swing.JPasswordField jContraseña;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -495,6 +498,7 @@ public class jfMenu extends javax.swing.JFrame {
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenuItem menuCerrar;
     private javax.swing.JMenuItem menuCerrarSesion;
-    private javax.swing.JMenuItem menuConfig;
+    private javax.swing.JMenu menuHerramientas;
+    private javax.swing.JMenuItem menuOpciones;
     // End of variables declaration//GEN-END:variables
 }

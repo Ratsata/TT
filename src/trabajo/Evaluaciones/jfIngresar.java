@@ -11,7 +11,6 @@ import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 
 public class jfIngresar extends javax.swing.JFrame {
-
     private Conexion BD = new Conexion();
     private String msj;
     private ResultSet rs;
