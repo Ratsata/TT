@@ -4,11 +4,16 @@ import clases.Conexion;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 public class JConfiguracion extends javax.swing.JFrame {
+    private String contraseñaNueva;
     private String contraseñaMaestra;
     private Conexion BD = new Conexion();
     private ResultSet rs;
+    private String msj;
+    private Boolean swContraseña = false;
+    private Boolean swCerrarAño = false;
     
     public JConfiguracion() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/settings.png"));
@@ -36,7 +41,7 @@ public class JConfiguracion extends javax.swing.JFrame {
         lblNewContraseña = new javax.swing.JLabel();
         btnCambiar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
-        txtContraseña = new javax.swing.JPasswordField();
+        txtContraseñaNueva = new javax.swing.JPasswordField();
         lblCerrar = new javax.swing.JLabel();
         btnCerrarAño = new javax.swing.JButton();
         btnAceptar = new javax.swing.JButton();
@@ -44,10 +49,10 @@ public class JConfiguracion extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
 
         confirmarContraseña.setTitle("Ingrese contraseña");
-        confirmarContraseña.setAlwaysOnTop(true);
         confirmarContraseña.setMaximumSize(new java.awt.Dimension(330, 160));
         confirmarContraseña.setMinimumSize(new java.awt.Dimension(330, 160));
         confirmarContraseña.setModal(true);
+        confirmarContraseña.setModalExclusionType(null);
         confirmarContraseña.setResizable(false);
 
         lblContraseña1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -58,6 +63,11 @@ public class JConfiguracion extends javax.swing.JFrame {
         lblContraseñaAnt2.setText("Repita Contraseña");
 
         btnContraseñaAceptar.setText("Aceptar");
+        btnContraseñaAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContraseñaAceptarActionPerformed(evt);
+            }
+        });
 
         btnContraseñaCancelar.setText("Cancelar");
         btnContraseñaCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -111,7 +121,6 @@ public class JConfiguracion extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setAlwaysOnTop(true);
         setMaximumSize(new java.awt.Dimension(500, 370));
         setMinimumSize(new java.awt.Dimension(500, 370));
         setPreferredSize(new java.awt.Dimension(500, 370));
@@ -189,7 +198,7 @@ public class JConfiguracion extends javax.swing.JFrame {
                                         .addGap(54, 54, 54)
                                         .addComponent(lblNewContraseña)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtContraseñaNueva, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(btnCambiar))))
                             .addComponent(lblTitulo, javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,7 +222,7 @@ public class JConfiguracion extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNewContraseña)
                     .addComponent(btnCambiar)
-                    .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtContraseñaNueva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -252,13 +261,27 @@ public class JConfiguracion extends javax.swing.JFrame {
         confirmarContraseña.setLocationRelativeTo(null);
         txtContraseñaActual.setText("");
         txtContraseñaActual2.setText("");
-        confirmarContraseña.setVisible(true);
+        if (!swContraseña){
+            try{
+                BD.crearConexion();
+                String sql = "SELECT contraseñaMaestra FROM contraseña";
+                rs = BD.ejecutarSQLSelect(sql);
+                if (rs.next()){
+                    contraseñaMaestra = rs.getString("contraseñaMaestra");
+                }
+                BD.cerrarConexion();
 
-        contraseñaMaestra = txtContraseña.getText();
+                confirmarContraseña.setVisible(true);
+
+            }catch (Exception e){
+                msj = "Error, hubo un problema.";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);            
+            }
+        }
     }//GEN-LAST:event_btnCambiarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        jfMenu menu = new jfMenu(contraseñaMaestra);
+        jfMenu menu = new jfMenu(contraseñaNueva);
         this.dispose();
         menu.setVisible(true);
     }//GEN-LAST:event_btnAceptarActionPerformed
@@ -266,6 +289,23 @@ public class JConfiguracion extends javax.swing.JFrame {
     private void btnContraseñaCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContraseñaCancelarActionPerformed
         confirmarContraseña.hide();
     }//GEN-LAST:event_btnContraseñaCancelarActionPerformed
+
+    private void btnContraseñaAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContraseñaAceptarActionPerformed
+        if (txtContraseñaActual.getText().equals(txtContraseñaActual2.getText())){
+            if (txtContraseñaActual.getText().equals(contraseñaMaestra)){
+                swContraseña = true;
+                contraseñaNueva = txtContraseñaNueva.getText();
+                contraseñaMaestra = contraseñaNueva;
+                confirmarContraseña.hide();
+            }else{
+                msj = "Error, contraseña incorrecta.";
+                JOptionPane.showMessageDialog(confirmarContraseña, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }else{
+            msj = "Error, las contraseñas no coinciden.";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnContraseñaAceptarActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -319,8 +359,8 @@ public class JConfiguracion extends javax.swing.JFrame {
     private javax.swing.JLabel lblContraseñaAnt2;
     private javax.swing.JLabel lblNewContraseña;
     private javax.swing.JLabel lblTitulo;
-    private javax.swing.JPasswordField txtContraseña;
     private javax.swing.JPasswordField txtContraseñaActual;
     private javax.swing.JPasswordField txtContraseñaActual2;
+    private javax.swing.JPasswordField txtContraseñaNueva;
     // End of variables declaration//GEN-END:variables
 }
