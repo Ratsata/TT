@@ -16,6 +16,8 @@ import trabajo.Notas.jfNotas;
 
 public class jfMenu extends javax.swing.JFrame {
     private String contraseñaMaestra = "contraseña";
+    private Conexion BD = new Conexion();
+    private ResultSet rs;
     
     //CONSTRUCTOR VACIO DEL MENU
     public jfMenu() {        
