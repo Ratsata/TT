@@ -285,22 +285,27 @@ public class JConfiguracion extends javax.swing.JFrame {
         confirmarContraseña.setLocationRelativeTo(null);
         txtContraseñaActual.setText("");
         txtContraseñaActual2.setText("");
-        if (!swContraseña){
-            try{
-                BD.crearConexion();
-                String sql = "SELECT contraseñaMaestra FROM contraseña";
-                rs = BD.ejecutarSQLSelect(sql);
-                if (rs.next()){
-                    contraseñaMaestra = rs.getString("contraseñaMaestra");
+        if (txtContraseñaNueva.getText().length() > 20){
+            if (!swContraseña){
+                try{
+                    BD.crearConexion();
+                    String sql = "SELECT contraseñaMaestra FROM contraseña";
+                    rs = BD.ejecutarSQLSelect(sql);
+                    if (rs.next()){
+                        contraseñaMaestra = rs.getString("contraseñaMaestra");
+                    }
+                    BD.cerrarConexion();
+                }catch (Exception e){
+                    msj = "Error, hubo un problema.";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);            
                 }
-                BD.cerrarConexion();
-            }catch (Exception e){
-                msj = "Error, hubo un problema.";
-                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);            
             }
+            origen = "contraseña";
+            confirmarContraseña.setVisible(true);
+        }else{
+            msj = "Error, la contraseña no debe exceder los 20 caracteres.";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
-        origen = "contraseña";
-        confirmarContraseña.setVisible(true);
     }//GEN-LAST:event_btnCambiarActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
