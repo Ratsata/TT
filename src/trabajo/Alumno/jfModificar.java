@@ -194,7 +194,7 @@ public class jfModificar extends javax.swing.JFrame {
             }
         });
 
-        cmbTransporte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Vehiculo Personal", "Locomocion Colectiva", "Otro" }));
+        cmbTransporte.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Locomocion Colectiva", "Vehiculo Personal", "Otro" }));
 
         lbl_Nacionalidad2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lbl_Nacionalidad2.setText("Colegio de procedencia:");
