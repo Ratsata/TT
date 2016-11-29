@@ -49,7 +49,7 @@ public class jObservacion extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(385, 290));
         setResizable(false);
 
-        cmbCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        cmbCurso.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Curso" }));
         cmbCurso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbCursoActionPerformed(evt);

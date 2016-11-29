@@ -166,7 +166,7 @@ public class jfEliminarProfesorJefe extends javax.swing.JFrame {
         String año = String.valueOf(añoLimite);
         int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea eliminar esta relacion?", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
         if (resp == 0) {
-            if (!(indexC == 0) || !(indexP == 0)) {
+            if (!(indexC == 0) && !(indexP == 0)) {
                 String rut = (String) cmbProfesores.getSelectedItem();
                 rut = rut.substring(0, rut.indexOf(" "));
                 String curso = (String) cmbCursos.getSelectedItem();
@@ -185,17 +185,18 @@ public class jfEliminarProfesorJefe extends javax.swing.JFrame {
                             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     }
-                } catch (Exception e) {
-                    
-                    msj = "Error, hubo un problema.";
+                    BD.cerrarConexion();
+                } catch (Exception e) {                    
+                    msj = "Seleccione un curso y un profesor.";
                     JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                
             }            
         }
         cmbCursos.removeAllItems();
         cmbCursos.addItem("Seleccione Curso");
         try {
-
+            
             BD.crearConexion();
             //PRIMER COMBOBOX            
             String sql = "SELECT id_curso,nombre FROM curso where id_curso in(Select distinct id_curso from profesorjefe_curso where anno = '" + año + "')";
@@ -207,7 +208,7 @@ public class jfEliminarProfesorJefe extends javax.swing.JFrame {
 
             BD.cerrarConexion();
         } catch (Exception e) {
-            msj = "Error, hubo un problema.";
+            msj = "Error, hubo un problema."+e.toString();
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
         
