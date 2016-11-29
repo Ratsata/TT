@@ -59,7 +59,7 @@ public class JConfiguracion extends javax.swing.JFrame {
         lblContraseña1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblContraseña1.setText("Ingrese contraseña actual");
 
-        lblContraseñaAnt.setText("Contraseña Antigua");
+        lblContraseñaAnt.setText("Contraseña Actual");
 
         lblContraseñaAnt2.setText("Repita Contraseña");
 
@@ -105,7 +105,7 @@ public class JConfiguracion extends javax.swing.JFrame {
                         .addGroup(confirmarContraseñaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtContraseñaActual, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
                             .addComponent(txtContraseñaActual2))))
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, confirmarContraseñaLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnContraseñaAceptar)

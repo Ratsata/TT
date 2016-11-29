@@ -37,7 +37,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace pref="41" max="32767" attributes="0"/>
+                  <EmptySpace pref="47" max="32767" attributes="0"/>
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
@@ -84,7 +84,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblContrase&#xf1;aAnt">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Contrase&#xf1;a Antigua"/>
+            <Property name="text" type="java.lang.String" value="Contrase&#xf1;a Actual"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lblContrase&#xf1;aAnt2">
