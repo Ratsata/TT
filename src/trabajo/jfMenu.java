@@ -1,11 +1,13 @@
 package trabajo;
 
+import clases.Conexion;
 import trabajo.Alumno.jfAlumno;
 import trabajo.Apoderado.jfApoderado;
 import trabajo.Profesores.jfProfesores;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import trabajo.Asignaturas.jfAsignaturas;
 import trabajo.Cursos.jfCursos;
@@ -29,11 +31,12 @@ public class jfMenu extends javax.swing.JFrame {
         //Obtener Contraseña
         try{
             BD.crearConexion();
-            String sql = "SELECT contraseñaMaestre FROM contraseña";
+            String sql = "SELECT contraseñaMaestra FROM contraseña";
             rs = BD.ejecutarSQLSelect(sql);
             if (rs.next()){
                 contraseñaMaestra = rs.getString("contraseñaMaestra");
             }
+            BD.cerrarConexion();
         }catch (Exception e){
             String msj = "Error, hubo un error al intentar conectar a la BD.";
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
@@ -42,7 +45,6 @@ public class jfMenu extends javax.swing.JFrame {
         deshabilitarBotones();
     }
     //CONSTRUCTOR DE CONTRASEÑA
-    
     public jfMenu(String contraseña){
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/gorro.png"));
         setIconImage(icon);
@@ -52,7 +54,15 @@ public class jfMenu extends javax.swing.JFrame {
         contraseñaMaestra = contraseña;
         deshabilitarBotones();
     }
-
+    //CONSTRUCTOR DE SESION
+    public jfMenu(Boolean sesion){
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/gorro.png"));
+        setIconImage(icon);
+        initComponents();
+        this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
+        
+        habilitarBotones();
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -141,7 +151,6 @@ public class jfMenu extends javax.swing.JFrame {
         lblContraseña.setText("Ingrese Contraseña");
 
         btnAlumno.setText("Alumnos");
-        btnAlumno.setEnabled(false);
         btnAlumno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAlumnoActionPerformed(evt);
@@ -149,7 +158,6 @@ public class jfMenu extends javax.swing.JFrame {
         });
 
         btnProfesores.setText("Profesores");
-        btnProfesores.setEnabled(false);
         btnProfesores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnProfesoresActionPerformed(evt);
@@ -157,7 +165,6 @@ public class jfMenu extends javax.swing.JFrame {
         });
 
         btnCursos.setText("Cursos");
-        btnCursos.setEnabled(false);
         btnCursos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCursosActionPerformed(evt);
@@ -165,7 +172,6 @@ public class jfMenu extends javax.swing.JFrame {
         });
 
         btnAsignaturas.setText("Asignaturas");
-        btnAsignaturas.setEnabled(false);
         btnAsignaturas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAsignaturasActionPerformed(evt);
@@ -173,7 +179,6 @@ public class jfMenu extends javax.swing.JFrame {
         });
 
         btnApoderado.setText("Apoderado");
-        btnApoderado.setEnabled(false);
         btnApoderado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnApoderadoActionPerformed(evt);
@@ -181,7 +186,6 @@ public class jfMenu extends javax.swing.JFrame {
         });
 
         btnEvaluacion.setText("Evaluaciones");
-        btnEvaluacion.setEnabled(false);
         btnEvaluacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEvaluacionActionPerformed(evt);
@@ -189,7 +193,6 @@ public class jfMenu extends javax.swing.JFrame {
         });
 
         btnNotas.setText("Notas");
-        btnNotas.setEnabled(false);
         btnNotas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNotasActionPerformed(evt);
@@ -216,7 +219,6 @@ public class jfMenu extends javax.swing.JFrame {
         });
 
         btnGenerarInforme.setText("Informes");
-        btnGenerarInforme.setEnabled(false);
         btnGenerarInforme.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerarInformeActionPerformed(evt);

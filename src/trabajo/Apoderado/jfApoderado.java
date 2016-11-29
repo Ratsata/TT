@@ -139,7 +139,7 @@ public class jfApoderado extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
-        jfMenu menu = new jfMenu();
+        jfMenu menu = new jfMenu(true);
         this.dispose();
         menu.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed

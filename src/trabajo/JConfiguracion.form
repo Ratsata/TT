@@ -93,8 +93,14 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="txtContrase&#xf1;aActual">
+          <Events>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtContrase&#xf1;aActualFocusGained"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JPasswordField" name="txtContrase&#xf1;aActual2">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtContrase&#xf1;aActual2ActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnContrase&#xf1;aAceptar">
           <Properties>
@@ -284,6 +290,9 @@
         <Component class="javax.swing.JSeparator" name="jSeparator2">
         </Component>
         <Component class="javax.swing.JPasswordField" name="txtContrase&#xf1;aNueva">
+          <Events>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtContrase&#xf1;aNuevaFocusGained"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lblCerrar">
           <Properties>

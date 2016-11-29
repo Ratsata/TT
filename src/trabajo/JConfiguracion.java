@@ -63,6 +63,18 @@ public class JConfiguracion extends javax.swing.JFrame {
 
         lblContraseñaAnt2.setText("Repita Contraseña");
 
+        txtContraseñaActual.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtContraseñaActualFocusGained(evt);
+            }
+        });
+
+        txtContraseñaActual2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtContraseñaActual2ActionPerformed(evt);
+            }
+        });
+
         btnContraseñaAceptar.setText("Aceptar");
         btnContraseñaAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -144,6 +156,12 @@ public class JConfiguracion extends javax.swing.JFrame {
         btnCambiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCambiarActionPerformed(evt);
+            }
+        });
+
+        txtContraseñaNueva.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtContraseñaNuevaFocusGained(evt);
             }
         });
 
@@ -347,6 +365,18 @@ public class JConfiguracion extends javax.swing.JFrame {
         aceptarContraseña(origen);
     }//GEN-LAST:event_btnContraseñaAceptarActionPerformed
 
+    private void txtContraseñaNuevaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtContraseñaNuevaFocusGained
+        txtContraseñaNueva.selectAll();
+    }//GEN-LAST:event_txtContraseñaNuevaFocusGained
+
+    private void txtContraseñaActualFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtContraseñaActualFocusGained
+        txtContraseñaActual.selectAll();
+    }//GEN-LAST:event_txtContraseñaActualFocusGained
+
+    private void txtContraseñaActual2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContraseñaActual2ActionPerformed
+        txtContraseñaActual2.selectAll();
+    }//GEN-LAST:event_txtContraseñaActual2ActionPerformed
+
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -384,9 +414,6 @@ public class JConfiguracion extends javax.swing.JFrame {
     private javax.swing.JButton btnCerrarAño;
     private javax.swing.JButton btnContraseñaAceptar;
     private javax.swing.JButton btnContraseñaCancelar;
-    private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnEliminar1;
-    private javax.swing.JButton btnEliminar2;
     private javax.swing.JDialog confirmarContraseña;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;

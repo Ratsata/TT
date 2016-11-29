@@ -272,7 +272,6 @@
         <Component class="javax.swing.JButton" name="btnAlumno">
           <Properties>
             <Property name="text" type="java.lang.String" value="Alumnos"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAlumnoActionPerformed"/>
@@ -281,7 +280,6 @@
         <Component class="javax.swing.JButton" name="btnProfesores">
           <Properties>
             <Property name="text" type="java.lang.String" value="Profesores"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProfesoresActionPerformed"/>
@@ -290,7 +288,6 @@
         <Component class="javax.swing.JButton" name="btnCursos">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cursos"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCursosActionPerformed"/>
@@ -299,7 +296,6 @@
         <Component class="javax.swing.JButton" name="btnAsignaturas">
           <Properties>
             <Property name="text" type="java.lang.String" value="Asignaturas"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAsignaturasActionPerformed"/>
@@ -308,7 +304,6 @@
         <Component class="javax.swing.JButton" name="btnApoderado">
           <Properties>
             <Property name="text" type="java.lang.String" value="Apoderado"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnApoderadoActionPerformed"/>
@@ -317,7 +312,6 @@
         <Component class="javax.swing.JButton" name="btnEvaluacion">
           <Properties>
             <Property name="text" type="java.lang.String" value="Evaluaciones"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEvaluacionActionPerformed"/>
@@ -326,7 +320,6 @@
         <Component class="javax.swing.JButton" name="btnNotas">
           <Properties>
             <Property name="text" type="java.lang.String" value="Notas"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNotasActionPerformed"/>
@@ -352,7 +345,6 @@
         <Component class="javax.swing.JButton" name="btnGenerarInforme">
           <Properties>
             <Property name="text" type="java.lang.String" value="Informes"/>
-            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerarInformeActionPerformed"/>
