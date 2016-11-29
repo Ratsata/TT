@@ -28,30 +28,7 @@ public class jfMenu extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
         
-        //Obtener Contraseña
-        try{
-            BD.crearConexion();
-            String sql = "SELECT contraseñaMaestra FROM contraseña";
-            rs = BD.ejecutarSQLSelect(sql);
-            if (rs.next()){
-                contraseñaMaestra = rs.getString("contraseñaMaestra");
-            }
-            BD.cerrarConexion();
-        }catch (Exception e){
-            String msj = "Error, hubo un error al intentar conectar a la BD.";
-            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
-        }
-        
-        deshabilitarBotones();
-    }
-    //CONSTRUCTOR DE CONTRASEÑA
-    public jfMenu(String contraseña){
-        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/gorro.png"));
-        setIconImage(icon);
-        initComponents();
-        this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
-        
-        contraseñaMaestra = contraseña;
+        consultarContraseña();
         deshabilitarBotones();
     }
     //CONSTRUCTOR DE SESION
@@ -334,6 +311,22 @@ public class jfMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void consultarContraseña(){
+        //Obtener Contraseña
+        try{
+            BD.crearConexion();
+            String sql = "SELECT contraseñaMaestra FROM contraseña";
+            rs = BD.ejecutarSQLSelect(sql);
+            if (rs.next()){
+                contraseñaMaestra = rs.getString("contraseñaMaestra");
+            }
+            BD.cerrarConexion();
+        }catch (Exception e){
+            String msj = "Error, hubo un error al intentar conectar a la BD.";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         // boton salir
         System.exit(0);
@@ -400,9 +393,10 @@ public class jfMenu extends javax.swing.JFrame {
         if (contraseña.equals(contraseñaMaestra)){
             habilitarBotones();
         }else{
-            JOptionPane.showMessageDialog(null,"Contraseña erronea","Error",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null,"Contraseña erronea","Error",JOptionPane.ERROR_MESSAGE);
             jContraseña.setText("");
             deshabilitarBotones();
+            jContraseña.requestFocus();
         }
     }//GEN-LAST:event_btnContraseñaActionPerformed
 
@@ -458,6 +452,7 @@ public class jfMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_menuOpcionesActionPerformed
 
     private void menuCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCerrarSesionActionPerformed
+        consultarContraseña();
         deshabilitarBotones();
     }//GEN-LAST:event_menuCerrarSesionActionPerformed
 

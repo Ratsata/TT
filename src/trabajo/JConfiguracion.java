@@ -331,7 +331,7 @@ public class JConfiguracion extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-        jfMenu menu = new jfMenu(contraseñaNueva);
+        jfMenu menu = new jfMenu();
         this.dispose();
         menu.setVisible(true);
     }//GEN-LAST:event_btnAceptarActionPerformed
