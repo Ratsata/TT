@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
-import trabajo.Rut;
+import clases.Rut;
 
 public class jfIngresar extends javax.swing.JFrame {
 

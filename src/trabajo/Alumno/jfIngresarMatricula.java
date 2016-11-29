@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
 import java.util.GregorianCalendar;
-import trabajo.Rut;
+import clases.Rut;
 
 public class jfIngresarMatricula extends javax.swing.JFrame {
     private Conexion BD = new Conexion();

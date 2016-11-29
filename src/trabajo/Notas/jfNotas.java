@@ -8,18 +8,18 @@ import javax.swing.JOptionPane;
 import trabajo.jfMenu;
 
 public class jfNotas extends javax.swing.JFrame {
-
     private Conexion BD = new Conexion();
     private String msj;
     private ResultSet rs;
     private String actualizando = "s";
 
     public jfNotas() {
-        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/gorro.png"));
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_add.png"));
         setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
         
+        deshabilitarBotones();
     }
 
     @SuppressWarnings("unchecked")
@@ -43,7 +43,13 @@ public class jfNotas extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(627, 313));
+        setMinimumSize(new java.awt.Dimension(627, 313));
         setResizable(false);
+
+        jPanel1.setMaximumSize(new java.awt.Dimension(627, 313));
+        jPanel1.setMinimumSize(new java.awt.Dimension(627, 313));
+        jPanel1.setPreferredSize(new java.awt.Dimension(627, 313));
 
         cmbEvaluacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione evaluacion" }));
         cmbEvaluacion.addActionListener(new java.awt.event.ActionListener() {
@@ -89,7 +95,7 @@ public class jfNotas extends javax.swing.JFrame {
             }
         });
 
-        cmbNota.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "n/a", "7,0", "6,9", "6,8", "6,7", "6,6", "6,5", "6,4", "6,3", "6,2", "6,1", "6,0", "5,9", "5,8", "5,7", "5,6", "5,5", "5,4", "5,3", "5,2", "5,1", "5,0", "4,9", "4,8", "4,7", "4,6", "4,5", "4,4", "4,3", "4,2", "4,1", "4,0", "3,9", "3,8", "3,7", "3,6", "3,6", "3,5", "3,4", "3,3", "3,2", "3,1", "3,0", "2,9", "2,8", "2,7", "2,6", "2,5", "2,4", "2,3", "2,2", "2,1", "2,0", "1,9", "1,8", "1,7", "1,6", "1,5", "1,4", "1,3", "1,2", "1,1", "1,0", "0,9", "0,8", "0,7", "0,6", "0,5", "0,4", "0,3", "0,2", "0,1", "0,0" }));
+        cmbNota.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "n/a", "70", "69", "68", "67", "66", "65", "64", "63", "62", "61", "60", "59", "58", "57", "56", "55", "54", "53", "52", "51", "50", "49", "48", "47", "46", "45", "44", "43", "42", "41", "40", "39", "38", "37", "36", "36", "35", "34", "33", "32", "31", "30", "29", "28", "27", "26", "25", "24", "23", "22", "21", "20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01", "00" }));
 
         jCurso.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -123,7 +129,7 @@ public class jfNotas extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cmbAlumnos, 0, 203, Short.MAX_VALUE)
+                                .addComponent(cmbAlumnos, 0, 213, Short.MAX_VALUE)
                                 .addGap(145, 145, 145))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,7 +199,7 @@ public class jfNotas extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -205,22 +211,34 @@ public class jfNotas extends javax.swing.JFrame {
         menu.setVisible(true);
     }//GEN-LAST:event_btnVolverActionPerformed
 
+    public void deshabilitarBotones(){
+        cmbEvaluacion.setEnabled(false);
+        cmbAlumnos.setEnabled(false);
+        cmbNota.setEnabled(false);
+        btnIngresar.setEnabled(false);
+    }
+    
+    public void habilitarBotones(){
+        cmbEvaluacion.setEnabled(true);
+        cmbAlumnos.setEnabled(true);
+        cmbNota.setEnabled(true);
+        btnIngresar.setEnabled(true);
+    }
+    
     private void cmbEvaluacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbEvaluacionActionPerformed
         if (actualizando.equals("n")) {
             Integer index = cmbEvaluacion.getSelectedIndex();
             cmbNota.setSelectedIndex(0);
             if (!(index == 0)) {
+                actualizando = "s";
+                cmbAlumnos.removeAllItems();
+                cmbAlumnos.addItem("Seleccione Alumno");
+                String codigo = (String) cmbEvaluacion.getSelectedItem();
+                String curso = codigo.substring(0, 3);
+                String año = codigo.substring(7, 11);
                 try {
-                    actualizando = "s";
-                    cmbAlumnos.removeAllItems();
-                    cmbAlumnos.addItem("Seleccione Alumno");
                     BD.crearConexion();
-                    String codigo = (String) cmbEvaluacion.getSelectedItem();
-                    String curso = codigo.substring(0, 3);
-                    String año = codigo.substring(7, 11);
-                    //String sql = "SELECT rut_alumno FROM alumno_curso where id_curso = '" + curso + "' and anno = " + año;
                     String sql = "SELECT ac.rut_alumno, a.nombres, a.ape_paterno FROM alumno_curso ac,alumno a where ac.id_curso = '" + curso + "' and ac.anno = " + año + " and ac.rut_alumno = a.rut_alumno";
-                    //String sql = "SELECT rut_alumno FROM alumno_curso ";
                     rs = BD.ejecutarSQLSelect(sql);
                     while (rs.next()) {
                         cmbAlumnos.addItem(rs.getString("ac.rut_alumno") + " " + rs.getString("a.nombres") + " " + rs.getString("a.ape_paterno"));
@@ -241,12 +259,12 @@ public class jfNotas extends javax.swing.JFrame {
 
     private void cmbAlumnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbAlumnosActionPerformed
         if (actualizando.equals("n")) {
+            String codigo = (String) cmbAlumnos.getSelectedItem();
+            String rutA = codigo.substring(0, codigo.indexOf(" "));
+            codigo = (String) cmbEvaluacion.getSelectedItem();
+            cmbNota.setSelectedIndex(0);
             try {
-                cmbNota.setSelectedIndex(0);
                 BD.crearConexion();
-                String codigo = (String) cmbAlumnos.getSelectedItem();
-                String rutA = codigo.substring(0, codigo.indexOf(" "));
-                codigo = (String) cmbEvaluacion.getSelectedItem();
                 String sql = "SELECT nota FROM notas where rut_alumno = '" + rutA + "' and id_evaluacion = '" + codigo + "'";
                 rs = BD.ejecutarSQLSelect(sql);
                 while (rs.next()) {
@@ -263,11 +281,11 @@ public class jfNotas extends javax.swing.JFrame {
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         String nota = (String) cmbNota.getSelectedItem();
         if (!(nota.equals("n/a"))) {
+            String codigo = (String) cmbAlumnos.getSelectedItem();
+            String rutA = codigo.substring(0, codigo.indexOf(" "));
+            codigo = (String) cmbEvaluacion.getSelectedItem();
             try {
                 BD.crearConexion();
-                String codigo = (String) cmbAlumnos.getSelectedItem();
-                String rutA = codigo.substring(0, codigo.indexOf(" "));
-                codigo = (String) cmbEvaluacion.getSelectedItem();
                 String sql = "SELECT nota FROM notas where rut_alumno = '" + rutA + "' and id_evaluacion = '" + codigo + "'";
                 rs = BD.ejecutarSQLSelect(sql);
                 if (rs.next()) {
@@ -310,12 +328,14 @@ public class jfNotas extends javax.swing.JFrame {
             while (rs.next()) {
                 cmbEvaluacion.addItem(rs.getString("id_evaluacion"));
                 actualizando = "s";
+                habilitarBotones();
             }
             actualizando = "n";
             BD.cerrarConexion();
         } catch (Exception e) {
             msj = "Error, hubo un problema.";
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            deshabilitarBotones();
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 

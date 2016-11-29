@@ -7,7 +7,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
-import trabajo.Rut;
+import clases.Rut;
 
 public class jfModificar extends javax.swing.JFrame {
 

@@ -5,7 +5,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
-import trabajo.Rut;
+import clases.Rut;
 
 public class jfEliminarRelacion extends javax.swing.JFrame {
 

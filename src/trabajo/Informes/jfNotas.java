@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import trabajo.Rut;
+import clases.Rut;
 
 public class jfNotas extends javax.swing.JFrame {
     private Rut rut;

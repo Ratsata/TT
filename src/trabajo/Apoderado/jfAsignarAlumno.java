@@ -6,7 +6,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
-import trabajo.Rut;
+import clases.Rut;
 
 public class jfAsignarAlumno extends javax.swing.JFrame {
     private Conexion BD = new Conexion();

@@ -5,7 +5,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
-import trabajo.Rut;
+import clases.Rut;
 
 public class jfEliminar extends javax.swing.JFrame {
     private Conexion BD = new Conexion();

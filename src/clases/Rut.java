@@ -1,4 +1,4 @@
-package trabajo;
+package clases;
 
 public class Rut {
 
