@@ -16,27 +16,47 @@ public class Conexion {
         return conexion;
     }
     
-    public boolean crearConexion(){
-        try{
+    
+    //Sistema Directo//
+    public boolean crearConexion() {
+        try {
             Class.forName("com.mysql.jdbc.Driver");
-            try{
-                conexion = DriverManager.getConnection(matrizConexiones[0][0], matrizConexiones[0][1], matrizConexiones[0][2]);
-            }catch (SQLException ex) {
-                try{
-                    conexion = DriverManager.getConnection(matrizConexiones[1][0], matrizConexiones[1][1], matrizConexiones[1][2]);
-                }catch (SQLException exx) {
-                    try{
-                        conexion = DriverManager.getConnection(matrizConexiones[2][0], matrizConexiones[2][1], matrizConexiones[2][2]);
-                    }catch (SQLException exxx) {
-                        return false;
-                    }
-                }
-            }
-        }catch (ClassNotFoundException ex) {
+            //Conexion JASON
+            //conexion = DriverManager.getConnection(matrizConexiones[0][0], matrizConexiones[0][1], matrizConexiones[0][2]);
+
+            //Conexion SEBA
+            //conexion = DriverManager.getConnection(matrizConexiones[1][0], matrizConexiones[1][1], matrizConexiones[1][2]);
+            conexion = DriverManager.getConnection(matrizConexiones[2][0], matrizConexiones[2][1], matrizConexiones[2][2]);
+        } catch (SQLException exxx) {
+            return false;
+        } catch (ClassNotFoundException ex) {
             return false;
         }
         return true;
     }
+    
+    //Sistema de Intentos//
+//    public boolean crearConexion(){
+//        try{
+//            Class.forName("com.mysql.jdbc.Driver");
+//            try{
+//                conexion = DriverManager.getConnection(matrizConexiones[0][0], matrizConexiones[0][1], matrizConexiones[0][2]);
+//            }catch (SQLException ex) {
+//                try{
+//                    conexion = DriverManager.getConnection(matrizConexiones[1][0], matrizConexiones[1][1], matrizConexiones[1][2]);
+//                }catch (SQLException exx) {
+//                    try{
+//                        conexion = DriverManager.getConnection(matrizConexiones[2][0], matrizConexiones[2][1], matrizConexiones[2][2]);
+//                    }catch (SQLException exxx) {
+//                        return false;
+//                    }
+//                }
+//            }
+//        }catch (ClassNotFoundException ex) {
+//            return false;
+//        }
+//        return true;
+//    }
 
     public boolean ejecutarSQL(String sql){
         try {
