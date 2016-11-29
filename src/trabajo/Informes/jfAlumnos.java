@@ -337,7 +337,7 @@ public class jfAlumnos extends javax.swing.JFrame {
                         documento.add(new Paragraph(" "));
                         
                         Integer contador=1;
-                        sql = "SELECT rpa.parentesco, p.rut_persona, p.nombres, p.ape_paterno, p.ape_materno, p.fecha_nacimiento, p.sexo, p.direccion, c.nombre, p.nacionalidad, p.fono, p.celular, p.ocupacion, p.nivel_educacion FROM persona p, relacion_persona_alumno rpa, comuna c WHERE rpa.rut_persona = p.rut_persona AND rpa.rut_alumno = '"+ rutDesformateado +"' AND rpa.apoderado = 's' AND c.id_comuna = p.id_comuna";
+                        sql = "SELECT rpa.parentesco, p.rut_persona, p.nombres, p.ape_paterno, p.ape_materno, p.fecha_nacimiento, p.sexo, p.direccion, c.nombre, p.nacionalidad, p.fono, p.celular, p.ocupacion, p.nivel_educacion FROM persona p, relacion_persona_alumno rpa, comuna c WHERE rpa.rut_persona = p.rut_persona AND rpa.rut_alumno = '"+ rutDesformateado +"' AND c.id_comuna = p.id_comuna";
                         rs = BD.ejecutarSQLSelect(sql);
                         while (rs.next()){
                             //Titulo Parrafo 2//
