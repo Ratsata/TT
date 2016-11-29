@@ -320,15 +320,21 @@ public class jfNotas extends javax.swing.JFrame {
         actualizando ="s";
         cmbEvaluacion.removeAllItems();
         cmbEvaluacion.addItem("Seleccione Evaluacion");
+        Boolean entroaWhile = false;
         try {
             BD.crearConexion();
             //PRIMER COMBOBOX
             String sql = "SELECT id_evaluacion FROM evaluacion where id_curso = '"+curso+"'";
             rs = BD.ejecutarSQLSelect(sql);
             while (rs.next()) {
+                entroaWhile = true;
                 cmbEvaluacion.addItem(rs.getString("id_evaluacion"));
                 actualizando = "s";
+            }
+            if (entroaWhile){
                 habilitarBotones();
+            }else{
+                deshabilitarBotones();
             }
             actualizando = "n";
             BD.cerrarConexion();
