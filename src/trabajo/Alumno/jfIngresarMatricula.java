@@ -189,6 +189,7 @@ public class jfIngresarMatricula extends javax.swing.JFrame {
         if(k==10){
             txtAño.transferFocus();
         }
+        if (txtFolio.getText().length()== 7){evt.consume();}
     }//GEN-LAST:event_txtFolioKeyTyped
 
     private void txtAñoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAñoKeyTyped
@@ -220,6 +221,19 @@ public class jfIngresarMatricula extends javax.swing.JFrame {
         txtFolio.setText("");
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
+    private void txtFolioFocusLost(java.awt.event.FocusEvent evt) {                                 
+        try {
+            String texto = txtFolio.getText();
+            Integer Numeros = Integer.parseInt(texto);
+            if (Numeros < 0 || Numeros > 9999999) {
+                JOptionPane.showMessageDialog(null, "Folio imposible", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
+                txtFolio.requestFocus();
+                txtFolio.setText("");
+            }
+        } catch (Exception e) {
+
+        }
+    }      
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
         try {
             //Objeto con la fecha actual

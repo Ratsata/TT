@@ -167,7 +167,7 @@ public class jfInscribirAlumno extends javax.swing.JFrame {
             }
             sql = "INSERT INTO alumno_curso(rut_alumno,id_curso,anno,activo) VALUES ('"+ rut + coma + idCurso + coma + añoActual + coma + activo + "')";
             if (BD.ejecutarSQL(sql)){
-                msj="Se ah inscrito el alumno correctamente.";
+                msj="Se ha inscrito el alumno correctamente.";
                 JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
             }else{
                 sql = "UPDATE alumno_curso SET activo = 's' where rut_alumno = '"+rut+"' and id_curso = '"+idCurso+"' and anno = '"+añoActual+"'";

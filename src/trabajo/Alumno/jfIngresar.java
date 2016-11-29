@@ -445,7 +445,7 @@ public class jfIngresar extends javax.swing.JFrame {
                             } else {
                                 sql = "INSERT INTO matricula(folio_matricula,rut_alumno,anno) values ('" + folioMatricula + coma + rutDesformateado + coma + anno + " ')";
                                 if (BD.ejecutarSQL(sql)) {
-                                    msj = "Ingreso realizado con exito";
+                                    msj = "Ingreso de matricula realizado con exito";
                                     JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
                                 } else {
                                     msj = "Error, folio existente";
@@ -519,7 +519,7 @@ public class jfIngresar extends javax.swing.JFrame {
         try {
             String texto = jFolio.getText();
             Integer Numeros = Integer.parseInt(texto);
-            if (Numeros < 0 || Numeros > 999999) {
+            if (Numeros < 0 || Numeros > 9999999) {
                 JOptionPane.showMessageDialog(null, "Folio imposible", "Ventana Error Año", JOptionPane.ERROR_MESSAGE);
                 jFolio.requestFocus();
                 jFolio.setText("");
@@ -542,6 +542,7 @@ public class jfIngresar extends javax.swing.JFrame {
         if (k == 10) {
             jAño.transferFocus();
         }
+        if (jFolio.getText().length()== 7){evt.consume();}
     }//GEN-LAST:event_jFolioKeyTyped
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
