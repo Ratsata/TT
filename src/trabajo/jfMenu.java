@@ -26,8 +26,7 @@ public class jfMenu extends javax.swing.JFrame {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/gorro.png"));
         setIconImage(icon);
         initComponents();
-        this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
-        
+        this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA        
         consultarContraseña();
         deshabilitarBotones();
     }
@@ -182,7 +181,6 @@ public class jfMenu extends javax.swing.JFrame {
             }
         });
 
-        jContraseña.setText("contraseña");
         jContraseña.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jContraseñaActionPerformed(evt);

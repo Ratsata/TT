@@ -313,7 +313,7 @@ public class jfIngresar extends javax.swing.JFrame {
                 try {
 
                     actualizando = "s";
-                    String sql = "SELECT a.id_asignatura,a.nombre FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura and ac.id_curso = '" + codigo + "'";
+                    String sql = "SELECT DISTINCT a.id_asignatura,a.nombre FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura and ac.id_curso = '" + codigo + "'";
                     rs = BD.ejecutarSQLSelect(sql);
                     while (rs.next()) {
                         cmbAsignatura.addItem(rs.getString("a.nombre"));

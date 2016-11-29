@@ -15,6 +15,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import clases.Rut;
 
 public class jfAlumnos extends javax.swing.JFrame {
+
     private Rut rut;
     private String rutFormateado;
     private String rutDesformateado;
@@ -27,19 +28,19 @@ public class jfAlumnos extends javax.swing.JFrame {
         setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
-        
+
         //Llenar ComboBox
-        try{
+        try {
             BD.crearConexion();
             String sql = "SELECT c.id_curso, c.nombre, ac.anno FROM curso c, alumno_curso ac WHERE ac.id_curso = c.id_curso";
             rs = BD.ejecutarSQLSelect(sql);
-            while(rs.next()){
-                cmbCursoTodos.addItem(rs.getString("c.id_curso")+","+rs.getString("c.nombre")+","+rs.getString("ac.anno"));
+            while (rs.next()) {
+                cmbCursoTodos.addItem(rs.getString("c.id_curso") + "," + rs.getString("c.nombre") + "," + rs.getString("ac.anno"));
             }
             BD.cerrarConexion();
-        }catch (Exception e){
+        } catch (Exception e) {
             msj = "Error, hubo un problema.";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);    
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
         deshabilitarBotones();
     }
@@ -160,7 +161,7 @@ public class jfAlumnos extends javax.swing.JFrame {
 
         lblInstruccion2.setText("Si desea el informe de los alumnos de un curso eliga el curso en cuestion:");
 
-        cmbCursoTodos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+        cmbCursoTodos.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccione Curso y año" }));
 
         btnGenerarTodos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/accept.png"))); // NOI18N
         btnGenerarTodos.setText("Generar informe");
@@ -258,8 +259,8 @@ public class jfAlumnos extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    private void deshabilitarBotones(){
+
+    private void deshabilitarBotones() {
         txtNombre.setText("");
         btnGenerarAlu.setEnabled(false);
     }
@@ -277,12 +278,12 @@ public class jfAlumnos extends javax.swing.JFrame {
             if (rs.next()) {
                 String rutPDF = rs.getString(1);
                 String nombreCompleto = rs.getString(2) + " " + rs.getString(3) + " " + rs.getString(4);
-            
+
                 Document documento = new Document();
                 FileOutputStream ficheroPdf;
                 try {
-                    JFileChooser file=new JFileChooser();
-                    file.setSelectedFile(new File("Datos_"+ rutPDF + "_" + nombreCompleto + ".pdf"));
+                    JFileChooser file = new JFileChooser();
+                    file.setSelectedFile(new File("Datos_" + rutPDF + "_" + nombreCompleto + ".pdf"));
                     file.setFileFilter(new FileNameExtensionFilter("pdf", "pdf"));
                     file.showSaveDialog(this);
                     String Ubicacion = String.valueOf(file.getSelectedFile());
@@ -291,80 +292,91 @@ public class jfAlumnos extends javax.swing.JFrame {
                             documento,
                             ficheroPdf
                     ).setInitialLeading(20);
-                } catch (Exception ex) {
-                    msj = ex.toString();
-                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
-                }
-                try {
-                    sql = "SELECT a.rut_alumno, a.nombres, a.ape_paterno, a.ape_materno, a.fecha_Nacimiento, a.sexo, a.direccion, a.religion, c.nombre, a.nacionalidad, a.transporte, a.num_hermanos, a.posicion_hermanos, a.colegio_procedencia FROM alumno a, comuna c WHERE c.id_comuna = a.id_comuna AND a.rut_alumno = '"+ rutDesformateado +"'";
-                    rs = BD.ejecutarSQLSelect(sql);
-                    if (rs.next()){
-                        documento.open();
-                        Font fuente= new Font();
-                        String imageUrl = "http://www.fundacioncondell.cl/images/noticias/plynch/22.jpg";
-                        Image foto = Image.getInstance(new URL(imageUrl));
-                        foto.scaleToFit(100, 100);
-                        foto.setAbsolutePosition(0f, 750f);
-                        foto.setAlignment(Chunk.ALIGN_LEFT);
-                        documento.add(foto);
-                        //Titulo//
-                        fuente.setSize(18);
-                        fuente.setStyle(Font.BOLD);
-                        Paragraph parrafoTitulo = new Paragraph("Informe del alumno",fuente);
-                        parrafoTitulo.setAlignment(1);
-                        documento.add(parrafoTitulo);
-                        documento.add(new Paragraph(" "));
-                        documento.add(new Paragraph(" "));
-                        //Titulo Parrafo 1//
-                        fuente.setStyle(Font.BOLD);
-                        fuente.setSize(14);
-                        documento.add(new Paragraph("IDENTIFICACION DEL ALUMNO", fuente));
-                        //Datos//
-                        fuente.setStyle(Font.NORMAL);
-                        fuente.setSize(12);
-                        documento.add(new Paragraph("NOMBRE                                                     :"+rs.getString("a.nombres")+" "+rs.getString("a.ape_paterno")+" "+rs.getString("a.ape_materno"), fuente));
-                        documento.add(new Paragraph("RUT                                                             :"+rs.getString("a.rut_alumno"), fuente));
-                        documento.add(new Paragraph("FECHA DE NACIMIENTO                           :"+rs.getString("a.fecha_nacimiento"), fuente));
-                        documento.add(new Paragraph("SEXO                                                           :"+rs.getString("a.sexo"), fuente));
-                        documento.add(new Paragraph("RELIGION                                                    :"+rs.getString("a.religion"), fuente));
-                        documento.add(new Paragraph("DIRECCION                                                 :"+rs.getString("a.direccion"), fuente));
-                        documento.add(new Paragraph("COMUNA                                                     :"+rs.getString("c.nombre"), fuente));
-                        documento.add(new Paragraph("NACIONALIDAD                                          :"+rs.getString("a.nacionalidad"), fuente));
-                        documento.add(new Paragraph("TRANSPORTE                                             :"+rs.getString("a.transporte"), fuente));
-                        documento.add(new Paragraph("NUM. HERMANOS                                      :"+rs.getString("a.num_hermanos"), fuente));
-                        documento.add(new Paragraph("POS. HERMANDAD                                    :"+rs.getString("a.posicion_hermanos"), fuente));
-                        documento.add(new Paragraph("COLEGIO PROCEDENCIA                         :"+rs.getString("a.colegio_procedencia"), fuente));
-                        documento.add(new Paragraph(" "));
-                        
-                        Integer contador=1;
-                        sql = "SELECT rpa.parentesco, p.rut_persona, p.nombres, p.ape_paterno, p.ape_materno, p.fecha_nacimiento, p.sexo, p.direccion, c.nombre, p.nacionalidad, p.fono, p.celular, p.ocupacion, p.nivel_educacion FROM persona p, relacion_persona_alumno rpa, comuna c WHERE rpa.rut_persona = p.rut_persona AND rpa.rut_alumno = '"+ rutDesformateado +"' AND c.id_comuna = p.id_comuna";
+
+                    try {
+                        sql = "SELECT a.rut_alumno, a.nombres, a.ape_paterno, a.ape_materno, a.fecha_Nacimiento, a.sexo, a.direccion, a.religion, c.nombre, a.nacionalidad, a.transporte, a.num_hermanos, a.posicion_hermanos, a.colegio_procedencia FROM alumno a, comuna c WHERE c.id_comuna = a.id_comuna AND a.rut_alumno = '" + rutDesformateado + "'";
                         rs = BD.ejecutarSQLSelect(sql);
-                        while (rs.next()){
-                            //Titulo Parrafo 2//
+                        if (rs.next()) {
+                            documento.open();
+                            Font fuente = new Font();
+                            String imageUrl = "http://www.fundacioncondell.cl/images/noticias/plynch/22.jpg";
+                            Image foto = Image.getInstance(new URL(imageUrl));
+                            foto.scaleToFit(100, 100);
+                            foto.setAbsolutePosition(0f, 750f);
+                            foto.setAlignment(Chunk.ALIGN_LEFT);
+                            documento.add(foto);
+                            //Titulo//
+                            fuente.setSize(18);
+                            fuente.setStyle(Font.BOLD);
+                            Paragraph parrafoTitulo = new Paragraph("Informe del alumno", fuente);
+                            parrafoTitulo.setAlignment(1);
+                            documento.add(parrafoTitulo);
+                            documento.add(new Paragraph(" "));
+                            documento.add(new Paragraph(" "));
+                            //Titulo Parrafo 1//
                             fuente.setStyle(Font.BOLD);
                             fuente.setSize(14);
-                            documento.add(new Paragraph("IDENTIFICACION DEL APODERADO "+contador.toString(), fuente));
+                            documento.add(new Paragraph("IDENTIFICACION DEL ALUMNO", fuente));
                             //Datos//
                             fuente.setStyle(Font.NORMAL);
                             fuente.setSize(12);
-                            documento.add(new Paragraph("PARENTESCO                                            :"+rs.getString("rpa.parentesco"), fuente));
-                            documento.add(new Paragraph("NOMBRE                                                     :"+rs.getString("p.nombres")+" "+rs.getString("p.ape_paterno")+" "+rs.getString("p.ape_materno"), fuente));
-                            documento.add(new Paragraph("RUT                                                             :"+rs.getString("p.rut_persona"), fuente));
-                            documento.add(new Paragraph("FECHA DE NACIMIENTO                           :"+rs.getString("p.fecha_nacimiento"), fuente));
-                            documento.add(new Paragraph("SEXO                                                           :"+rs.getString("p.sexo"), fuente));
-                            documento.add(new Paragraph("DIRECCION                                                 :"+rs.getString("p.direccion"), fuente));
-                            documento.add(new Paragraph("COMUNA                                                     :"+rs.getString("c.nombre"), fuente));
-                            documento.add(new Paragraph("NACIONALIDAD                                          :"+rs.getString("p.nacionalidad"), fuente));
-                            documento.add(new Paragraph("FONO                                                          :"+rs.getString("p.fono"), fuente));
-                            documento.add(new Paragraph("CELULAR                                                    :"+rs.getString("p.celular"), fuente));
-                            documento.add(new Paragraph("OCUPACION                                               :"+rs.getString("p.ocupacion"), fuente));
-                            documento.add(new Paragraph("NIVEL DE EDUCACION                              :"+rs.getString("p.nivel_educacion"), fuente));
+                            documento.add(new Paragraph("NOMBRE                                                     : " + rs.getString("a.nombres") + " " + rs.getString("a.ape_paterno") + " " + rs.getString("a.ape_materno"), fuente));
+                            documento.add(new Paragraph("RUT                                                             : " + rs.getString("a.rut_alumno"), fuente));
+                            documento.add(new Paragraph("FECHA DE NACIMIENTO                           : " + rs.getString("a.fecha_nacimiento"), fuente));
+                            documento.add(new Paragraph("SEXO                                                           : " + rs.getString("a.sexo"), fuente));
+                            documento.add(new Paragraph("RELIGION                                                    : " + rs.getString("a.religion"), fuente));
+                            documento.add(new Paragraph("DIRECCION                                                 : " + rs.getString("a.direccion"), fuente));
+                            documento.add(new Paragraph("COMUNA                                                     : " + rs.getString("c.nombre"), fuente));
+                            documento.add(new Paragraph("NACIONALIDAD                                          : " + rs.getString("a.nacionalidad"), fuente));
+                            documento.add(new Paragraph("TRANSPORTE                                             : " + rs.getString("a.transporte"), fuente));
+                            documento.add(new Paragraph("NUM. HERMANOS                                      : " + rs.getString("a.num_hermanos"), fuente));
+                            documento.add(new Paragraph("POS. HERMANDAD                                    : " + rs.getString("a.posicion_hermanos"), fuente));
+                            documento.add(new Paragraph("COLEGIO PROCEDENCIA                         : " + rs.getString("a.colegio_procedencia"), fuente));
                             documento.add(new Paragraph(" "));
-                            contador ++;
+
+                            Integer contador = 1;
+                            sql = "SELECT rpa.parentesco, p.rut_persona, p.nombres, p.ape_paterno, p.ape_materno, p.fecha_nacimiento, p.sexo, p.direccion, c.nombre, p.nacionalidad, p.fono, p.celular, p.ocupacion, p.nivel_educacion , rpa.apoderado , rpa.sostenedor FROM persona p, relacion_persona_alumno rpa, comuna c WHERE rpa.rut_persona = p.rut_persona AND rpa.rut_alumno = '" + rutDesformateado + "' AND c.id_comuna = p.id_comuna";
+                            rs = BD.ejecutarSQLSelect(sql);
+                            while (rs.next()) {
+                                //Titulo Parrafo 2//
+                                fuente.setStyle(Font.BOLD);
+                                fuente.setSize(14);
+                                documento.add(new Paragraph("IDENTIFICACION DEL APODERADO/SOSTENEDOR " + contador.toString(), fuente));
+                                //Datos//
+                                fuente.setStyle(Font.NORMAL);
+                                fuente.setSize(12);
+                                documento.add(new Paragraph("PARENTESCO                                            : " + rs.getString("rpa.parentesco"), fuente));
+                                documento.add(new Paragraph("NOMBRE                                                     : " + rs.getString("p.nombres") + " " + rs.getString("p.ape_paterno") + " " + rs.getString("p.ape_materno"), fuente));
+                                documento.add(new Paragraph("RUT                                                             :" + rs.getString("p.rut_persona"), fuente));
+                                documento.add(new Paragraph("FECHA DE NACIMIENTO                           : " + rs.getString("p.fecha_nacimiento"), fuente));
+                                documento.add(new Paragraph("SEXO                                                           : " + rs.getString("p.sexo"), fuente));
+                                documento.add(new Paragraph("DIRECCION                                                 : " + rs.getString("p.direccion"), fuente));
+                                documento.add(new Paragraph("COMUNA                                                     : " + rs.getString("c.nombre"), fuente));
+                                documento.add(new Paragraph("NACIONALIDAD                                          : " + rs.getString("p.nacionalidad"), fuente));
+                                documento.add(new Paragraph("FONO                                                          : " + rs.getString("p.fono"), fuente));
+                                documento.add(new Paragraph("CELULAR                                                    : " + rs.getString("p.celular"), fuente));
+                                documento.add(new Paragraph("OCUPACION                                               : " + rs.getString("p.ocupacion"), fuente));
+                                documento.add(new Paragraph("NIVEL DE EDUCACION                              : " + rs.getString("p.nivel_educacion"), fuente));
+                                if (rs.getString("rpa.apoderado").equals("S")) {
+                                    documento.add(new Paragraph("APODERADO                                                 : SI", fuente));
+                                } else {
+                                    documento.add(new Paragraph("APODERADO                                                 : NO", fuente));
+                                }
+                                if (rs.getString("rpa.sostenedor").equals("S")) {
+                                    documento.add(new Paragraph("SOSTENEDOR                                                : SI", fuente));
+                                } else {
+                                    documento.add(new Paragraph("SOSTENEDOR                                                : NO", fuente));
+                                }
+                                documento.add(new Paragraph(" "));
+                                contador++;
+                            }
+                            documento.close();
+                            msj = "Exito, se creo el informe correctamente.";
+                            JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
                         }
-                        documento.close();
-                        msj="Exito, se creo el informe correctamente.";
-                        JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception ex) {
+                        msj = ex.toString();
+                        JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } catch (Exception ex) {
                     msj = ex.toString();
@@ -379,7 +391,7 @@ public class jfAlumnos extends javax.swing.JFrame {
             msj = "Error, no existe tal alumno.";
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
     }//GEN-LAST:event_btnGenerarAluActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -395,10 +407,10 @@ public class jfAlumnos extends javax.swing.JFrame {
                 txtRut.setText(rutFormateado);
                 try {
                     BD.crearConexion();
-                    String sql = "SELECT nombres, ape_paterno, ape_materno FROM alumno WHERE rut_alumno = '"+ rutDesformateado +"'";
+                    String sql = "SELECT nombres, ape_paterno, ape_materno FROM alumno WHERE rut_alumno = '" + rutDesformateado + "'";
                     rs = BD.ejecutarSQLSelect(sql);
                     if (rs.next()) {
-                        txtNombre.setText(rs.getString("nombres")+" "+rs.getString("ape_paterno")+" "+rs.getString("ape_materno"));
+                        txtNombre.setText(rs.getString("nombres") + " " + rs.getString("ape_paterno") + " " + rs.getString("ape_materno"));
                     }
                     BD.cerrarConexion();
                 } catch (Exception e) {
@@ -412,7 +424,7 @@ public class jfAlumnos extends javax.swing.JFrame {
             txtRut.setText("");
         }
 
-        
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnGenerarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarTodosActionPerformed
@@ -425,11 +437,11 @@ public class jfAlumnos extends javax.swing.JFrame {
             String nomArchivo = cmbCursoTodos.getSelectedItem().toString().replace(",", "_");
             String curso = cmbCursoTodos.getSelectedItem().toString();
             String idcurso = curso.substring(0, 3);
-            String año = curso.substring(curso.length()-4, curso.length());
-            String nomcurso = curso.replace(","+año,"").replace(idcurso + ",", "");
+            String año = curso.substring(curso.length() - 4, curso.length());
+            String nomcurso = curso.replace("," + año, "").replace(idcurso + ",", "");
             try {
-                JFileChooser file=new JFileChooser();
-                file.setSelectedFile(new File("Datos_"+nomArchivo +".pdf"));
+                JFileChooser file = new JFileChooser();
+                file.setSelectedFile(new File("Datos_" + nomArchivo + ".pdf"));
                 file.setFileFilter(new FileNameExtensionFilter("pdf", "pdf"));
                 file.showSaveDialog(this);
                 String Ubicacion = String.valueOf(file.getSelectedFile());
@@ -456,25 +468,28 @@ public class jfAlumnos extends javax.swing.JFrame {
                 Paragraph parrafoTitulo2 = new Paragraph(nomcurso, fuente);
                 parrafoTitulo2.setAlignment(1);
                 documento.add(parrafoTitulo2);
+                Paragraph parrafoTitulo3 = new Paragraph("Año "+año, fuente);
+                parrafoTitulo3.setAlignment(1);
+                documento.add(parrafoTitulo3);
                 documento.add(new Paragraph(" "));
                 //Titulo Parrafo 1//
                 fuente.setStyle(Font.BOLD);
                 fuente.setSize(14);
-                documento.add(new Paragraph("Lista de Alumnos", fuente));
+                documento.add(new Paragraph("Lista de Alumnos", fuente));                
                 //Datos//
                 fuente.setStyle(Font.NORMAL);
                 fuente.setSize(12);
                 try {
                     BD.crearConexion();
-                    Integer contador = 1;
-                    String sql = "SELECT a.rut_alumno, a.nombres, a.ape_paterno, a.ape_materno FROM alumno a, alumno_curso ac WHERE ac.id_curso = '"+ idcurso +"' AND a.rut_alumno = ac.rut_alumno ORDER BY nombres asc, ape_paterno asc, ape_materno asc";
+                    Integer contador = 1;                    
+                    String sql = "SELECT a.rut_alumno, a.nombres, a.ape_paterno, a.ape_materno FROM alumno a, alumno_curso ac WHERE ac.id_curso = '" + idcurso + "' AND a.rut_alumno = ac.rut_alumno AND ac.anno = '"+año+"' ORDER BY nombres asc, ape_paterno asc, ape_materno asc";
                     rs = BD.ejecutarSQLSelect(sql);
                     while (rs.next()) {
-                        documento.add(new Paragraph(contador + "    " + rs.getString("a.rut_alumno")+"    "+rs.getString("a.nombres") + " " + rs.getString("a.ape_paterno") + " " + rs.getString("a.ape_materno"),fuente));
-                        contador ++;
+                        documento.add(new Paragraph(contador + "    " + rs.getString("a.rut_alumno") + "    " + rs.getString("a.nombres") + " " + rs.getString("a.ape_paterno") + " " + rs.getString("a.ape_materno"), fuente));
+                        contador++;
                     }
                     BD.cerrarConexion();
-                }catch(Exception ex) {
+                } catch (Exception ex) {
                     msj = ex.toString();
                     JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -488,20 +503,20 @@ public class jfAlumnos extends javax.swing.JFrame {
                 fuente.setSize(12);
                 try {
                     BD.crearConexion();
-                    String sql = "SELECT observaciones FROM curso WHERE id_curso = '"+ idcurso +"'";
+                    String sql = "SELECT observaciones FROM curso WHERE id_curso = '" + idcurso + "'";
                     rs = BD.ejecutarSQLSelect(sql);
                     if (rs.next()) {
-                        documento.add(new Paragraph(rs.getString("observaciones"),fuente));
+                        documento.add(new Paragraph(rs.getString("observaciones"), fuente));
                     }
                     BD.cerrarConexion();
-                }catch(Exception ex) {
+                } catch (Exception ex) {
                     msj = ex.toString();
                     JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                    
+
                 documento.close();
-                msj="Exito, se creo el informe correctamente.";
-                JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
+                msj = "Exito, se creo el informe correctamente.";
+                JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
                 msj = ex.toString();
                 JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);

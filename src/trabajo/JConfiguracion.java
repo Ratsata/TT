@@ -50,7 +50,6 @@ public class JConfiguracion extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
 
         confirmarContraseña.setTitle("Ingrese contraseña");
-        confirmarContraseña.setMaximumSize(new java.awt.Dimension(330, 160));
         confirmarContraseña.setMinimumSize(new java.awt.Dimension(330, 160));
         confirmarContraseña.setModal(true);
         confirmarContraseña.setModalExclusionType(null);
@@ -176,7 +175,7 @@ public class JConfiguracion extends javax.swing.JFrame {
             }
         });
 
-        btnAceptar.setText("Aceptar");
+        btnAceptar.setText("Aplicar Cambios");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAceptarActionPerformed(evt);
@@ -348,7 +347,7 @@ public class JConfiguracion extends javax.swing.JFrame {
                     contraseñaNueva = txtContraseñaNueva.getText();
                     contraseñaMaestra = contraseñaNueva;
                     txtContraseñaNueva.setText("");
-                    msj = "Se ah modificado la contraseña.";
+                    msj = "Se ha modificado la contraseña.";
                     JOptionPane.showMessageDialog(confirmarContraseña, msj, "Contraseña", JOptionPane.INFORMATION_MESSAGE);
                 }else{
                     swCerrarAño = true;
