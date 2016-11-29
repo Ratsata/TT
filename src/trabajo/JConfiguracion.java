@@ -69,9 +69,9 @@ public class JConfiguracion extends javax.swing.JFrame {
             }
         });
 
-        txtContraseñaActual2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtContraseñaActual2ActionPerformed(evt);
+        txtContraseñaActual2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtContraseñaActual2FocusGained(evt);
             }
         });
 
@@ -285,7 +285,7 @@ public class JConfiguracion extends javax.swing.JFrame {
         confirmarContraseña.setLocationRelativeTo(null);
         txtContraseñaActual.setText("");
         txtContraseñaActual2.setText("");
-        if (txtContraseñaNueva.getText().length() > 20){
+        if (txtContraseñaNueva.getText().length() < 20){
             if (!swContraseña){
                 try{
                     BD.crearConexion();
@@ -348,6 +348,8 @@ public class JConfiguracion extends javax.swing.JFrame {
                     contraseñaNueva = txtContraseñaNueva.getText();
                     contraseñaMaestra = contraseñaNueva;
                     txtContraseñaNueva.setText("");
+                    msj = "Se ah modificado la contraseña.";
+                    JOptionPane.showMessageDialog(confirmarContraseña, msj, "Contraseña", JOptionPane.INFORMATION_MESSAGE);
                 }else{
                     swCerrarAño = true;
                 }
@@ -357,12 +359,14 @@ public class JConfiguracion extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(confirmarContraseña, msj, "Error", JOptionPane.ERROR_MESSAGE);
                 txtContraseñaActual.setText("");
                 txtContraseñaActual2.setText("");
+                txtContraseñaActual.requestFocus();
             }
         }else{
             msj = "Error, las contraseñas no coinciden.";
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
             txtContraseñaActual.setText("");
             txtContraseñaActual2.setText("");
+            txtContraseñaActual.requestFocus();
         }
     }
     
@@ -378,9 +382,9 @@ public class JConfiguracion extends javax.swing.JFrame {
         txtContraseñaActual.selectAll();
     }//GEN-LAST:event_txtContraseñaActualFocusGained
 
-    private void txtContraseñaActual2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContraseñaActual2ActionPerformed
+    private void txtContraseñaActual2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtContraseñaActual2FocusGained
         txtContraseñaActual2.selectAll();
-    }//GEN-LAST:event_txtContraseñaActual2ActionPerformed
+    }//GEN-LAST:event_txtContraseñaActual2FocusGained
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

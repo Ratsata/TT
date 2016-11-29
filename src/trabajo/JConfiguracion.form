@@ -99,7 +99,7 @@
         </Component>
         <Component class="javax.swing.JPasswordField" name="txtContrase&#xf1;aActual2">
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtContrase&#xf1;aActual2ActionPerformed"/>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtContrase&#xf1;aActual2FocusGained"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnContrase&#xf1;aAceptar">
