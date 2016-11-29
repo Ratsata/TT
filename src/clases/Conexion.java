@@ -5,27 +5,34 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 public class Conexion {
-    static Connection conexion;   
-    
+    static Connection conexion;
+    private String [][] matrizConexiones ={{"jdbc:mysql://localhost:3306/cpl","root",""},//CONEXION ESTANDAR - JASON//
+                                           {"jdbc:mysql://192.168.1.36:3306/BG","ratsata","toor"},//CONEXION SEBA//
+                                           {"jdbc:mysql://defweb.ddns.net:3306/BG","ratsata","toor"}};//CONEXION SEBA//
     public Connection getConexion(){
         return conexion;
     }
     
     public boolean crearConexion(){
-        try {
+        try{
             Class.forName("com.mysql.jdbc.Driver");
-            //CONEXION ESTANDAR - JASON//
-            //conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/cpl","root","");
-            //CONEXION SEBA//
-            conexion = DriverManager.getConnection("jdbc:mysql://192.168.1.36:3306/BG","ratsata","toor");
-            //conexion = DriverManager.getConnection("jdbc:mysql://defweb.ddns.net:3306/BG","ratsata","toor");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
+            try{
+                conexion = DriverManager.getConnection(matrizConexiones[0][0], matrizConexiones[0][1], matrizConexiones[0][2]);
+            }catch (SQLException ex) {
+                try{
+                    conexion = DriverManager.getConnection(matrizConexiones[1][0], matrizConexiones[1][1], matrizConexiones[1][2]);
+                }catch (SQLException exx) {
+                    try{
+                        conexion = DriverManager.getConnection(matrizConexiones[2][0], matrizConexiones[2][1], matrizConexiones[2][2]);
+                    }catch (SQLException exxx) {
+                        return false;
+                    }
+                }
+            }
+        }catch (ClassNotFoundException ex) {
             return false;
         }
         return true;
@@ -36,7 +43,6 @@ public class Conexion {
             Statement sentencia = conexion.createStatement();
             sentencia.executeUpdate(sql);
         } catch (SQLException ex) {
-            ex.printStackTrace();
             return false;
         }
        return true;
@@ -48,7 +54,6 @@ public class Conexion {
             Statement sentencia = conexion.createStatement();
             resultado = sentencia.executeQuery(sql);
         } catch (SQLException ex) {
-            ex.printStackTrace();
             return null;
         }
         return resultado;
@@ -57,7 +62,6 @@ public class Conexion {
         try {
             conexion.close();
         } catch (SQLException ex) {
-            ex.printStackTrace();
             return false;
         }
         return true;
