@@ -1,6 +1,5 @@
 package trabajo.Profesores;
 
-import trabajo.Apoderado.*;
 import clases.Conexion;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -10,9 +9,12 @@ import javax.swing.JOptionPane;
 import clases.Rut;
 
 public class jfModificar extends javax.swing.JFrame {
-
     private Conexion BD = new Conexion();
     private String msj;
+    private Rut rut;
+    private String rutFormateado;
+    private String rutDesformateado;
+    
     public jfModificar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_edit.png"));
         setIconImage(icon);
@@ -286,34 +288,60 @@ public class jfModificar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        BD.crearConexion();
-        msj = "";        
-        jNombre.setText("");
-        jApePat.setText("");
-        jApeMat.setText("");
-        String rut = jRutModi.getText();
-        String sql1="SELECT * FROM profesor WHERE rut_profesor='"+rut+"'";
-        try{
-            //sentencia = (com.mysql.jdbc.Statement)conexion.createStatement();
-            ResultSet lis = BD.ejecutarSQLSelect(sql1);
-            if (lis.next()){
-                String prefijo;
-                msj="Profesor Existe Modifique los campos";
-                habilitarBotones();
-                jExiste.setText(msj);
-                jNombre.setText(lis.getString(2));
-                jApePat.setText(lis.getString(3));
-                jApeMat.setText(lis.getString(4));                
-                prefijo = lis.getString(5).substring(0,lis.getString(5).length()-7);
-                cmbPrefijo.setSelectedItem(prefijo);
-                jFono.setText(lis.getString(5).substring(lis.getString(5).length()-7,lis.getString(5).length()));
-                jCelular.setText(lis.getString(6).substring(4,(lis.getString(6).length())));                
-                jMail.setText(lis.getString(7));
-                jExiste.setText(msj);
+        try {
+            rutFormateado = rut.formatear(jRutModi.getText());
+            if (rut.validar(rutFormateado) == false) {
+                JOptionPane.showMessageDialog(null, "Rut incorrecto", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
+                jRutModi.setText("");
+                jNombre.setText("");
+                jApePat.setText("");
+                jApeMat.setText("");
+                jFono.setText("");
+                jCelular.setText("");
+                jMail.setText("");
+                deshabilitarBotones();
+            } else {
+                rutDesformateado = rut.desformatear(rutFormateado);
+                jRutModi.setText(rutFormateado);
+                
+                BD.crearConexion();
+                msj = "";
+                jNombre.setText("");
+                jApePat.setText("");
+                jApeMat.setText("");
+                String sql1 = "SELECT * FROM profesor WHERE rut_profesor='" + rutDesformateado + "'";
+                try {
+                    ResultSet lis = BD.ejecutarSQLSelect(sql1);
+                    if (lis.next()) {
+                        String prefijo;
+                        msj = "Profesor Existe Modifique los campos";
+                        habilitarBotones();
+                        jExiste.setText(msj);
+                        jNombre.setText(lis.getString(2));
+                        jApePat.setText(lis.getString(3));
+                        jApeMat.setText(lis.getString(4));
+                        prefijo = lis.getString(5).substring(0, lis.getString(5).length() - 7);
+                        cmbPrefijo.setSelectedItem(prefijo);
+                        jFono.setText(lis.getString(5).substring(lis.getString(5).length() - 7, lis.getString(5).length()));
+                        jCelular.setText(lis.getString(6).substring(4, (lis.getString(6).length())));
+                        jMail.setText(lis.getString(7));
+                        jExiste.setText(msj);
+                    }
+                } catch (Exception e) {
+                    msj = "Error, no se pudo realizar la operacion";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
-        }catch(Exception e){
-            msj="Error, no se pudo realizar la operacion";
-            JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Mal formato de rut", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
+            jRutModi.setText("");
+            jNombre.setText("");
+            jApePat.setText("");
+            jApeMat.setText("");
+            jFono.setText("");
+            jCelular.setText("");
+            jMail.setText("");
+            deshabilitarBotones();
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -336,8 +364,7 @@ public class jfModificar extends javax.swing.JFrame {
             msj="Error, No deje ningun campo vacio";
             JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);
         }else{
-            String rut,nombre,apeP,apeM,mail,fono,fonoFinal,celular,celuFinal,coma;
-            rut = jRutModi.getText();
+            String nombre,apeP,apeM,mail,fono,fonoFinal,celular,celuFinal,coma;
             nombre = jNombre.getText();
             apeP = jApePat.getText();
             apeM = jApeMat.getText();
@@ -352,7 +379,7 @@ public class jfModificar extends javax.swing.JFrame {
                         + "fono = '"+fonoFinal+"',"
                         + "celular = '"+celuFinal+"',"
                         + "mail = '"+mail +"'"
-                        + " WHERE rut_profesor = '"+rut+"';"; //Espacio Necesario para el WHERE
+                        + " WHERE rut_profesor = '"+rutDesformateado+"';"; //Espacio Necesario para el WHERE
                     if(BD.ejecutarSQL(sql)){
                         msj="Datos modificados";
                         JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);
@@ -427,44 +454,11 @@ public class jfModificar extends javax.swing.JFrame {
     }//GEN-LAST:event_jCelularFocusLost
 
     private void jRutModiFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRutModiFocusLost
-        try{
-            Rut rutv = new Rut();
-            String rut = jRutModi.getText();
-            rut = rutv.formatear(rut);
-            if (rutv.validar(rut) == false){
-                JOptionPane.showMessageDialog(null,"Rut incorrecto","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
-                jRutModi.setText("");
-                jNombre.setText("");
-                jApePat.setText("");
-                jApeMat.setText("");
-                jFono.setText("");
-                jCelular.setText("");
-                jMail.setText("");
-                deshabilitarBotones();
-            }else{
-                rut = rut.replace(".", "");
-                rut = rut.replace("-", "");
-                jRutModi.setText(rut);
-            }
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Mal formato de rut","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
-            jRutModi.setText("");
-            jNombre.setText("");
-            jApePat.setText("");
-            jApeMat.setText("");
-            jFono.setText("");
-            jCelular.setText("");
-            jMail.setText("");   
-            deshabilitarBotones();
-        }
+        
     }//GEN-LAST:event_jRutModiFocusLost
 
     private void jRutModiKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jRutModiKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            String rut = jRutModi.getText();
-            rut = rut.replace(".", "");
-            rut = rut.replace("-", "");
-            jRutModi.setText(rut);
             btnBuscar.requestFocus();
             btnBuscar.doClick();
         }

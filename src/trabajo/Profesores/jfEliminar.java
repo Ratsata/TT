@@ -1,7 +1,7 @@
 package trabajo.Profesores;
 
-import trabajo.Apoderado.*;
 import clases.Conexion;
+import clases.Rut;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -9,9 +9,11 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 public class jfEliminar extends javax.swing.JFrame {
-
     private Conexion BD = new Conexion();
     private String msj;
+    private Rut rut;
+    private String rutFormateado;
+    private String rutDesformateado;
 
     public jfEliminar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_delete.png"));
@@ -179,44 +181,54 @@ public class jfEliminar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        BD.crearConexion();
-        msj = "";
-        jRutProfesor.setText("");
-        jNomProfesor.setText("");
-        String rut = jRutEli.getText();
-        String sql1 = "SELECT * FROM profesor WHERE rut_profesor='" + rut + "'";
         try {
-            ResultSet lis = BD.ejecutarSQLSelect(sql1);
-            if (lis.next()) {
-                msj = "Persona Existe presione eliminar para confirmar";
-                jMensaje.setText(msj);
-                jRutProfesor.setText(lis.getString(1));
-                jNomProfesor.setText(lis.getString(2) + " " + lis.getString(3) + " " + lis.getString(4));
-                jMensaje.setText(msj);
+            rutFormateado = rut.formatear(jRutEli.getText());
+            if (rut.validar(rutFormateado) == false) {
+                JOptionPane.showMessageDialog(null, "Rut incorrecto", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
             } else {
-                msj = "Persona No Existe busque denuevo";
-                jMensaje.setText(msj);
+                rutDesformateado = rut.desformatear(rutFormateado);
+                jRutEli.setText(rutFormateado);
+        
+                BD.crearConexion();
+                msj = "";
+                jRutProfesor.setText("");
+                jNomProfesor.setText("");
+                String sql1 = "SELECT * FROM profesor WHERE rut_profesor='" + rutDesformateado + "'";
+                try {
+                    ResultSet lis = BD.ejecutarSQLSelect(sql1);
+                    if (lis.next()) {
+                        msj = "Persona Existe presione eliminar para confirmar";
+                        jMensaje.setText(msj);
+                        jRutProfesor.setText(lis.getString(1));
+                        jNomProfesor.setText(lis.getString(2) + " " + lis.getString(3) + " " + lis.getString(4));
+                        jMensaje.setText(msj);
+                    } else {
+                        msj = "Persona No Existe busque denuevo";
+                        jMensaje.setText(msj);
+                    }
+                } catch (Exception e) {
+                    msj = "Error, no se pudo realizar la operacion";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         } catch (Exception e) {
-            msj = "Error, no se pudo realizar la operacion";
-            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Mal formato de rut", "Ventana Error Rut", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        String rut = jRutEli.getText();
         int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea eliminar a este profesor?", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
         if (resp == 0) {
             try {
-                String sql = "Select * from asignatura_profesor where rut_profesor = '" + rut + "'";
+                String sql = "Select * from asignatura_profesor where rut_profesor = '" + rutDesformateado + "'";
                 ResultSet rs = BD.ejecutarSQLSelect(sql);
-                sql = "Select * from profesorjefe_curso where rut_profesor = '" + rut + "'";
+                sql = "Select * from profesorjefe_curso where rut_profesor = '" + rutDesformateado + "'";
                 ResultSet lis = BD.ejecutarSQLSelect(sql);
                 if (rs.next() || lis.next()) {
                     msj = "Profesor asociado a un curso o asignatura no puede eliminarse";
                     JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    sql = "DELETE FROM profesor WHERE rut_profesor = '" + rut + "' ";
+                    sql = "DELETE FROM profesor WHERE rut_profesor = '" + rutDesformateado + "' ";
                     if (!jNomProfesor.getText().equals("")) {
                         try {
                             BD.ejecutarSQL(sql);
@@ -250,30 +262,11 @@ public class jfEliminar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVolverActionPerformed
 
     private void jRutEliFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRutEliFocusLost
-        /*    try{
-            Rut rutv = new Rut();
-            String rut = jRutEli.getText();
-            rut = rutv.formatear(rut);
-            if (rutv.validar(rut) == false){
-                JOptionPane.showMessageDialog(null,"Rut incorrecto","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
-                jRutEli.setText("");
-            }else{
-                rut = rut.replace(".", "");
-                rut = rut.replace("-", "");
-                jRutEli.setText(rut);
-            }
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Mal formato de rut","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
-            jRutEli.setText("");
-        }*/
+
     }//GEN-LAST:event_jRutEliFocusLost
 
     private void jRutEliKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jRutEliKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            String rut = jRutEli.getText();
-            rut = rut.replace(".", "");
-            rut = rut.replace("-", "");
-            jRutEli.setText(rut);
             btnBuscar.requestFocus();
             btnBuscar.doClick();
         }
