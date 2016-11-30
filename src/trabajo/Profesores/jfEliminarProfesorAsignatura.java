@@ -88,27 +88,22 @@ public class jfEliminarProfesorAsignatura extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jOk))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cmbAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(cmbProfesores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(43, 43, 43)
-                                .addComponent(jLabel4)))
-                        .addGap(69, 69, 69)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(cmbAsignatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(cmbProfesores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jOk)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jLabel4)))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,7 +153,7 @@ public class jfEliminarProfesorAsignatura extends javax.swing.JFrame {
         String año = String.valueOf(añoLimite);
         int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea eliminar esta relacion?", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
         if (resp == 0) {
-            if (!(indexA == 0) || !(indexP == 0)) {
+            if (!(indexA == 0) && !(indexP == 0)) {
                 String rut = (String) cmbProfesores.getSelectedItem();
                 rut = rut.substring(0, rut.indexOf(" "));
                 String asignatura = (String) cmbAsignatura.getSelectedItem();
@@ -181,7 +176,10 @@ public class jfEliminarProfesorAsignatura extends javax.swing.JFrame {
                     msj = "Error, hubo un problema.";
                     JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            }            
+            }else{
+                msj = "Error, seleccione una asignatura y un profesor.";
+                JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            }        
         }
         if (actualizando.equals("n")) {
             Integer index = cmbAsignatura.getSelectedIndex();
@@ -196,10 +194,8 @@ public class jfEliminarProfesorAsignatura extends javax.swing.JFrame {
                     añoLimite = (calendario.get(Calendar.YEAR));
                     año = String.valueOf(añoLimite);
                     String codigo = (String) cmbAsignatura.getSelectedItem();
-                    String asignatura = codigo.substring(0, 4);
-                    //String sql = "SELECT rut_alumno FROM alumno_curso where id_curso = '" + curso + "' and anno = " + año;
-                    String sql = "SELECT ap.rut_profesor, p.nombres, p.ape_paterno FROM asignatura_profesor ap , profesor p where ap.id_asignatura = '" + asignatura + "' and ap.anno = " + año + " and ap.rut_profesor = p.rut_profesor";
-                    //String sql = "SELECT rut_alumno FROM alumno_curso ";
+                    String asignatura = codigo.substring(0, 4);                    
+                    String sql = "SELECT ap.rut_profesor, p.nombres, p.ape_paterno FROM asignatura_profesor ap , profesor p where ap.id_asignatura = '" + asignatura + "' and ap.anno = " + año + " and ap.rut_profesor = p.rut_profesor";                   
                     rs = BD.ejecutarSQLSelect(sql);
                     while (rs.next()) {
                         cmbProfesores.addItem(rs.getString("ap.rut_profesor") + " " + rs.getString("p.nombres") + " " + rs.getString("p.ape_paterno"));
@@ -212,7 +208,7 @@ public class jfEliminarProfesorAsignatura extends javax.swing.JFrame {
             } else {
                 actualizando = "s";
                 cmbProfesores.removeAllItems();
-                cmbProfesores.addItem("Seleccione Profesor");
+                cmbProfesores.addItem("Seleccione");
             }
             actualizando = "n";
         }
