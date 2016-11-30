@@ -241,7 +241,7 @@
         <Component class="javax.swing.JComboBox" name="cmbNota">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="73">
+              <StringArray count="63">
                 <StringItem index="0" value="n/a"/>
                 <StringItem index="1" value="70"/>
                 <StringItem index="2" value="69"/>
@@ -305,16 +305,6 @@
                 <StringItem index="60" value="12"/>
                 <StringItem index="61" value="11"/>
                 <StringItem index="62" value="10"/>
-                <StringItem index="63" value="09"/>
-                <StringItem index="64" value="08"/>
-                <StringItem index="65" value="07"/>
-                <StringItem index="66" value="06"/>
-                <StringItem index="67" value="05"/>
-                <StringItem index="68" value="04"/>
-                <StringItem index="69" value="03"/>
-                <StringItem index="70" value="02"/>
-                <StringItem index="71" value="01"/>
-                <StringItem index="72" value="00"/>
               </StringArray>
             </Property>
           </Properties>
