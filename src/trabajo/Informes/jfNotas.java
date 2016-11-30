@@ -520,8 +520,7 @@ public class jfNotas extends javax.swing.JFrame {
                 try{
                     BD.crearConexion();
                     Integer promedio;
-                    Integer promedioFinal = 0;
-                    Integer contadorPromedio = 0;
+                    
                     //Cabecera Tabla//
                     tabla.addCell("Rut");
                     tabla.addCell("Nombre");
@@ -530,6 +529,8 @@ public class jfNotas extends javax.swing.JFrame {
                     String sql = "SELECT a.rut_alumno, a.nombres, a.ape_paterno, a.ape_materno FROM alumno a, alumno_curso ac WHERE ac.anno = '"+ año +"' AND a.rut_alumno = ac.rut_alumno AND ac.id_curso = '"+ idCurso +"'";
                     rs = BD.ejecutarSQLSelect(sql);
                     while (rs.next()){
+                        Integer promedioFinal = 0;
+                        Integer contadorPromedio = 0;
                         tabla.addCell(rut.formatear(rs.getString("a.rut_alumno")));
                         tabla.addCell(rs.getString("a.nombres")+" "+rs.getString("a.ape_paterno")+" "+rs.getString("a.ape_materno"));
                         sql = "SELECT a.nombre, a.id_asignatura FROM asignatura a, asignatura_curso ac WHERE ac.anno = '"+ año +"' AND a.id_asignatura = ac.id_asignatura AND ac.id_curso = '"+  idCurso +"'";
