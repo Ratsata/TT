@@ -176,7 +176,7 @@ public class jfProfesorJefe extends javax.swing.JFrame {
         Calendar calendario = new GregorianCalendar();
         Integer añoLimite = (calendario.get(Calendar.YEAR));
         String año = String.valueOf(añoLimite);
-        if (!(indexC == 0) || !(indexP == 0)) {
+        if (!(indexC == 0) && !(indexP == 0)) {
             String rut = (String) cmbProfesores.getSelectedItem();
             rut = rut.substring(0, rut.indexOf(" "));
             String curso = (String) cmbCursos.getSelectedItem();
@@ -188,26 +188,33 @@ public class jfProfesorJefe extends javax.swing.JFrame {
                 if (BD.ejecutarSQL(sql)) {
                     msj = "Se realizó la asociación con éxito.";
                     JOptionPane.showMessageDialog(null, msj, "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    cmbProfesores.setSelectedIndex(0);
                 } else {
-                    msj = "Ya existe esta asociacion entre profesor y curso.";
+                    msj = "Error, hubo un problema.";
                     JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                BD.cerrarConexion();
             } catch (Exception e) {
-                msj = "Error, hubo un problema.";
+                msj = "Error, hubo un problema."+e.toString();
                 JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
             }
+        }else{
+            msj = "Seleccione algun profesor / curso.";
+            JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
         cmbCursos.removeAllItems();
         cmbCursos.addItem("Seleccione Curso");
         try {
+            BD.crearConexion();
             String sql = "SELECT id_curso,nombre FROM curso where id_curso not in(Select distinct id_curso from profesorjefe_curso where anno = '" + año + "')";
             rs = BD.ejecutarSQLSelect(sql);
             while (rs.next()) {
                 cmbCursos.addItem(rs.getString("id_curso") + " " + rs.getString("nombre"));
             }
             actualizando = "n";
+            BD.cerrarConexion();
         } catch (Exception e) {
-            msj = "Error, hubo un problema.";
+            msj = "Error, hubo un problema."+e.toString();
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnFinalizarActionPerformed

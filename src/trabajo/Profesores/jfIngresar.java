@@ -1,17 +1,18 @@
 package trabajo.Profesores;
 
-import trabajo.Apoderado.*;
 import clases.Conexion;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import clases.Rut;
 
 public class jfIngresar extends javax.swing.JFrame {
     private Conexion BD = new Conexion();
     private String msj;
+    private Rut rut;
+    private String rutFormateado;
+    private String rutDesformateado;
 
     public jfIngresar() {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/book_add.png"));
@@ -264,8 +265,7 @@ public class jfIngresar extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null,msj,"Error",JOptionPane.ERROR_MESSAGE);}
         else{
             try{
-            String rut,nombre,apeP,apeM,mail,fono,fonoFinal,celular,celuFinal,coma;
-            rut = jRut.getText();
+            String nombre,apeP,apeM,mail,fono,fonoFinal,celular,celuFinal,coma;
             nombre = jNombre.getText();
             apeP = jApePat.getText();
             apeM = jApeMat.getText();
@@ -275,7 +275,7 @@ public class jfIngresar extends javax.swing.JFrame {
             celuFinal =  jPrefijoCelu.getText() + celular;
             fonoFinal = cmbPrefijo.getSelectedItem() + fono;
             coma = "','";                   
-            String sql = "INSERT INTO profesor VALUES ('"+ rut +coma+ nombre+coma+apeP+coma+apeM+coma+fonoFinal+coma+celuFinal+coma+mail+"')";
+            String sql = "INSERT INTO profesor VALUES ('"+ rutDesformateado +coma+ nombre+coma+apeP+coma+apeM+coma+fonoFinal+coma+celuFinal+coma+mail+"')";
             if(BD.ejecutarSQL(sql)){
                     msj="Ingreso realizado con exito";
                     JOptionPane.showMessageDialog(null,msj,"Exito",JOptionPane.INFORMATION_MESSAGE);   
@@ -342,18 +342,18 @@ public class jfIngresar extends javax.swing.JFrame {
 
     private void jRutFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRutFocusLost
         try{
-            Rut rutv = new Rut();
-            String rut = jRut.getText();
-            rut = rutv.formatear(rut);
-            if (rutv.validar(rut) == false){
+            rutFormateado = rut.formatear(jRut.getText());
+            if (rut.validar(rutFormateado) == false){
                 JOptionPane.showMessageDialog(null,"Rut incorrecto","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
-                jRut.setText("");}else {
-                rut = rut.replace(".", "");
-                rut = rut.replace("-", "");
-                jRut.setText(rut);}}catch (Exception e) {
-                    JOptionPane.showMessageDialog(null,"Mal formato de rut","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
-                    jRut.setText("");
-                }
+                jRut.setText("");
+            }else{
+                rutDesformateado = rut.desformatear(rutFormateado);
+                jRut.setText(rutFormateado);
+            }
+        }catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Mal formato de rut","Ventana Error Rut",JOptionPane.ERROR_MESSAGE);
+            jRut.setText("");
+        }
     }//GEN-LAST:event_jRutFocusLost
 
 
