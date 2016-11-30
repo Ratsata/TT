@@ -244,7 +244,7 @@ public class jfIngresar extends javax.swing.JFrame {
                 sql = "SELECT MAX(id_evaluacion) numEvaluacion FROM evaluacion WHERE id_curso = '"+ id_curso +"' AND semestre = '"+ (int) (cmbSemestre.getSelectedIndex() + 1) +"' AND anno = '"+ anno +"'";
                 rs = BD.ejecutarSQLSelect(sql);
                 while (rs.next()) {
-                    num_evaluacion = String.format("%02d", rs.getInt("numEvaluacion"));
+                    num_evaluacion = String.format("%02d", Integer.parseInt(rs.getString("numEvaluacion").substring(rs.getString("numEvaluacion").length() - 2, rs.getString("numEvaluacion").length()))+1);
                 }
                 id_evaluacion = id_evaluacion + num_evaluacion;
                 //FECHA
@@ -265,7 +265,7 @@ public class jfIngresar extends javax.swing.JFrame {
                 BD.cerrarConexion();
             }
         } catch (Exception e) {
-            msj = "Error, hubo un problema.";
+            msj = "Error, hubo un problema."+e.toString();
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnGenerarActionPerformed
