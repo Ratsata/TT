@@ -75,7 +75,7 @@ public class jfAlumno extends javax.swing.JFrame {
         jInstruccion.setText("Elija la opción que desee");
 
         btnInscribirAlumno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/group_add.png"))); // NOI18N
-        btnInscribirAlumno.setText("Inscirbir alumno en curso");
+        btnInscribirAlumno.setText("Inscribir alumno en curso");
         btnInscribirAlumno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInscribirAlumnoActionPerformed(evt);

@@ -172,7 +172,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/imagenes/group_add.png"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Inscirbir alumno en curso"/>
+            <Property name="text" type="java.lang.String" value="Inscribir alumno en curso"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInscribirAlumnoActionPerformed"/>
