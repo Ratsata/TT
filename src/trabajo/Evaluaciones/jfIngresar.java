@@ -224,9 +224,9 @@ public class jfIngresar extends javax.swing.JFrame {
         try {
             BD.crearConexion();
             String curso = (String) cmbCurso.getSelectedItem();
-            id_curso = curso.substring(0, curso.indexOf(",") - 1);
+            id_curso = curso.substring(0, curso.indexOf(","));
             asignatura = cmbAsignatura.getSelectedItem().toString();
-            id_asignatura = asignatura.substring(0, asignatura.indexOf(",") - 1);
+            id_asignatura = asignatura.substring(0, asignatura.indexOf(","));
             anno = txtAño.getText();
             
             id_evaluacion = id_curso + id_asignatura + anno + (int) (cmbSemestre.getSelectedIndex() + 1);
