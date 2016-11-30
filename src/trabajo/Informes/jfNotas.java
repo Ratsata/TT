@@ -389,7 +389,13 @@ public class jfNotas extends javax.swing.JFrame {
                     sql = "SELECT n.nota, e.id_evaluacion FROM notas n, evaluacion e WHERE n.id_evaluacion = e.id_evaluacion AND e.semestre = '" + String.valueOf(cmbSemestre.getSelectedIndex() + 1) + "' AND n.rut_alumno = '" + rutDesformateado + "' AND e.id_curso = '" + idCurso + "' AND e.id_asignatura = '" + rs.getString("a.id_asignatura") + "'";
                     rs2 = BD.ejecutarSQLSelect(sql);
                     while (rs2.next()) {
-                        tabla.addCell(rs2.getString("n.nota"));
+                        //tabla.addCell(rs2.getString("n.nota"));
+                        if (rs2.getInt("n.nota") < 40){
+                            fuente.setColor(BaseColor.RED);
+                            tabla.addCell(new Phrase(rs2.getString("n.nota"), fuente));
+                        }else{
+                            tabla.addCell(rs2.getString("n.nota"));
+                        }
                         contadorNotas++;
                         promedio = promedio + rs2.getInt("n.nota");
                     }
@@ -400,7 +406,13 @@ public class jfNotas extends javax.swing.JFrame {
                         promedio = promedio / contadorNotas;
                         promedioFinal = promedioFinal + promedio;
                         contadorPromedio++;
-                        tabla.addCell(String.valueOf(promedio));
+                        if (promedio < 40){
+                            fuente.setColor(BaseColor.RED);
+                            tabla.addCell(new Phrase(String.valueOf(promedio), fuente));
+                        }else{
+                            tabla.addCell(String.valueOf(promedio));
+                        }
+                        
                     } else {
                         tabla.addCell("");
                     }
@@ -552,7 +564,12 @@ public class jfNotas extends javax.swing.JFrame {
                         }
                         if (contadorPromedio > 0) {
                             promedioFinal = promedioFinal / contadorPromedio;
-                            tabla.addCell(String.valueOf(promedioFinal));
+                            if (promedioFinal < 40) {
+                                fuente.setColor(BaseColor.RED);
+                                tabla.addCell(new Phrase(String.valueOf(promedioFinal), fuente));
+                            } else {
+                                tabla.addCell(String.valueOf(promedioFinal));
+                            }
                         } else {
                             tabla.addCell("");
                         }
