@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 
 public class jfEliminarAsignaturaCurso extends javax.swing.JFrame {
@@ -14,6 +15,7 @@ public class jfEliminarAsignaturaCurso extends javax.swing.JFrame {
     private ResultSet rs;
     private String id_curso;
     private String id_asignatura;
+    private Integer año;
     String actualizando = "s";
 
     public jfEliminarAsignaturaCurso() {
@@ -21,12 +23,16 @@ public class jfEliminarAsignaturaCurso extends javax.swing.JFrame {
         setIconImage(icon);
         initComponents();
         this.setLocationRelativeTo(null); //CENTRAR EN LA PANTALLA
+        
+        Calendar calendario = new GregorianCalendar();
+        año = (calendario.get(Calendar.YEAR));
+        
         //Llenar ComboBoxs
         try {
             actualizando = "s";
             BD.crearConexion();
             //PRIMER COMBOBOX
-            String sql = "SELECT distinct c.id_curso,c.nombre FROM asignatura_curso ac, curso c,asignatura a WHERE ac.id_curso = c.id_curso";
+            String sql = "SELECT distinct c.id_curso,c.nombre FROM asignatura_curso ac, curso c,asignatura a WHERE ac.id_curso = c.id_curso AND ac.anno = '"+ año +"'";
             rs = BD.ejecutarSQLSelect(sql);
             while (rs.next()) {
                 cmbCurso.addItem(rs.getString("c.id_curso") + " " + rs.getString("c.nombre"));
@@ -88,6 +94,7 @@ public class jfEliminarAsignaturaCurso extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(btn_volver)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_eliminar))
@@ -148,13 +155,14 @@ public class jfEliminarAsignaturaCurso extends javax.swing.JFrame {
         id_asignatura = id_asignatura.substring(0, id_asignatura.indexOf(" "));
         Integer indexC = cmbCurso.getSelectedIndex();
         Integer indexA = cmbAsignatura.getSelectedIndex();
+
         //Eliminacion
         if (!(indexC == 0) && !(indexA == 0)) {
             int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea eliminar la asignatura de este curso?, Si la elimina las notas asociadas a esta asignatura no saldran en el informe de notas", "Advertencia", JOptionPane.OK_CANCEL_OPTION);
             if (resp == 0) {
                 //Esta seguro que desea eliminar? SI-NO VENTANITA ANTES DEL TRY
                 try {
-                    String sql = "DELETE FROM asignatura_curso where id_asignatura = '" + id_asignatura + "' and id_curso = '" + id_curso + "'";
+                    String sql = "DELETE FROM asignatura_curso where id_asignatura = '" + id_asignatura + "' and id_curso = '" + id_curso + "' AND anno = '"+ año +"'";
                     BD.ejecutarSQL(sql);
                     msj = "Datos eliminados con exito";
                     JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
@@ -177,7 +185,7 @@ public class jfEliminarAsignaturaCurso extends javax.swing.JFrame {
                     cmbAsignatura.addItem("Seleccione Asignatura");
                     BD.crearConexion();
                     //PRIMER COMBOBOX
-                    String sql = "SELECT a.nombre, a.id_asignatura FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura and ac.id_curso = '" + curso + "'";
+                    String sql = "SELECT DISTINCT a.nombre, a.id_asignatura FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura and ac.id_curso = '" + curso + "' AND ac.anno = '"+ año +"'";
                     rs = BD.ejecutarSQLSelect(sql);
                     while (rs.next()) {
                         cmbAsignatura.addItem(rs.getString("a.id_asignatura") + " " + rs.getString("a.nombre"));
@@ -201,7 +209,7 @@ public class jfEliminarAsignaturaCurso extends javax.swing.JFrame {
             cmbCurso.addItem("Seleccione Curso");
             BD.crearConexion();
             //PRIMER COMBOBOX
-            String sql = "SELECT distinct c.id_curso,c.nombre FROM asignatura_curso ac, curso c,asignatura a WHERE ac.id_curso = c.id_curso";
+            String sql = "SELECT distinct c.id_curso,c.nombre FROM asignatura_curso ac, curso c,asignatura a WHERE ac.id_curso = c.id_curso AND ac.anno = '"+ año +"'";
             rs = BD.ejecutarSQLSelect(sql);
             while (rs.next()) {
                 cmbCurso.addItem(rs.getString("c.id_curso") + " " + rs.getString("c.nombre"));
@@ -227,7 +235,7 @@ public class jfEliminarAsignaturaCurso extends javax.swing.JFrame {
                     cmbAsignatura.addItem("Seleccione Asignatura");
                     BD.crearConexion();
                     //PRIMER COMBOBOX
-                    String sql = "SELECT a.nombre, a.id_asignatura FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura and ac.id_curso = '" + curso + "'";
+                    String sql = "SELECT DISTINCT a.nombre, a.id_asignatura FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura and ac.id_curso = '" + curso + "' AND ac.anno ='"+ año +"'";
                     rs = BD.ejecutarSQLSelect(sql);
                     while (rs.next()) {
                         cmbAsignatura.addItem(rs.getString("a.id_asignatura") + " " + rs.getString("a.nombre"));
