@@ -236,23 +236,28 @@ public class jfIngresar extends javax.swing.JFrame {
             while (rs.next()) {
                 num_evaluacion = String.format("%02d", rs.getInt("n_evaluacion"));
             }
-            id_evaluacion = id_evaluacion + num_evaluacion;
-            //FECHA
-            String año = txtAño.getText();
-            String mes = String.format("%02d", cmbMes.getSelectedIndex() + 1);
-            String dia = (String) cmbDia.getSelectedItem();
-            fecha = año + "-" + mes + "-" + dia;
-            LocalDate today = LocalDate.of(Integer.parseInt(año), Integer.parseInt(mes), Integer.parseInt(dia));
-            //INSERT
-            sql = "INSERT INTO evaluacion(id_evaluacion,id_curso,id_asignatura,anno,semestre,num_evaluacion,fecha,detalle) VALUES ('" + id_evaluacion + coma + id_curso + coma + id_asignatura + coma + anno + coma + (int) (cmbSemestre.getSelectedIndex() + 1) + coma + num_evaluacion + coma + fecha + coma + txtDetalle.getText() + "')";
-            if (BD.ejecutarSQL(sql)) {
-                msj = "Se registro la evaluacion correctamente";
-                JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                msj = "Error, No se pudo realizar la operacion";
+            if (Integer.parseInt(num_evaluacion) >= 11){
+                msj = "Error, no puede exceder la cantidad de 10 evaluaciones por semestre en una asignatura.";
                 JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+            }else{
+                id_evaluacion = id_evaluacion + num_evaluacion;
+                //FECHA
+                String año = txtAño.getText();
+                String mes = String.format("%02d", cmbMes.getSelectedIndex() + 1);
+                String dia = (String) cmbDia.getSelectedItem();
+                fecha = año + "-" + mes + "-" + dia;
+                LocalDate today = LocalDate.of(Integer.parseInt(año), Integer.parseInt(mes), Integer.parseInt(dia));
+                //INSERT
+                sql = "INSERT INTO evaluacion(id_evaluacion,id_curso,id_asignatura,anno,semestre,num_evaluacion,fecha,detalle) VALUES ('" + id_evaluacion + coma + id_curso + coma + id_asignatura + coma + anno + coma + (int) (cmbSemestre.getSelectedIndex() + 1) + coma + num_evaluacion + coma + fecha + coma + txtDetalle.getText() + "')";
+                if (BD.ejecutarSQL(sql)) {
+                    msj = "Se registro la evaluacion correctamente";
+                    JOptionPane.showMessageDialog(null, msj, "Exito", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    msj = "Error, No se pudo realizar la operacion";
+                    JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                BD.cerrarConexion();
             }
-            BD.cerrarConexion();
         } catch (Exception e) {
             msj = "Error, hubo un problema.";
             JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
