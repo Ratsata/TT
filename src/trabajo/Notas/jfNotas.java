@@ -4,6 +4,8 @@ import clases.Conexion;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import trabajo.jfMenu;
 
@@ -327,10 +329,12 @@ public class jfNotas extends javax.swing.JFrame {
         cmbEvaluacion.removeAllItems();
         cmbEvaluacion.addItem("Seleccione Evaluacion");
         Boolean entroaWhile = false;
+        Calendar calendario = new GregorianCalendar();
+        int anno = calendario.get(Calendar.YEAR);
         try {
             BD.crearConexion();
             //PRIMER COMBOBOX
-            String sql = "SELECT id_evaluacion FROM evaluacion where id_curso = '"+curso+"'";
+            String sql = "SELECT id_evaluacion FROM evaluacion where (anno = '"+ anno +"' OR anno = '"+ (anno -1) +"' ) AND id_curso = '"+curso+"'";
             rs = BD.ejecutarSQLSelect(sql);
             while (rs.next()) {
                 entroaWhile = true;
