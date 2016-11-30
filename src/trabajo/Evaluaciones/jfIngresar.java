@@ -17,6 +17,7 @@ public class jfIngresar extends javax.swing.JFrame {
     private String id_evaluacion;
     private String id_curso;
     private String id_asignatura;
+    private String asignatura;
     private String anno;
     private String num_evaluacion;
     private String fecha;
@@ -223,18 +224,14 @@ public class jfIngresar extends javax.swing.JFrame {
         try {
             BD.crearConexion();
             String curso = (String) cmbCurso.getSelectedItem();
-            curso = curso.substring(curso.indexOf(",") + 1, curso.length());
-            String sql = "SELECT ac.id_curso, ac.id_asignatura, anno FROM asignatura_curso ac, curso c, asignatura a WHERE ac.id_curso = c.id_curso AND ac.id_asignatura = a.id_asignatura AND a.nombre = '" + cmbAsignatura.getSelectedItem() + "' AND c.nombre = '" + curso + "';";
-            rs = BD.ejecutarSQLSelect(sql);
-            //Armar id_evaluacion
-            while (rs.next()) {
-                id_curso = rs.getString("ac.id_curso");
-                id_asignatura = rs.getString("ac.id_asignatura");
-                anno = txtAño.getText();
-                id_evaluacion = id_curso + id_asignatura + anno + (int) (cmbSemestre.getSelectedIndex() + 1);
-            }
+            id_curso = curso.substring(0, curso.indexOf(",") - 1);
+            asignatura = cmbAsignatura.getSelectedItem().toString();
+            id_asignatura = asignatura.substring(0, asignatura.indexOf(",") - 1);
+            anno = txtAño.getText();
+            
+            id_evaluacion = id_curso + id_asignatura + anno + (int) (cmbSemestre.getSelectedIndex() + 1);
             //Agregar el numero de la Evaluacion
-            sql = "SELECT COUNT(id_evaluacion)+1 as n_evaluacion FROM evaluacion WHERE id_asignatura = '" + id_asignatura + "' AND id_curso = '" + id_curso + "' AND anno = '" + anno + "' AND semestre = '" + (int) (cmbSemestre.getSelectedIndex() + 1) + "'";
+            String sql = "SELECT COUNT(id_evaluacion)+1 as n_evaluacion FROM evaluacion WHERE id_asignatura = '" + id_asignatura + "' AND id_curso = '" + id_curso + "' AND anno = '" + anno + "' AND semestre = '" + (int) (cmbSemestre.getSelectedIndex() + 1) + "'";
             rs = BD.ejecutarSQLSelect(sql);
             while (rs.next()) {
                 num_evaluacion = String.format("%02d", rs.getInt("n_evaluacion"));
@@ -316,7 +313,7 @@ public class jfIngresar extends javax.swing.JFrame {
                     String sql = "SELECT DISTINCT a.id_asignatura,a.nombre FROM asignatura_curso ac, asignatura a WHERE ac.id_asignatura = a.id_asignatura and ac.id_curso = '" + codigo + "'";
                     rs = BD.ejecutarSQLSelect(sql);
                     while (rs.next()) {
-                        cmbAsignatura.addItem(rs.getString("a.nombre"));
+                        cmbAsignatura.addItem(rs.getString("a.id_asignatura")+","+rs.getString("a.nombre"));
                     }
                 } catch (Exception e) {
                 }
