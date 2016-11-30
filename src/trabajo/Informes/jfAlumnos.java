@@ -32,7 +32,7 @@ public class jfAlumnos extends javax.swing.JFrame {
         //Llenar ComboBox
         try {
             BD.crearConexion();
-            String sql = "SELECT c.id_curso, c.nombre, ac.anno FROM curso c, alumno_curso ac WHERE ac.id_curso = c.id_curso";
+            String sql = "SELECT DISTINCT c.id_curso, c.nombre, ac.anno FROM curso c, alumno_curso ac WHERE ac.id_curso = c.id_curso";
             rs = BD.ejecutarSQLSelect(sql);
             while (rs.next()) {
                 cmbCursoTodos.addItem(rs.getString("c.id_curso") + "," + rs.getString("c.nombre") + "," + rs.getString("ac.anno"));
