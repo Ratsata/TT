@@ -228,18 +228,24 @@ public class jfIngresar extends javax.swing.JFrame {
             asignatura = cmbAsignatura.getSelectedItem().toString();
             id_asignatura = asignatura.substring(0, asignatura.indexOf(","));
             anno = txtAño.getText();
+            Integer cant_evaluacion = 0;
             
             id_evaluacion = id_curso + id_asignatura + anno + (int) (cmbSemestre.getSelectedIndex() + 1);
             //Agregar el numero de la Evaluacion
             String sql = "SELECT COUNT(id_evaluacion)+1 as n_evaluacion FROM evaluacion WHERE id_asignatura = '" + id_asignatura + "' AND id_curso = '" + id_curso + "' AND anno = '" + anno + "' AND semestre = '" + (int) (cmbSemestre.getSelectedIndex() + 1) + "'";
             rs = BD.ejecutarSQLSelect(sql);
             while (rs.next()) {
-                num_evaluacion = String.format("%02d", rs.getInt("n_evaluacion"));
+                cant_evaluacion = rs.getInt("n_evaluacion");
             }
-            if (Integer.parseInt(num_evaluacion) >= 11){
+            if (cant_evaluacion >= 11){
                 msj = "Error, no puede exceder la cantidad de 10 evaluaciones por semestre en una asignatura.";
                 JOptionPane.showMessageDialog(null, msj, "Error", JOptionPane.ERROR_MESSAGE);
             }else{
+                sql = "SELECT MAX(id_evaluacion) numEvaluacion FROM evaluacion WHERE id_curso = '"+ id_curso +"' AND semestre = '"+ (int) (cmbSemestre.getSelectedIndex() + 1) +"' AND anno = '"+ anno +"'";
+                rs = BD.ejecutarSQLSelect(sql);
+                while (rs.next()) {
+                    num_evaluacion = String.format("%02d", rs.getInt("numEvaluacion"));
+                }
                 id_evaluacion = id_evaluacion + num_evaluacion;
                 //FECHA
                 String año = txtAño.getText();
