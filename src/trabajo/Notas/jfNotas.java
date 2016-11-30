@@ -65,7 +65,7 @@ public class jfNotas extends javax.swing.JFrame {
         jLabel5.setText("Nota:");
 
         btnIngresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/disk.png"))); // NOI18N
-        btnIngresar.setText("Modificar/Ingresar");
+        btnIngresar.setText("Ingresar/Modificar");
         btnIngresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIngresarActionPerformed(evt);
